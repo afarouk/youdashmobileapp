@@ -87,7 +87,7 @@ const OrderDetailsPage = ({ businessData, user }) => {
       return scrollToElement(document.getElementById('pickup-selectors'));
     }
     if (user && !credentialsChanged) {
-      if (acceptCreditCards && paymentProcessor === paymentProcessors.VANTIV_HID) {
+      if (acceptCreditCards && paymentProcessor === paymentProcessors.VANTIV_ECOMMERCE) {
         !isMobileVerified && verificationCode
           ? onSendVerificationCode()
               .then(() => {
@@ -123,7 +123,7 @@ const OrderDetailsPage = ({ businessData, user }) => {
         .then((user) => {
           setUpdateMode(false);
           setOrderInProgress(false);
-          if (acceptCreditCards && paymentProcessor === paymentProcessors.VANTIV_HID) {
+          if (acceptCreditCards && paymentProcessor === paymentProcessors.VANTIV_ECOMMERCE) {
             if (!user.adhocEntry && user.mobileVerified) {
               setCheckoutMode(true);
             } else if (user.adhocEntry && !user.mobileVerified && verificationCode) {
