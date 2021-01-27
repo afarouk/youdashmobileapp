@@ -1,0 +1,30 @@
+.loyalty {
+  position: relative;
+}
+.loyalty svg {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  font-size: 2rem;
+}
+.loyalty .loyalty-title {
+  margin-bottom: 3em;
+}
+.loyalty .loyalty-summary {
+  display: flex;
+  align-items: center;
+  font-weight: 500;
+  justify-content: space-between;
+}
+.loyalty .loyalty-summary > div {
+  display: flex;
+  align-items: center;
+}
+.loyalty .loyalty-summary-credits {
+  font-size: 2rem;
+  margin-right: 0.5em;
+}
+.loyalty-swipe {
+  font-size: 0.7rem;
+  padding-left: 1em;
+}

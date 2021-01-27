@@ -1,0 +1,31 @@
+.greetings {
+  display: flex;
+  align-items: flex-start;
+}
+.greetings .greetings-avatar {
+  background-size: cover;
+  width: 64px;
+  height: 64px;
+  min-width: 64px;
+  margin-right: 10px;
+  border-radius: 50%;
+}
+.greetings .greetings__content {
+  color: #000;
+}
+.greetings .greetings__content .greetings__content-title {
+  font-weight: 500;
+  margin-bottom: 0;
+}
+.greetings-wrapper {
+  position: relative;
+}
+.greetings-wrapper-inner {
+  position: relative;
+  top: -64px;
+  margin-bottom: -64px;
+  width: 100%;
+}
+.greetings-wrapper-inner > * {
+  margin-bottom: var(--default-margin-bottom);
+}

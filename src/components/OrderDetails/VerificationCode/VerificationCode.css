@@ -1,0 +1,7 @@
+.verification-code > * {
+  margin-bottom: var(--default-margin-bottom);
+}
+.resend-btn span.resend-btn__title {
+  display: inline-block;
+  border-bottom: 1px solid var(--primary-color);
+}

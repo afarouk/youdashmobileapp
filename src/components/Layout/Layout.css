@@ -1,0 +1,17 @@
+.page-content {
+  margin-top: 45px;
+}
+
+#root,
+.app,
+.page-content.single-page {
+  /*height: 100vh;*/
+  min-height: 100vh;
+}
+
+body {
+  height: initial !important;
+}
+body.full-height {
+  height: 100vh !important;
+}

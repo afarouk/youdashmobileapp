@@ -1,0 +1,30 @@
+.pickup .pickup-line {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: var(--default-margin-bottom);
+}
+.pickup .pickup-line.address span {
+  /*font-weight: 500;*/
+  margin-right: 1.25em;
+}
+.pickup-status {
+  font-weight: 500;
+}
+.pickup .pickup-line > span > svg {
+  font-size: 1.4rem;
+  position: relative;
+  top: -2px;
+}
+.pickup .pickup-line.delivery-type {
+  justify-content: space-evenly;
+  font-size: initial;
+}
+.pickup .pickup-line.selectors {
+  justify-content: space-between;
+}
+
+.pickup .pickup-line .ant-select {
+  width: 48%;
+  min-width: 98px;
+  text-overflow: ellipsis;
+}

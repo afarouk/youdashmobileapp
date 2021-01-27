@@ -1,0 +1,9 @@
+.form > *,
+.form > div > * {
+  margin-bottom: var(--default-margin-bottom);
+}
+.form label {
+  font-size: 0.8rem;
+  font-weight: 500;
+  margin-bottom: var(--default-margin-bottom);
+}

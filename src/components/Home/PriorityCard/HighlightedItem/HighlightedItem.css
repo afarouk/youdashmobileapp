@@ -1,0 +1,6 @@
+.highlighted-item__message {
+    font-weight: bold;
+}
+.highlighted-item__card {
+    border-radius: 6px;
+}

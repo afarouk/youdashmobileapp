@@ -1,0 +1,4 @@
+#vantiv-iframe {
+    height: var(--vantiv-iframe-height);
+    width: 100%;
+}

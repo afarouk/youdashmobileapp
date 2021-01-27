@@ -1,0 +1,5 @@
+.image-placeholder-bg {
+  background: url('../../../assets/icons/image-placeholder.svg') center center no-repeat;
+  background-size: contain;
+  min-height: 200px;
+}

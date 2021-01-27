@@ -1,0 +1,37 @@
+.reward {
+  position: relative;
+}
+.reward.reward-dashed {
+  border-width: 1px;
+  border-style: dashed;
+}
+.reward .reward-row {
+  display: flex;
+}
+.reward .reward-row .reward-tag-icon {
+  border-radius: 10px;
+  padding: 10px 15px;
+  border: 1px solid #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 1em;
+  margin-bottom: var(--default-margin-bottom);
+}
+
+.reward .reward-row .reward-tag-icon svg {
+  font-size: 2rem;
+}
+.reward .reward-expires {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0;
+  font-size: 0.9rem;
+}
+.reward .reward-expires-terms {
+  font-size: 0.7rem;
+}
+.rewards-carousel .reward {
+  margin: 2px;
+}

@@ -1,0 +1,25 @@
+.redirect-container {
+  height: var(--vantiv-iframe-height);
+}
+.success-payment {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.success-payment__result svg {
+  font-size: 3em;
+  color: var(--primary-color);
+}
+.success-payment__result > * {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 0.5em;
+}
+.success-payment__processing-order {
+  text-align: center;
+}
+.success-payment__processing-order span {
+  margin-left: 0.5em;
+}

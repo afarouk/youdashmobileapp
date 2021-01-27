@@ -1,0 +1,27 @@
+.ant-drawer-body {
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.ant-menu-item,
+.ant-menu-item a,
+.ant-menu-submenu-title {
+  font-size: 1rem;
+}
+.ant-menu-item svg,
+.ant-menu-submenu-title svg {
+  font-size: 1.25rem;
+}
+.ant-menu-item span,
+.ant-menu-submenu-title .submenu-item-title {
+  margin-left: 20px;
+  font-size: 1rem;
+}
+.ant-menu-item,
+.ant-menu-submenu-title {
+  display: flex !important;
+  align-items: center !important;
+}
+.drawer-menu {
+  padding-top: 2em;
+}

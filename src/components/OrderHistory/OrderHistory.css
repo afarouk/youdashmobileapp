@@ -1,0 +1,6 @@
+.order-history .ant-input-affix-wrapper > input.ant-input {
+  font-size: 0.8rem;
+}
+.order-history > * {
+  margin-bottom: var(--default-margin-bottom);
+}

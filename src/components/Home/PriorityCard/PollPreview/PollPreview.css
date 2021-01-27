@@ -1,0 +1,12 @@
+.poll-preview {
+  display: flex;
+  align-items: center;
+}
+.poll-preview img {
+  height: 60px;
+  border-radius: 6px;
+  margin-right: 1em;
+}
+.poll-preview p {
+  color: #545353;
+}

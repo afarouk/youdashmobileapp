@@ -1,0 +1,7 @@
+.user-settings > * {
+  margin-bottom: var(--default-margin-bottom);
+}
+.user-settings label {
+  font-weight: 500;
+  margin-bottom: var(--default-margin-bottom);
+}

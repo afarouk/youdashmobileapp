@@ -1,0 +1,9 @@
+.last-order {
+  margin-bottom: var(--default-margin-bottom);
+  text-align: center;
+}
+
+.track-last-order-btn {
+  background-color: var(--secondary-color) !important;
+  border-color: #f56b10 !important;
+}

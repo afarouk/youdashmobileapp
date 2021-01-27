@@ -1,0 +1,37 @@
+.user-data-form label {
+  position: relative;
+}
+.user-data-form label.required-field:after {
+  content: '*';
+  font-size: 1.1em;
+  color: #f44336;
+  position: absolute;
+  top: -2px;
+  right: -8px;
+  display: block;
+}
+.user-data-form > * {
+  margin-bottom: var(--default-margin-bottom);
+}
+.key-tag-container {
+  display: flex;
+  align-items: center;
+}
+.key-tag-container > * {
+  width: 50%;
+}
+
+.key-tag-container__img-wrapper {
+  text-align: center;
+}
+.key-tag-container__img-wrapper img {
+  height: 50px;
+}
+
+.user-details h4,
+.user-details h5 {
+  margin-bottom: var(--default-margin-bottom);
+}
+.user-details h4 > span:nth-child(2) {
+  font-weight: 600;
+}

@@ -1,0 +1,18 @@
+.native-select {
+  width: 100%;
+  color: var(--primary-color) !important;
+  height: 32px;
+  padding: 0 0.5em;
+  border: 1px solid #d9d9d9;
+  outline: none !important;
+  border-radius: 2px;
+}
+.native-select option {
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+  border-right: none !important;
+}
+.native-select option:focus {
+  outline: 0px transparent !important;
+}

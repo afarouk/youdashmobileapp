@@ -1,0 +1,36 @@
+.groups-tabs {
+  margin-top: 1em;
+}
+
+.groups-tabs .ant-tabs > .ant-tabs-nav {
+  position: sticky;
+  top: 45px;
+  right: 0;
+  background-color: #eff2f6;
+}
+
+.groups-tabs .ant-tabs {
+  overflow: initial !important;
+}
+.groups-tabs.tabs-1-only .ant-tabs-tab {
+  width: 100%;
+  justify-content: center;
+  margin-right: 0;
+}
+
+.groups-tabs.tabs-2-only .ant-tabs-nav-list {
+  display: flex;
+  justify-content: space-between;
+}
+
+.groups-tabs.tabs-2-only .ant-tabs-tab {
+  width: 50%;
+  justify-content: center;
+  margin-right: 0;
+}
+
+.groups-tabs.tabs-3-only .ant-tabs-tab {
+  width: 33%;
+  justify-content: center;
+  margin-right: 0;
+}
