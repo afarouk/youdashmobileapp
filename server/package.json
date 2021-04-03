@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "scripts": {
     "start": "node index.js",
-    "dev": "set NODE_ENV=development && nodemon index.js"
+    "dev": "set NODE_ENV=development && npm run watch",
+    "watch": "nodemon --watch . --watch ../build -e js,json,html index.js"
   },
   "dependencies": {
     "axios": "^0.20.0",

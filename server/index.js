@@ -19,7 +19,6 @@ if (NODE_ENV && NODE_ENV === 'development') {
 }
 
 
-//should goes before app.use*
 app.get('/manifest.json', function (request, res) {
   const { url } = request.query;
   log(`Load manifest for: ${url}`, 2);
@@ -37,6 +36,11 @@ app.get('/manifest.json', function (request, res) {
   }
 });
 
+
+
+// static conf
+const buildpath = path.resolve(__dirname, '../build');
+app.use(express.static(buildpath));
 
 async function requestHandler(request, res, next) {
   const { urlKey } = request.params;
@@ -73,11 +77,6 @@ app.get('/:urlKey/p/*', requestHandler);
 app.get('/:urlKey/', requestHandler);
 
 
-
-// static conf
-// @weisk in the end now, because we want to handle 404 ourselves
-const buildpath = path.resolve(__dirname, '../build');
-app.use(express.static(buildpath, { fallthrough: false }));
 
 
 app.listen(port, () => log(`Listening on port ${port}`, 1));
