@@ -87,6 +87,7 @@ export const OrderDetails = ({
           <Tips tips={tips} onChange={onTipsChange} />
           <GrossTotal total={priceTotal} />
         </Card>
+
         {allowOrderComments && (
           <Card>
             <h4 className="font-size-lg primary-text">Comments</h4>

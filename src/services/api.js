@@ -88,6 +88,7 @@ export const orderAPI = {
       params
     })
 };
+
 export const paymentAPI = {
   getTransactionSetupID: (data) =>
     request({
@@ -101,6 +102,7 @@ export const paymentAPI = {
       params
     })
 };
+
 export const pollAPI = {
   submitPoll: (data) => {
     const { choice, UID, uuid } = data;
