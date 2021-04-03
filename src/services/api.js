@@ -89,6 +89,11 @@ export const orderAPI = {
     })
 };
 
+const gwApis = {
+  vantiv: {},
+
+}
+
 export const paymentAPI = {
   getTransactionSetupID: (data) =>
     request({
