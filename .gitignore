@@ -24,6 +24,3 @@ yarn-error.log*
 /server/node_modules/
 package-lock.json
 
-# development
-# (sometimes we want to clear the console of warnings)
-.eslintrc*
