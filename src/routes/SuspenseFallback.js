@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Header } from '../../components/Layout/Header/Header';
+import { Header } from '../components/Layout/Header/Header';
 import { useSelector } from 'react-redux';
 
 export const SuspenseFallback = () => {

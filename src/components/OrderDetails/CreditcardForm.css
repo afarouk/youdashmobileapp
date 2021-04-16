@@ -1,0 +1,46 @@
+form.cc  {
+
+}
+
+form.cc .form-row {
+  display: flex;
+  flex-direction: row;
+}
+
+form.cc .form-field {
+  margin-bottom: var(--default-margin-bottom);
+}
+
+form.cc .divider-vertical {
+  width: 10px;
+}
+
+form.cc label {
+  position: relative;
+}
+
+form.cc label.required:after {
+  content: '*';
+  font-size: 1.1em;
+  color: #f44336;
+  position: absolute;
+  top: -2px;
+  right: -8px;
+  display: block;
+}
+
+.order-details form.cc h4 {
+  margin-bottom: 40px;
+}
+
+form.cc .form-title {
+  position: relative;
+}
+
+form.cc .rccs {
+  transform: scale(0.5);
+  transform-origin: top right;
+  position: absolute;
+  right: 0px;
+  top: 0px;
+}

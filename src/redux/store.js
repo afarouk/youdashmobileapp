@@ -5,6 +5,7 @@ import { authReducer } from './slices/auth';
 import { loyaltyAndOrderHistoryReducer } from './slices/loyaltyAndOrderHistory';
 import { shoppingCartReducer } from './slices/shoppingCart';
 import { globalErrorReducer } from './slices/globalError';
+import { ccReducer } from './slices/cc';
 
 const middleware = [
   ...getDefaultMiddleware()
@@ -17,7 +18,8 @@ export const store = configureStore({
     auth: authReducer,
     shoppingCart: shoppingCartReducer,
     loyaltyAndOrderHistory: loyaltyAndOrderHistoryReducer,
-    globalError: globalErrorReducer
+    globalError: globalErrorReducer,
+    cc: ccReducer
   },
   middleware
 });

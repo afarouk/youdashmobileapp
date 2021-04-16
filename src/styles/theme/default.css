@@ -309,3 +309,6 @@ button.ant-btn:not(.ant-btn-circle):not(.ant-btn-icon-only) svg {
 .ant-select-arrow {
   top: 48%;
 }
+.hidden {
+  display: none;
+}
