@@ -1,8 +1,11 @@
-# changelog
+# changelog.md
 
-## [2021/04/03][weisk]
-### added
-  - development configs
-    - no cache on '/server/index.js' express server
-    - eslintrc config for sane development and visibility
-    - add cra-build-watch, to produce incremental builds of react app on DEV
+
+## 04/16/2021
+  - hooks for handling creditcards
+    - src/hooks/payment-details/useCreditcardDetails.js
+
+  - Form, component, styles, for creditcard form
+    - src/components/OrderDetails/Creditcard.css
+    - src/components/OrderDetails/CreditcardForm.css
+    - src/components/OrderDetails/CreditcardForm.js

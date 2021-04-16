@@ -35,9 +35,11 @@ export default (businessData, user) => {
   ] = useCalculateOrderPrice(businessData, priceSubTotal, shoppingCartItems);
 
   const handleResetOrderError = () => dispatch(resetOrderError());
+
   const handleCreateOrder = (newUser = null, transactionData = null) => {
     const { serviceAccommodatorId, serviceLocationId, catalogId, pickUp } = businessData;
     let requestedDeliveryDate = '';
+
     if (pickUp && pickUp.futureDays && pickUp.futureDays.length) {
       let selectedDay = pickUp.futureDays.filter(
         ({ displayText }) => displayText === orderPickUp.day
@@ -71,7 +73,8 @@ export default (businessData, user) => {
       transactionData
     });
 
-    dispatch(createOrder(orderData)).then(({ payload, error }) => {
+    dispatch(createOrder(orderData))
+    .then(({ payload, error }) => {
       if (payload && payload.orderUUID && !error) {
         dispatch(clearCart());
         history.push(`/${businessUrlKey}/order-status/${payload.orderUUID}${search}`);
@@ -80,6 +83,7 @@ export default (businessData, user) => {
         setOrderInProgress(false);
       }
     });
+
   };
   return [
     orderInProgress,

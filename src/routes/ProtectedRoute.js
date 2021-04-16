@@ -1,8 +1,8 @@
 import React from 'react';
 import { Route, Redirect } from 'react-router-dom';
 import { useCookies as useReactCookie } from 'react-cookie';
-import { Layout } from '../../components/Layout/Layout';
-import { USER_COOKIE } from '../../config/constants';
+import { Layout } from '../components/Layout/Layout';
+import { USER_COOKIE } from '../config/constants';
 
 export const ProtectedRoute = ({ component: Component, user, ...rest }) => {
   const [cookies] = useReactCookie();

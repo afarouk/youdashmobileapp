@@ -14,6 +14,8 @@ import useTableOrder from '../../hooks/order-details/useTableOrder';
 import { Page404 } from './Page404/Page404';
 import useGetProductItem from '../../hooks/product-item/useGetProductItem';
 
+import { logLocationComponents } from '../../utils/logger';
+
 export const Layout = ({
   isHome = false,
   isProductItem,
@@ -21,19 +23,22 @@ export const Layout = ({
   pageTitle,
   children
 }) => {
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
+  // execute only once (window.load)
+  useEffect(() => { window.scrollTo(0, 0) }, []);
 
-  const [openDrawer, handleOpen, handleClose, handleGoBack] = useDrawer();
+  // logLocationComponents(children, window.location);
+
   const [logIn, logOut] = useAuthActions();
   const [businessData, loading, error] = useBusinessData();
+  const [openDrawer, handleOpen, handleClose, handleGoBack] = useDrawer();
   const [user, loyaltyAndOrderHistory] = useGetUserSASLSummary(true);
-
-  const { saslName, bannerImageURL, themeColors } = businessData;
+  const {
+    saslName,
+    bannerImageURL,
+    themeColors,
+  } = businessData;
 
   const [productItem] = useGetProductItem(businessData, isShoppingCartItem);
-
   useDiscounts(businessData);
   useTableOrder();
   // useGlobalErrorMessage();
@@ -53,20 +58,18 @@ export const Layout = ({
         title={saslName}
         isHome={isHome}
         onBack={isHome ? handleOpen : handleGoBack}
-        bannerImageURL={bannerImageURL}
-      />
+        bannerImageURL={bannerImageURL}/>
+
       <Drawer
         open={openDrawer}
         onOpen={handleOpen}
         onClose={handleClose}
         user={user}
         onLogin={logIn}
-        onLogout={logOut}
-      />
+        onLogout={logOut} />
+
       <div className={`page-content ${isHome ? '' : ' single-page'}`}>
-        {error ? (
-          <Page404 />
-        ) : (
+        {error ? ( <Page404 /> ) : (
           <>{React.cloneElement(children, { businessData, user, loyaltyAndOrderHistory })}</>
         )}
       </div>
