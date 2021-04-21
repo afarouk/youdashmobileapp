@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {default as CC} from "react-credit-cards";
 // import { Input } from 'antd';
 import { Card } from '../Shared/Card/Card';
@@ -19,11 +19,38 @@ export default function CreditcardForm({
   handleInputFocus,
   handleInputChange,
   onCardSubmitHandler,
+  priceTotal
 }) {
   const formRef = useRef(null);
   const { ccHolderName, ccNumber, ccExpiration, ccCVC, ccIssuer } = ccData;
-    // 4012 0000 3333 0026
-    // 12/25    123
+
+  // 4012 0000 3333 0026
+  // 12/25    123
+
+  let [expMonth, setExpMonth] = useState("");
+  let [expYear, setExpYear] = useState("");
+  useEffect(() => {
+    if (!ccExpiration) {
+      return;
+    }
+    let chunks = ccExpiration.split('/');
+    if (chunks.length <= 1) {
+      setExpMonth("");
+      setExpYear("");
+      return;
+    }
+    setExpMonth(chunks[0]);
+    setExpYear(chunks[1]);
+  }, [ccExpiration]);
+
+  let [cardNumber, setCardNumber] = useState("");
+  useEffect(() => {
+    if (ccNumber && ccNumber.length) {
+      setCardNumber(ccNumber.replace(/\s/g,''));
+    } else {
+      setCardNumber("");
+    }
+  }, [ccNumber]);
 
   return (
 
@@ -72,6 +99,7 @@ export default function CreditcardForm({
             className="ant-input"
             placeholder="Name"
             required
+            data-cayan="cardholder"
             onChange={handleInputChange}
             onFocus={handleInputFocus}
           />
@@ -101,6 +129,7 @@ export default function CreditcardForm({
             <label htmlFor="cvc" className="font-size-sm required">
               CVC
             </label>
+
             <input
               type="tel"
               name="cvc"
@@ -108,6 +137,7 @@ export default function CreditcardForm({
               placeholder="CVC"
               pattern="\d{3,4}"
               required
+              data-cayan="cvv"
               onChange={handleInputChange}
               onFocus={handleInputFocus}
             />
@@ -116,6 +146,10 @@ export default function CreditcardForm({
 
         <div className="form-field">
           <input type="hidden" name="issuer" value={issuer} />
+          <input type="hidden" name="total" data-cayan="amount" value={priceTotal}/>
+          <input type="hidden" name="expirationmonth" data-cayan="expirationmonth" value={expMonth}/>
+          <input type="hidden" name="expirationyear" data-cayan="expirationyear" value={expYear}/>
+          <input type="hidden" name="cardnumber" data-cayan="cardnumber" value={cardNumber}/>
 
           <button type="submit" className="hidden">Presubmit</button>
         </div>

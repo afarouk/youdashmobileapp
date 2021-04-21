@@ -1,5 +1,4 @@
 form.cc  {
-
 }
 
 form.cc .form-row {
@@ -30,7 +29,6 @@ form.cc label.required:after {
 }
 
 .order-details form.cc h4 {
-  margin-bottom: 40px;
 }
 
 form.cc .form-title {
@@ -38,9 +36,10 @@ form.cc .form-title {
 }
 
 form.cc .rccs {
-  transform: scale(0.5);
+  display: none;
+  /*transform: scale(0.5);
   transform-origin: top right;
   position: absolute;
   right: 0px;
-  top: 0px;
+  top: 0px;*/
 }

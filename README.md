@@ -2,6 +2,20 @@
 
 bootstrapped using cra [Create react app docs](./docs/cra.md)
 
+## get started
+
+on the root folder, run:
+
+```sh
+yarn install
+```
+
+then to start the app on port 3000 by default:
+
+```sh
+yarn start
+```
+
 ## Development
 
 it is recommended to create a `.env` file, in order to have flexibility with Create React App's  builds.

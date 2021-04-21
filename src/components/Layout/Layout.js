@@ -32,6 +32,7 @@ export const Layout = ({
   const [businessData, loading, error] = useBusinessData();
   const [openDrawer, handleOpen, handleClose, handleGoBack] = useDrawer();
   const [user, loyaltyAndOrderHistory] = useGetUserSASLSummary(true);
+
   const {
     saslName,
     bannerImageURL,

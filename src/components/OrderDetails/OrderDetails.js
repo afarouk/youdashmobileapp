@@ -1,23 +1,25 @@
-import React, { useRef } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 import PropTypes from 'prop-types';
+import { Alert, Button } from 'antd';
 
+import { Tips } from './Tips';
 import { Pickup } from './Pickup';
 import { SubTotal } from './SubTotal';
 import { GrossTotal } from './GrossTotal';
 import { OrderItemsList } from './OrderItemList/OrderItemsList';
-import './OrderDetails.css';
-import { Tips } from './Tips';
-import { Alert, Button } from 'antd';
+import CreditcardForm from './CreditcardForm';
+import OrderFormErrors from './OrderFormErrors';
+
 import { UserDataForm } from '../Shared/UserDataForm/UserDataForm';
 import { UserDetails } from '../Shared/UserDataForm/UserDetails';
 import { Form } from '../Shared/Form/Form';
 import { Card } from '../Shared/Card/Card';
 import { CheckoutIFrame } from '../Checkout/CheckoutIFrame';
-import CreditcardForm from './CreditcardForm';
-
 import { Comments } from '../Shared/Comments/Comments';
 import { VerificationCode } from './VerificationCode/VerificationCode';
+
+import './OrderDetails.css';
 
 export const OrderDetails = ({
   priceTotal,
@@ -77,7 +79,6 @@ export const OrderDetails = ({
   const portalForm = useRef(null);
 
   const onSubmitHandler = (evt = window.event) => {
-    console.log('Hooked to Onsubmit');
     onCreateOrder(evt);
   };
 
@@ -101,23 +102,38 @@ export const OrderDetails = ({
     handleInputFocus,
     handleInputChange,
     onCardSubmitHandler,
+    priceTotal
   };
 
-  // preventOrdering || !shoppingCartItems.length || !credentials.firstName || !credentials.email || !credentials.mobile
+  const [isFormValid, setIsFormValid] = useState(false);
+  useEffect(() => {
+    // preventOrdering || !shoppingCartItems.length ||
+    // !credentials.firstName || !credentials.email || !credentials.mobile
+    const cond_1 = preventOrdering;
+    const cond_2 = shoppingCartItems.length;
+    const cond_3 = credentials.firstName && credentials.email && credentials.mobile;
+    const valid = (cond_1 || !cond_2 || !cond_3) ? false : true;
+    // console.log('[hook][formvalid]', valid)
+    setIsFormValid(valid);
+  }, [preventOrdering, shoppingCartItems, credentials])
 
-  const cond_1 = preventOrdering;
-  const cond_2 = shoppingCartItems.length;
-  const cond_3 = credentials.firstName && credentials.email && credentials.mobile;
+  // @todo formstate not updated when ccNumber/ccName/etc change
+  const [isPayFormValid, setIsPayFormValid] = useState(true);
+  useEffect(() => {
+    if (isIframePayment) {
+      return;
+    }
+    const fs = formState;
+    const valid = (fs.valid && fs.name && fs.expiry && fs.cvc) ? true : false;
+    // console.log('[hook][payformvalid]', valid)
+    setIsPayFormValid(valid);
+  }, [isIframePayment, formState]);
 
-  let btnProps = {
-    disabled: cond_1 || !cond_2 || !cond_3
-  };
-
-  if (!isIframePayment) {
-    let fs = formState;
-    let isFormValid = fs.valid && fs.name && fs.expiry && fs.cvc
-    btnProps.disabled = btnProps.disabled || !isFormValid;
-  }
+  const [btnProps, setBtnProps] = useState({disabled: true});
+  useEffect(() => {
+    setBtnProps({ disabled : !isFormValid || !isPayFormValid });
+    // console.log('[hook][btnprops]', !isFormValid || !isPayFormValid)
+  }, [isFormValid, isPayFormValid]);
 
   return (
     <div className="p-default">
@@ -197,24 +213,12 @@ export const OrderDetails = ({
             createPortal(<CreditcardForm {...ccProps} />, portalForm.current)
           }
 
-          {transactionError && <Alert message="Checkout error." type="error" showIcon closable />}
-
-          {orderRequestError && <Alert message="Placing order error." type="error" showIcon closable />}
-
-          {preventOrdering && (
-            <Alert
-              message="Business doesn't accept orders at this moment."
-              type="warning"
-              showIcon
-            />
-          )}
-
           <button ref={submitForm} type="submit" className="hidden">formsubmit</button>
         </Form>
 
         <div ref={portalForm}></div>
 
-        {showSubmitButton && (
+        { showSubmitButton && (
           <Button
             block
             size="large"
@@ -225,7 +229,11 @@ export const OrderDetails = ({
             {...btnProps}>
             {submitLabel}
           </Button>
-          )}
+        )}
+
+
+        { <OrderFormErrors {...{transactionError, orderRequestError, preventOrdering}} />}
+
       </div>
     </div>
   );

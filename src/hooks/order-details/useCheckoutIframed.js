@@ -34,8 +34,7 @@ export function useHooksIframe(config, handleCreateorder) {
       return;
     }
 
-    const handler = (event) => {
-      debugger;
+    const handler = (event = window.event) => {
       const { message } = event.data || "";
 
       if (event.origin !== window.location.origin) return;
