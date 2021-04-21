@@ -91,12 +91,13 @@ export default (businessData, user) => {
       case paymentProcessors.TSYS_ECOMMERCE:
         orderData = {
           ...orderData,
+          paymentProcessor,
           provisioningParam1,
           provisioningParam2,
           provisioningParam3,
           provisioningParam4,
           provisioningParam5,
-          processorParam1: transactionData.token
+          processorParam1: transactionData.token,
         };
         break;
       default:
