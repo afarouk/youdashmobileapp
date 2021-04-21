@@ -78,7 +78,12 @@ const OrderDetailsPage = ({ businessData, user }) => {
     handleInputFocus,
     handleInputChange,
     handleCardSubmit,
-  ] = useCreditcardDetails(businessData);
+  ] = useCreditcardDetails(
+    businessData,
+    shoppingCartItems,
+    priceTotal,
+    onCreateOrder,
+    orderRequestError);
 
   const [preventOrdering] = usePreventOrdering(businessData);
 

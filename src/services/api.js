@@ -105,7 +105,17 @@ export const paymentAPI = {
   getOrderStatus: (params) =>
     request.get(`/apptsvc/rest/retail/retrieveOrderStatusData`, {
       params
-    })
+    }),
+  getPaymentToken: (data) => {
+    const { CayanCheckout } = window;
+
+    return new Promise((resolve, reject) => {
+      CayanCheckout.createPaymentToken({
+        success: (...args) => resolve(...args),
+        error: (...args) => reject(...args)
+      })
+    });
+  }
 };
 
 export const pollAPI = {

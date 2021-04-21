@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
 import { paymentProcessors } from '../../config/constants';
+import { paymentAPI } from '../../services/api';
 
 import {
   formatCreditCardNumber,
@@ -22,8 +23,14 @@ import {
   setFormState
 } from '../../redux/slices/cc';
 
-export default ({ onlineOrder }) => {
-  const { paymentProcessor } = onlineOrder;
+export default (
+  businessData,
+  shoppingCartItems,
+  priceTotal,
+  handleCreateOrder,
+  orderRequestError
+) => {
+  const { paymentProcessor } = businessData.onlineOrder;
   const dispatch = useDispatch();
 
   const ccData = useSelector((state) => {
@@ -82,19 +89,36 @@ export default ({ onlineOrder }) => {
     dispatch(setFormState({name, value}));
   };
 
-  const handleCardSubmit = async (evt) => {
-    if (evt && evt.preventDefault) {
-      evt.preventDefault();
-    }
-
-    const domFormData = [...evt.target.elements]
+  const formToObject = (form) => {
+    return [...form.elements]
     .filter(d => d.name)
     .reduce((acc, d) => {
       acc[d.name] = d.value;
       return acc;
     }, {});
-    alert('Hooray!')
-    return domFormData;
+  }
+
+  const handleCardSubmit = (evt) => {
+    if (evt && evt.preventDefault) {
+      evt.preventDefault();
+    }
+    // const domFormData = formToObject(evt.target);
+    // console.log(domFormData);
+
+    paymentAPI.getPaymentToken()
+    .then((res) => {
+      const { token, created, expires } = res;
+      const postData = {
+        token,
+        created,
+        expires,
+        paymentProcessor
+      };
+      handleCreateOrder(null, postData);
+    })
+    .catch((err) => {
+      console.error(err);
+    })
   };
 
   return [
