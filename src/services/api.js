@@ -88,6 +88,21 @@ export const orderAPI = {
       params
     })
 };
+
+const gwApis = {
+  vantiv: {},
+
+}
+
+function getCayanToken(CayanCheckout) {
+  return new Promise((resolve, reject) => {
+    CayanCheckout.createPaymentToken({
+      success: (...args) => resolve(...args),
+      error: (...args) => reject(...args)
+    })
+  })
+}
+
 export const paymentAPI = {
   getTransactionSetupID: (data) =>
     request({
@@ -99,8 +114,22 @@ export const paymentAPI = {
   getOrderStatus: (params) =>
     request.get(`/apptsvc/rest/retail/retrieveOrderStatusData`, {
       params
+    }),
+  getPaymentToken: (data) => {
+    const { CayanCheckout } = window;
+    return new Promise((resolve, reject) => {
+      getCayanToken(CayanCheckout)
+      .then(resolve)
+      .catch((err) => {
+        CayanCheckout.setWebApiKey("CAQIJ8EHM0VHSCC8");
+        return getCayanToken(CayanCheckout);
+      })
+      .catch((err) => reject(err));
     })
+
+  }
 };
+
 export const pollAPI = {
   submitPoll: (data) => {
     const { choice, UID, uuid } = data;

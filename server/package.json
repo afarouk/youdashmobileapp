@@ -2,13 +2,19 @@
   "name": "server",
   "version": "1.0.0",
   "scripts": {
-    "start": "node index.js"
+    "start": "node index.js",
+    "dev": "set NODE_ENV=development && npm run watch",
+    "watch": "nodemon --watch . --watch ../build -e js,json,html index.js"
   },
   "dependencies": {
     "axios": "^0.20.0",
+    "colors": "^1.4.0",
     "dotenv": "^8.2.0",
     "edit-json-file": "^1.4.1",
     "express": "^4.17.1",
     "serialize-javascript": "^4.0.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.7"
   }
 }

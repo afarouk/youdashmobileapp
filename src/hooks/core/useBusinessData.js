@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { getBusinessData, updateGroups, hydrateBusinessData } from '../../redux/slices/business';
 import { clearCart } from '../../redux/slices/shoppingCart';
+
 export default () => {
   const { businessUrlKey } = useParams();
   const businessData = useSelector((state) => state.business.data);
@@ -11,44 +12,52 @@ export default () => {
   const orderPickUp = useSelector((state) => state.shoppingCart.orderPickUp);
   const dispatch = useDispatch();
   const [isLoadedFromClient, setIsLoadedFromClient] = useState(false);
+
   useEffect(() => {
-    if (window.__SASL_DATA__ && window.__SASL_DATA__ !== undefined && businessUrlKey) {
+    const bd = businessData;
+    const wd = window.__SASL_DATA__;
+
+    if (!businessUrlKey) {
+      return;
+    }
+
+    if (wd) {
       dispatch(
         hydrateBusinessData({
-          businessData: window.__SASL_DATA__,
+          businessData: wd,
           businessUrlKey
         })
       );
-    } else if (
-      (!businessData.urlKey || !businessData.saslName || !businessData.groups) &&
-      businessUrlKey !== undefined
-    ) {
-      dispatch(getBusinessData(businessUrlKey)).then(() => {
-        // do additional work
+    } else if (!bd.urlKey || !bd.saslName || !bd.groups) {
+      dispatch(getBusinessData(businessUrlKey))
+      .then(() => {
         setIsLoadedFromClient(true);
-        console.log('Business Data loaded.');
+        // console.log('Business Data loaded.');
       });
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [businessUrlKey]);
+
   useEffect(() => {
     if (isLoadedFromClient && businessData.ogTags) {
       const { ogTags } = businessData;
+      const qs = 'querySelector';
+      const sa = 'setAttribute';
 
       if (ogTags) {
-        document.title = ogTags.title;
-        document.querySelector('meta[property="og:title"]').setAttribute('content', ogTags.title);
-        document
-          .querySelector('meta[property="og:description"]')
-          .setAttribute('content', ogTags.description);
-        document
-          .querySelector('meta[name="description"]')
-          .setAttribute('content', ogTags.description);
-        console.log('CSR: Updated meta tags.');
+        const { title, description } = ogTags;
+        document.title = title;
+        document[qs]('meta[property="og:title"]')[sa]('content', title);
+        document[qs]('meta[property="og:description"]')[sa]('content', description);
+        document[qs]('meta[name="description"]')[sa]('content', description);
+
         setIsLoadedFromClient(false);
+
+        // console.log('CSR: Updated meta tags.');
       }
     }
   }, [isLoadedFromClient]);
+
   useEffect(() => {
     if (
       businessData.hasGroupsBasedOnDay &&
@@ -65,5 +74,6 @@ export default () => {
       }
     }
   }, [orderPickUp]);
+
   return [businessData, loading, error];
 };

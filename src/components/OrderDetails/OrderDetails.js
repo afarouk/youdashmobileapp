@@ -1,21 +1,25 @@
-import React from 'react';
+import React, { useRef, useEffect, useState } from 'react';
+import { createPortal } from 'react-dom';
 import PropTypes from 'prop-types';
+import { Alert, Button } from 'antd';
 
+import { Tips } from './Tips';
 import { Pickup } from './Pickup';
 import { SubTotal } from './SubTotal';
 import { GrossTotal } from './GrossTotal';
 import { OrderItemsList } from './OrderItemList/OrderItemsList';
-import './OrderDetails.css';
-import { Tips } from './Tips';
-import { Alert, Button } from 'antd';
+import CreditcardForm from './CreditcardForm';
+import OrderFormErrors from './OrderFormErrors';
+
 import { UserDataForm } from '../Shared/UserDataForm/UserDataForm';
 import { UserDetails } from '../Shared/UserDataForm/UserDetails';
 import { Form } from '../Shared/Form/Form';
 import { Card } from '../Shared/Card/Card';
 import { CheckoutIFrame } from '../Checkout/CheckoutIFrame';
-
 import { Comments } from '../Shared/Comments/Comments';
 import { VerificationCode } from './VerificationCode/VerificationCode';
+
+import './OrderDetails.css';
 
 export const OrderDetails = ({
   priceTotal,
@@ -56,9 +60,80 @@ export const OrderDetails = ({
   verificationCode,
   verificationCodeError,
   onVerificationCodeChange,
-  onResendVerificationCode
+  onResendVerificationCode,
+
+  isResolved,
+  isIframePayment,
+  ccData,
+  issuer,
+  formState,
+  focused,
+  handleCallback,
+  handleInputFocus,
+  handleInputChange,
+  handleCardSubmit,
 }) => {
   const { saslName } = businessData;
+
+  const submitForm = useRef(null);
+  const portalForm = useRef(null);
+
+  const onSubmitHandler = (evt = window.event) => {
+    onCreateOrder(evt);
+  };
+
+  const onCardSubmitHandler = async (evt = window.event) => {
+    const res = await handleCardSubmit(evt);
+  };
+
+  const clickSubmitBtn = () => {
+    let portalFormBtn = portalForm.current.querySelector('[type=submit]');
+    portalFormBtn.click();
+  };
+
+  const ccProps = {
+    isResolved,
+    isIframePayment,
+    ccData,
+    issuer,
+    focused,
+    formState,
+    handleCallback,
+    handleInputFocus,
+    handleInputChange,
+    onCardSubmitHandler,
+    priceTotal
+  };
+
+  const [isFormValid, setIsFormValid] = useState(false);
+  useEffect(() => {
+    // preventOrdering || !shoppingCartItems.length ||
+    // !credentials.firstName || !credentials.email || !credentials.mobile
+    const cond_1 = preventOrdering;
+    const cond_2 = shoppingCartItems.length;
+    const cond_3 = credentials.firstName && credentials.email && credentials.mobile;
+    const valid = (cond_1 || !cond_2 || !cond_3) ? false : true;
+    // console.log('[hook][formvalid]', valid)
+    setIsFormValid(valid);
+  }, [preventOrdering, shoppingCartItems, credentials])
+
+  // @todo formstate not updated when ccNumber/ccName/etc change
+  const [isPayFormValid, setIsPayFormValid] = useState(true);
+  useEffect(() => {
+    if (isIframePayment) {
+      return;
+    }
+    const fs = formState;
+    const valid = (fs.valid && fs.name && fs.expiry && fs.cvc) ? true : false;
+    // console.log('[hook][payformvalid]', valid)
+    setIsPayFormValid(valid);
+  }, [isIframePayment, formState]);
+
+  const [btnProps, setBtnProps] = useState({disabled: true});
+  useEffect(() => {
+    setBtnProps({ disabled : !isFormValid || !isPayFormValid });
+    // console.log('[hook][btnprops]', !isFormValid || !isPayFormValid)
+  }, [isFormValid, isPayFormValid]);
 
   return (
     <div className="p-default">
@@ -74,19 +149,21 @@ export const OrderDetails = ({
           <OrderItemsList
             items={shoppingCartItems}
             onDeleteItem={onDeleteItem}
-            onEditItem={onEditItem}
-          />
+            onEditItem={onEditItem}/>
+
           <SubTotal
             orderDiscount={orderDiscount}
             priceSubTotal={priceSubTotal}
             discountedPriceSubTotal={discountedPriceSubTotal}
             taxes={taxes}
             tips={tips}
-            extraFee={extraFee}
-          />
+            extraFee={extraFee}/>
+
           <Tips tips={tips} onChange={onTipsChange} />
+
           <GrossTotal total={priceTotal} />
         </Card>
+
         {allowOrderComments && (
           <Card>
             <h4 className="font-size-lg primary-text">Comments</h4>
@@ -98,7 +175,8 @@ export const OrderDetails = ({
           </Card>
         )}
 
-        <Form onSubmit={onCreateOrder}>
+        <Form
+          onSubmit={(e) => onSubmitHandler(e)}>
           {(!user || (user && updateMode)) && (
             <Card>
               <UserDataForm
@@ -111,7 +189,9 @@ export const OrderDetails = ({
               />
             </Card>
           )}
+
           {user && !updateMode && <UserDetails user={user} toggleUpdateMode={toggleUpdateMode} />}
+
           {user && !isMobileVerified && (
             <VerificationCode
               onResend={onResendVerificationCode}
@@ -120,43 +200,40 @@ export const OrderDetails = ({
               verificationCodeError={verificationCodeError}
             />
           )}
+
           {registerMemberRequestError && (
             <Alert message={registerMemberRequestError} type="error" showIcon closable />
           )}
-          {transactionSetupUrl && !orderRequestError && !transactionError && (
+
+          { isResolved && isIframePayment && transactionSetupUrl && !orderRequestError && !transactionError && (
             <CheckoutIFrame transactionSetupUrl={transactionSetupUrl} />
           )}
-          {transactionError && <Alert message="Checkout error." type="error" showIcon closable />}
-          {orderRequestError && (
-            <Alert message="Placing order error." type="error" showIcon closable />
-          )}
-          {preventOrdering && (
-            <Alert
-              message="Business doesn't accept orders at this moment."
-              type="warning"
-              showIcon
-            />
-          )}
-          {showSubmitButton && (
-            <Button
-              className="font-size-md"
-              size="large"
-              type="primary"
-              htmlType="submit"
-              block
-              loading={orderInProgress}
-              disabled={
-                preventOrdering ||
-                !shoppingCartItems.length ||
-                !credentials.firstName ||
-                !credentials.email ||
-                !credentials.mobile
-              }
-            >
-              {submitLabel}
-            </Button>
-          )}
+
+          { isResolved && !isIframePayment && portalForm.current &&
+            createPortal(<CreditcardForm {...ccProps} />, portalForm.current)
+          }
+
+          <button ref={submitForm} type="submit" className="hidden">formsubmit</button>
         </Form>
+
+        <div ref={portalForm}></div>
+
+        { showSubmitButton && (
+          <Button
+            block
+            size="large"
+            type="primary"
+            className="font-size-md"
+            onClick={clickSubmitBtn}
+            loading={orderInProgress}
+            {...btnProps}>
+            {submitLabel}
+          </Button>
+        )}
+
+
+        { <OrderFormErrors {...{transactionError, orderRequestError, preventOrdering}} />}
+
       </div>
     </div>
   );

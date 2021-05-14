@@ -1,19 +1,19 @@
 import React, { useEffect, useState } from 'react';
-import { OrderDetails } from '../components/OrderDetails/OrderDetails';
 import { useDispatch } from 'react-redux';
 import { useParams, useHistory, useLocation } from 'react-router-dom';
-import { deleteCartItem } from '../redux/slices/shoppingCart';
+
+import { OrderDetails } from '../components/OrderDetails/OrderDetails';
 
 import { getPercent, scrollToElement } from '../utils/helpers';
-import useMemberData from '../hooks/user/useMemberData';
-
-import useCreateOrder from '../hooks/order-details/useCreateOrder';
 import { paymentProcessors } from '../config/constants';
+import { deleteCartItem } from '../redux/slices/shoppingCart';
 
+import useMemberData from '../hooks/user/useMemberData';
+import useCreateOrder from '../hooks/order-details/useCreateOrder';
 import useCheckout from '../hooks/order-details/useCheckout';
 import usePreventOrdering from '../hooks/core/usePreventOrdering';
-
 import useMobileVerification from '../hooks/user/useMobileVerification';
+import useCreditcardDetails from '../hooks/payment-details/useCreditcardDetails';
 
 const OrderDetailsPage = ({ businessData, user }) => {
   const dispatch = useDispatch();
@@ -62,13 +62,28 @@ const OrderDetailsPage = ({ businessData, user }) => {
     onCommentChange
   ] = useCreateOrder(businessData, user);
 
-  const [checkoutMode, setCheckoutMode, transactionSetupUrl, transactionError] = useCheckout(
+  const [
+    checkoutMode, setCheckoutMode,
+    transactionSetupUrl, transactionError
+  ] = useCheckout(
+    businessData, shoppingCartItems,
+    priceTotal, onCreateOrder,
+    orderRequestError
+  );
+
+  const [
+    isResolved, isIframePayment,
+    ccData, issuer, formState, focused,
+    handleCallback,
+    handleInputFocus,
+    handleInputChange,
+    handleCardSubmit,
+  ] = useCreditcardDetails(
     businessData,
     shoppingCartItems,
     priceTotal,
     onCreateOrder,
-    orderRequestError
-  );
+    orderRequestError);
 
   const [preventOrdering] = usePreventOrdering(businessData);
 
@@ -77,80 +92,82 @@ const OrderDetailsPage = ({ businessData, user }) => {
       history.push(`/${businessUrlKey}/${search}`);
     }
   }, []);
+
   const handleEditItem = (index) =>
     history.push(`/${businessUrlKey}/shopping-cart/${index}${search}`);
 
   const handleDeleteCartItem = (index) => dispatch(deleteCartItem(index));
-  const handlePlaceOrder = (e) => {
-    e.preventDefault();
+
+  function handlePlaceOrder(evt = window.event) {
+    if (evt && evt.defaultPrevented) {
+      return;
+    }
+
+    if (evt && evt.preventDefault && typeof evt.preventDefault === 'function') {
+      evt.preventDefault();
+    }
+
+    try {
+      orderHandler()
+    } catch (err) {
+      console.error(err);
+      setOrderInProgress(false);
+    }
+  }
+
+  async function orderHandler() {
     if (!orderPickUp.day || !orderPickUp.time) {
       return scrollToElement(document.getElementById('pickup-selectors'));
     }
-    if (user && !credentialsChanged) {
-      if (acceptCreditCards && paymentProcessor === paymentProcessors.VANTIV_ECOMMERCE) {
-        !isMobileVerified && verificationCode
-          ? onSendVerificationCode()
-              .then(() => {
-                setCheckoutMode(true);
-              })
-              .catch((error) => {
-                if (error) {
-                  setOrderInProgress(false);
-                }
-              })
-          : setCheckoutMode(true);
 
-        if (orderRequestError) {
-          onResetOrderError();
-        }
+    if (orderRequestError) {
+      return onResetOrderError();
+    }
+
+    const sendVerificationAnd = async (fn) => {
+      if (!isMobileVerified && verificationCode) {
+        await onSendVerificationCode();
+        fn();
+      } else {
+        fn();
+      }
+    }
+
+    if (user && !credentialsChanged) {
+      if (acceptCreditCards && isIframePayment) {
+        await sendVerificationAnd(() => setCheckoutMode(true));
       } else {
         setOrderInProgress(true);
-        !isMobileVerified && verificationCode
-          ? onSendVerificationCode()
-              .then(() => {
-                onCreateOrder();
-              })
-              .catch((error) => {
-                if (error) {
-                  setOrderInProgress(false);
-                }
-              })
-          : onCreateOrder();
+        await sendVerificationAnd(() => onCreateOrder());
       }
     } else {
       setOrderInProgress(true);
-      onSignUpSubmit(updateMode, user, true)
-        .then((user) => {
-          setUpdateMode(false);
+      const userData = onSignUpSubmit(updateMode, user, true);
+
+      const adhoc = userData.adhocEntry;
+      const verified = userData.mobileVerified;
+      setUpdateMode(false);
+      setOrderInProgress(false);
+
+      if (acceptCreditCards && isIframePayment) {
+        if (!adhoc && verified) {
+          setCheckoutMode(true);
+        } else if (adhoc && !verified && verificationCode) {
+          setOrderInProgress(true);
+          await onSendVerificationCode();
+          setCheckoutMode(true);
           setOrderInProgress(false);
-          if (acceptCreditCards && paymentProcessor === paymentProcessors.VANTIV_ECOMMERCE) {
-            if (!user.adhocEntry && user.mobileVerified) {
-              setCheckoutMode(true);
-            } else if (user.adhocEntry && !user.mobileVerified && verificationCode) {
-              setOrderInProgress(true);
-              onSendVerificationCode().then(() => {
-                setCheckoutMode(true);
-                setOrderInProgress(false);
-              });
-            }
-          } else {
-            if (!user.adhocEntry && user.mobileVerified) {
-              onCreateOrder(user && user ? user : null);
-            } else if (user.adhocEntry && !user.mobileVerified && verificationCode) {
-              onSendVerificationCode().then(() => {
-                onCreateOrder(user && user ? user : null);
-              });
-            } else {
-              setOrderInProgress(false);
-            }
-          }
-        })
-        .catch((error) => {
-          console.log(error);
-          if (error) {
-            setOrderInProgress(false);
-          }
-        });
+        }
+      } else {
+        if (!adhoc && verified) {
+          onCreateOrder(userData);
+        } else if (adhoc && !verified && verificationCode) {
+          await onSendVerificationCode();
+          onCreateOrder(userData);
+        } else {
+          setOrderInProgress(false);
+        }
+      }
     }
   };
 
@@ -193,6 +210,16 @@ const OrderDetailsPage = ({ businessData, user }) => {
       checkoutMode={checkoutMode}
       toggleUpdateMode={toggleUpdateMode}
       submitLabel={acceptCreditCards ? 'Checkout' : 'Place Order'}
+      isResolved={isResolved}
+      isIframePayment={isIframePayment}
+      ccData={ccData}
+      issuer={issuer}
+      formState={formState}
+      focused={focused}
+      handleCallback={handleCallback}
+      handleInputFocus={handleInputFocus}
+      handleInputChange={handleInputChange}
+      handleCardSubmit={handleCardSubmit}
     />
   );
 };

@@ -68,6 +68,7 @@ const initialState = {
   loading: false,
   error: false
 };
+
 const getCatalog = (catalogs) => {
   const validOneDayOnlyFalse = catalogs.filter(
     ({ isValidOneDayOnly }) => isValidOneDayOnly === false
@@ -133,6 +134,7 @@ const mapUnSubgroupedItems = (items, groupId) => {
     itemsObject
   };
 };
+
 const mapGroups = (groupsSrc) => {
   let groups = [];
   let itemsById = {};
@@ -161,6 +163,7 @@ const mapGroups = (groupsSrc) => {
     itemsById
   };
 };
+
 const mapMobileOrderStatuses = (mobileOrderStatuses) => {
   const statuses = {};
   if (mobileOrderStatuses && mobileOrderStatuses.length) {
@@ -170,6 +173,7 @@ const mapMobileOrderStatuses = (mobileOrderStatuses) => {
   }
   return statuses;
 };
+
 const mapPollsById = (polls) => {
   let pollsById = {};
   if (polls.length > 0) {
@@ -177,6 +181,7 @@ const mapPollsById = (polls) => {
   }
   return pollsById;
 };
+
 const mapBusinessData = (urlKey, data) => {
   const {
     serviceAccommodatorId,
@@ -230,19 +235,22 @@ const mapBusinessData = (urlKey, data) => {
     allowOrderComments
   } = services.onlineOrder;
 
-  let onlineOrder = {
-    tips,
-    showTips,
-    acceptCreditCards,
-    paymentProcessor,
-    allowItemComments,
-    allowOrderComments
-  };
+  // let onlineOrder = {
+  //   tips,
+  //   showTips,
+  //   acceptCreditCards,
+  //   paymentProcessor,
+  //   allowItemComments,
+  //   allowOrderComments
+  // };
+
+  let onlineOrder = services.onlineOrder;
 
   let mapCoordinates = {
     latitude,
     longitude
   };
+
   let pickUp = {
     futureDays,
     pickUpTimes,
@@ -259,6 +267,7 @@ const mapBusinessData = (urlKey, data) => {
       zip
     }
   };
+
   let priorityBox = {
     highLightedItem,
     notification,

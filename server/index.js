@@ -3,17 +3,25 @@ require('dotenv').config({ path: '.env' });
 const app = express();
 const port = process.env.PORT || 3000;
 const path = require('path');
-const fs = require('fs');
-const axios = require('axios');
 const editJsonFile = require('edit-json-file');
-const serialize = require('serialize-javascript');
-const endpoints = {
-  getSiteletteData: `/apptsvc/rest/sasl/getCatalogAndSiteletteDataModelByURLkey`
-};
-//should goes before app.use*
+
+const { log } = require('./src/logger');
+const {
+  getSiteletteData,
+  getFile
+} = require('./src/services.js');
+
+/* @weisk 2021/04/03: disable all cache on dev */
+const { NODE_ENV } = process.env;
+if (NODE_ENV && NODE_ENV === 'development') {
+  app.set('etag', false);
+  app.use((req, res, next) => res.set('Cache-Control', 'no-store'));
+}
+
+
 app.get('/manifest.json', function (request, res) {
   const { url } = request.query;
-  console.log(`Load manifest for: ${url}`);
+  log(`Load manifest for: ${url}`, 2);
   try {
     const filePath = path.resolve(__dirname, '../build', 'manifest.json');
     if (!url) {
@@ -27,87 +35,37 @@ app.get('/manifest.json', function (request, res) {
     return res.send(error);
   }
 });
-app.use(express.static(path.resolve(__dirname, '../build')));
 
-async function getSiteletteData(urlKey, query = {}) {
-  const { server, demo } = query;
 
-  const baseUrl = server
-      ? `http://${server}`
-      : `https://${demo && demo === 'true' ? 'simfel.com' : 'communitylive.ws'}`;
-  // console.log(`${baseUrl}${endpoints.getSiteletteData}?urlKey=${urlKey}`);
-  return axios.get(`${baseUrl}${endpoints.getSiteletteData}?urlKey=${urlKey}`);
-}
 
-async function readFile(filePath, siteletteData, urlKey, query) {
-  return new Promise((resolve, reject) => {
-    fs.readFile(filePath, 'utf8', function (err, fileData) {
-      if (err) {
-        console.log(err);
-        reject(err);
-      }
-      const { sasl } = siteletteData.siteletteDataModel;
-      if (sasl) {
-        const { ogTags, appleTouchIcon192URL } = sasl;
-        if (ogTags) {
-          fileData = fileData.replace(/\__OG_TITLE__/g, ogTags.title);
-          fileData = fileData.replace(/\__OG_DESCRIPTION__/g, ogTags.description);
-          fileData = fileData.replace(/\__OG_IMAGE__/g, ogTags.image);
-        }
-        if (appleTouchIcon192URL) {
-          fileData = fileData.replace(/\__LINK_ICON_192__/g, appleTouchIcon192URL);
-          fileData = fileData.replace(/\__LINK_APPLE_TOUCH_ICON__/g, appleTouchIcon192URL);
-        }
-        if (urlKey && query) {
-          let queryString = '';
-          if (query && Object.keys(query).length) {
-            Object.keys(query).map((key) => {
-              queryString += `${!queryString ? `${urlKey}/?` : '&'}${key}=${query[key]}`;
-            });
-          }
-          fileData = fileData.replace(
-              /\/manifest.json/g,
-              `/manifest.json?url=${encodeURIComponent(queryString)}`
-          );
-        }
-      }
+// static conf
+const buildpath = path.resolve(__dirname, '../build');
+app.use(express.static(buildpath));
 
-      fileData = fileData.replace(
-          /\window.__SASL_DATA__/g,
-          `window.__SASL_DATA__ = ${serialize(siteletteData, { isJSON: true })}`
-      );
-      // replace the special strings with server generated strings
-      resolve(fileData);
-    });
-  });
-}
-
-async function requestHandler(request, res) {
+async function requestHandler(request, res, next) {
   const { urlKey } = request.params;
-  console.log(`${urlKey} page visited.`);
-  console.log(request.originalUrl);
-  console.log(request.params);
-  console.log(request.query);
-  console.log(request.url);
+  log(`${urlKey} page visited.`, 2);
+  log(`\t${request.originalUrl}`);
+  log(`\t${JSON.stringify(request.params)}`);
+  log(`\t${JSON.stringify(request.query)}`);
+  log(`\t${request.url}`);
+
   const filePath = path.resolve(__dirname, '../build', 'index.html');
+  // if (!filePath) {
+  //   notFoundHandler(request, res);
+  // }
   try {
     const { data: siteletteData } = await getSiteletteData(urlKey, request.query);
     if (siteletteData) {
-      res.send(await readFile(filePath, siteletteData, urlKey, request.query));
+      res.send(await getFile(filePath, siteletteData, urlKey, request.query));
     }
-  } catch (e) {
-    console.log(e);
+  } catch (err) {
+    let msg = `Error ${err.code}\n\turl: ${err.config.url}\n\tisAxiosError: ${err.isAxiosErr}`;
+    log(msg, 4);
     // const filePath = path.resolve(__dirname, '../build', 'index.html');
-
-    res.sendFile(path.resolve(__dirname, './', '404.html'));
+    res.status(500);
   }
 }
-/*app.get('*.json', function (req, res) {
-  console.log(`json file ${req.originalUrl}`);
-  const filePath = path.resolve(__dirname, '../build', req.originalUrl);
-  res.sendFile(filePath);
-});*/
-//need to serve manifest.json properly and prevent app.get('*'...) below to handle it
 
 app.get('/:urlKey/order-status*', requestHandler);
 app.get('/:urlKey/order-details', requestHandler);
@@ -118,11 +76,24 @@ app.get('/:urlKey/user-settings', requestHandler);
 app.get('/:urlKey/p/*', requestHandler);
 app.get('/:urlKey/', requestHandler);
 
-/*app.get('*', function (request, response) {
-  console.log(request.originalUrl);
-  console.log(request.params);
+
+
+
+app.listen(port, () => log(`Listening on port ${port}`, 1));
+
+
+// can get rid of??
+
+/*app.get('*.json', function (req, res) {
+  console.(`json file ${req.originalUrl}`);
+  const filePath = path.resolve(__dirname, '../build', req.originalUrl);
+  res.sendFile(filePath);
+});*/
+//need to serve manifest.json properly and prevent app.get('*'...) below to handle it
+
+app.get('*', (request, response) => {
+  log(request.originalUrl, 1);
+  log(request.params);
   const filePath = path.resolve(__dirname, '../build', 'index.html');
   response.sendFile(filePath);
-});*/
-
-app.listen(port, () => console.log(`Listening on port ${port}`));
+});

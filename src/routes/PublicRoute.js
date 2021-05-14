@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Route } from 'react-router-dom';
-import { Layout } from '../../components/Layout/Layout';
+import { Layout } from '../components/Layout/Layout';
 
 export const PublicRoute = ({ component: Component, ...rest }) => {
   return (

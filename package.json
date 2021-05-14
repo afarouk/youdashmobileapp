@@ -10,29 +10,29 @@
     "antd": "^4.4.3",
     "axios": "^0.19.2",
     "date-fns": "^2.15.0",
+    "payment": "^2.4.3",
     "prop-types": "^15.7.2",
     "react": "^16.13.1",
     "react-barcode": "^1.4.0",
     "react-cookie": "^4.0.3",
+    "react-credit-cards": "^0.8.3",
     "react-dom": "^16.13.1",
     "react-input-mask": "^2.0.4",
     "react-redux": "^7.2.1",
     "react-router-dom": "^5.2.0",
-    "react-scripts": "3.4.1",
+    "react-scripts": "4.0.0",
     "react-slick": "^0.27.0",
     "slick-carousel": "^1.8.1",
     "stickybits": "^3.7.7"
   },
   "scripts": {
+    "dev": "cra-build-watch",
     "start": "react-scripts start",
     "build-default": "react-scripts build",
     "build": "react-scripts build && npm run build-sw",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "build-sw": "node ./src/sw-build.js"
-  },
-  "eslintConfig": {
-    "extends": "react-app"
   },
   "browserslist": {
     "production": [
@@ -47,6 +47,7 @@
     ]
   },
   "devDependencies": {
+    "cra-build-watch": "^3.4.0",
     "prettier": "^2.0.5",
     "source-map-explorer": "^2.5.0",
     "workbox-build": "^5.1.3"

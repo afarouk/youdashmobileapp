@@ -1,68 +1,81 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# readme
 
-## Available Scripts
+bootstrapped using cra [Create react app docs](./docs/cra.md)
 
-In the project directory, you can run:
+## get started
 
-### `yarn start`
+on the root folder, run:
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+```sh
+yarn install
+```
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
+then to start the app on port 3000 by default:
 
-### `yarn test`
+```sh
+yarn start
+```
 
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Development
 
-### `yarn build`
+it is recommended to create a `.env` file, in order to have flexibility with Create React App's  builds.
+For example, disable `eslint` to get some sense of the console, until you regain control of the app.
+Another example is to specify a different port than the default `3000`.
 
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
+Also there is the option to use a custom `api` server, so all requests made to
+`\` on the react app, automatically get forwarded to the proxy specified. More
+on that on the official
+[docs](https://create-react-app.dev/docs/proxying-api-requests-in-development/).
 
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
+## Payment flows
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+- ![Vantiv](./docs/flow-vantiv.png)
+- ![Tsys](./docs/flow-tsys.png)
 
-### `yarn eject`
+checkout folder `./docs` for more annotations..
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+## Technologies
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+This is a react static app, that can be distributed as a bundle, normally
+inside the folder `build/`.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+It makes extensive use of latest react v16-17. apis, like:
+  - Hooks
+  - ContextApi
+  - Functional Components
+  - Suspense
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+For state management, it is using Redux, more specifically, [Redux-toolkit](https://redux-toolkit.js.org/).
 
-## Learn More
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+The routes are defined using [react-router-dom](https://www.npmjs.com/package/react-router-dom).
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+For the UI and the visual identity, the library
+[Ant.design](https://ant.design/components/overview/) is being used.
 
-### Code Splitting
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
+## Architecture
 
-### Analyzing the Bundle Size
+All the code lies inside the folder  `src`, which is where most of development should happen.
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
+Inside, we find the bootstrapping `index.js`, which imports external dependencies and
+bootstraps the react app with the root component, `<App/>`, defined in the file `App.js`.
 
-### Making a Progressive Web App
+This App component brings in the <Routes> component, which is where all the urls of the app are declared.
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
+There are 2 kinds of routes in this app,
+  - Public
+  - Private
 
-### Advanced Configuration
+Which, as the name says, one doesn't require any session nor cookie setup, unlike the other.
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
+From here on, each route defines which component it needs.
 
-### Deployment
+On another side, we have the `store` injected into the app, which comes from the folder `redux`.
+This is what holds all the data and state that the application handles.
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
+The folder `config` holds some constants.
 
-### `yarn build` fails to minify
+The folder `hooks` brings the hooks, modules that act like 'providers' and 'services', to the otherwise
+purely visual react componennts, lying inside the folder `components`.
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
