@@ -134,7 +134,7 @@ const OrderDetailsPage = ({ businessData, user }) => {
     }
 
     if (user && !credentialsChanged) {
-      if (acceptCreditCards && isIframePayment) {
+      if (acceptCreditCards) {
         await sendVerificationAnd(() => setCheckoutMode(true));
       } else {
         setOrderInProgress(true);
@@ -142,14 +142,14 @@ const OrderDetailsPage = ({ businessData, user }) => {
       }
     } else {
       setOrderInProgress(true);
-      const userData = onSignUpSubmit(updateMode, user, true);
+      const userData = await onSignUpSubmit(updateMode, user, true);
 
       const adhoc = userData.adhocEntry;
       const verified = userData.mobileVerified;
       setUpdateMode(false);
       setOrderInProgress(false);
 
-      if (acceptCreditCards && isIframePayment) {
+      if (acceptCreditCards) {
         if (!adhoc && verified) {
           setCheckoutMode(true);
         } else if (adhoc && !verified && verificationCode) {

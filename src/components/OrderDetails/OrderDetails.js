@@ -21,58 +21,60 @@ import { VerificationCode } from './VerificationCode/VerificationCode';
 
 import './OrderDetails.css';
 
-export const OrderDetails = ({
-  priceTotal,
-  tips,
-  taxes,
-  extraFee,
-  orderPickUp,
-  shoppingCartItems,
-  priceSubTotal,
-  discountedPriceSubTotal,
-  orderDiscount,
-  businessData,
-  user,
-  credentials,
-  updateMode,
-  showSubmitButton,
-  toggleUpdateMode,
-  orderInProgress,
-  orderRequestError,
-  submitLabel,
-
-  transactionSetupUrl,
-  transactionError,
-  registerMemberRequestError,
-
-  onTipsChange,
-  onEditItem,
-  onDeleteItem,
-  onCreateOrder,
-  onCredentialsChange,
-  preventOrdering,
-
-  allowOrderComments,
-  comment,
-  onCommentChange,
-
-  isMobileVerified,
-  verificationCode,
-  verificationCodeError,
-  onVerificationCodeChange,
-  onResendVerificationCode,
-
-  isResolved,
-  isIframePayment,
-  ccData,
-  issuer,
-  formState,
-  focused,
-  handleCallback,
-  handleInputFocus,
-  handleInputChange,
-  handleCardSubmit,
-}) => {
+export const OrderDetails = (props) => {
+  const {
+    priceTotal,
+    tips,
+    taxes,
+    extraFee,
+    orderPickUp,
+    shoppingCartItems,
+    priceSubTotal,
+    discountedPriceSubTotal,
+    orderDiscount,
+    businessData,
+    user,
+    credentials,
+    updateMode,
+    showSubmitButton,
+    toggleUpdateMode,
+    orderInProgress,
+    orderRequestError,
+    submitLabel,
+  
+    transactionSetupUrl,
+    transactionError,
+    registerMemberRequestError,
+  
+    onTipsChange,
+    onEditItem,
+    onDeleteItem,
+    onCreateOrder,
+    onCredentialsChange,
+    preventOrdering,
+  
+    allowOrderComments,
+    comment,
+    onCommentChange,
+  
+    isMobileVerified,
+    verificationCode,
+    verificationCodeError,
+    onVerificationCodeChange,
+    onResendVerificationCode,
+  
+    isResolved,
+    isIframePayment,
+    ccData,
+    issuer,
+    formState,
+    focused,
+    handleCallback,
+    handleInputFocus,
+    handleInputChange,
+    handleCardSubmit,
+  } = props;
+  console.log('order details props', props)
   const { saslName } = businessData;
 
   const submitForm = useRef(null);
@@ -86,9 +88,16 @@ export const OrderDetails = ({
     const res = await handleCardSubmit(evt);
   };
 
-  const clickSubmitBtn = () => {
-    let portalFormBtn = portalForm.current.querySelector('[type=submit]');
-    portalFormBtn.click();
+  const clickSubmitBtn = (event) => {
+    // TODO: handle button click
+    onCreateOrder(event)
+    if (isMobileVerified) {
+      // let portalFormBtn = portalForm.current.querySelector('[type=submit]');
+      // portalFormBtn.click();
+    } else {
+      // onCreateOrder(event)
+    }
+    
   };
 
   const ccProps = {
@@ -109,11 +118,13 @@ export const OrderDetails = ({
   useEffect(() => {
     // preventOrdering || !shoppingCartItems.length ||
     // !credentials.firstName || !credentials.email || !credentials.mobile
-    const cond_1 = preventOrdering;
-    const cond_2 = shoppingCartItems.length;
-    const cond_3 = credentials.firstName && credentials.email && credentials.mobile;
-    const valid = (cond_1 || !cond_2 || !cond_3) ? false : true;
-    // console.log('[hook][formvalid]', valid)
+    const orderingEnabled = !preventOrdering;
+    const hasCartItems = shoppingCartItems.length > 0;
+    const dataProvided = credentials.firstName && credentials.email && credentials.mobile;
+    const valid = orderingEnabled
+      && hasCartItems
+      && dataProvided;
+    console.log('[hook][formvalid]', valid)
     setIsFormValid(valid);
   }, [preventOrdering, shoppingCartItems, credentials])
 

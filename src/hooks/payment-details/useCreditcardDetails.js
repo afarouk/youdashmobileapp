@@ -106,24 +106,28 @@ export default (
     // console.log(domFormData);
 
     paymentAPI.getPaymentToken()
-    .then((res) => {
-      const { token, created, expires } = res;
-      const postData = {
-        token,
-        created,
-        expires,
-        paymentProcessor
-      };
-      handleCreateOrder(null, postData);
-    })
-    .catch((err) => {
-      console.error(err);
-    })
+      .then((res) => {
+        const { token, created, expires } = res;
+        const postData = {
+          token,
+          created,
+          expires,
+          paymentProcessor
+        };
+        handleCreateOrder(null, postData);
+      })
+      .catch((err) => {
+        console.error(err);
+      })
   };
 
   return [
-    isResolved, isIframePayment,
-    ccData, issuer, formState, focused,
+    isResolved, 
+    isIframePayment,
+    ccData, 
+    issuer, 
+    formState, 
+    focused,
     handleCallback,
     handleInputFocus,
     handleInputChange,
