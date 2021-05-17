@@ -21,10 +21,7 @@ export const Pickup = ({ address, saslName, businessData, user, orderPickUp }) =
             <PickUpSelectors user={user} businessData={businessData} />
           </div>
           <div>
-            {(!orderPickUp.day ||
-              typeof orderPickUp.day === 'undefined' ||
-              !orderPickUp.time ||
-              typeof orderPickUp.time === 'undefined') && (
+            {(!orderPickUp.date || !orderPickUp.time) && (
               <Alert message="Select day and time" type="warning" showIcon />
             )}
           </div>

@@ -64,12 +64,6 @@ export const PickUp = memo(({ businessData, user }) => {
 
     if (openClosingDateTime) {
       let nowDate = changeTimezone(new Date(), timeZone);
-      /* nowDate.setHours(20);
-        nowDate.setMinutes(0);*/
-      /* console.log(nowDate);
-      console.log(openClosingDateTime);
-      console.log(differenceInMinutes(nowDate, openClosingDateTime.open));
-      console.log(differenceInMinutes(nowDate, openClosingDateTime.close));*/
       setOpenStatus(
         differenceInMinutes(nowDate, openClosingDateTime.open) >= 0 &&
           differenceInMinutes(nowDate, openClosingDateTime.close) <= 0

@@ -286,6 +286,10 @@ const mapBusinessData = (urlKey, data) => {
     mapCoordinates,
     mobileOrderStatuses: mapMobileOrderStatuses(mobileOrderStatuses),
     onlineOrder,
+    // onlineOrder: {
+    //   ...onlineOrder,
+    //   paymentProcessor: 'TSYS_ECOMMERCE', // TODO: remove this code after testing
+    // },
     loyaltyProgram,
     loyaltyProgramData,
     promotions,

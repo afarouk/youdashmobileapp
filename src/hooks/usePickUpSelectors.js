@@ -2,9 +2,9 @@ import { useEffect, useState } from 'react';
 import differenceInMinutes from 'date-fns/differenceInMinutes';
 import { setOrderPickUp } from '../redux/slices/shoppingCart';
 import { useDispatch, useSelector } from 'react-redux';
-import {addLeadingZero, changeTimezone, isToday} from '../utils/helpers';
+import {addLeadingZero, changeTimezone, formatDeliveryDate, isToday, getDayNameByIndex } from '../utils/helpers';
 
-const getTimeString = (hours, minutes, pickUpDay, timeZone) => {
+const getTimeString = (hours, minutes, pickupDate, timeZone) => {
   let date = changeTimezone(new Date(), timeZone);
   date.setHours(+hours);
   date.setMinutes(+minutes);
@@ -14,8 +14,7 @@ const getTimeString = (hours, minutes, pickUpDay, timeZone) => {
     hour12: true
   };
   let dateToCompare = changeTimezone(new Date(), timeZone);
-  if (pickUpDay && isToday(pickUpDay.toLowerCase())) {
-    // console.log(differenceInMinutes(dateToCompare, date))
+  if (pickupDate && isToday(pickupDate)) {
     return differenceInMinutes(dateToCompare, date) < 0
       ? {
           label: date.toLocaleString('en-US', options),
@@ -41,13 +40,16 @@ export default (businessData) => {
     dispatch(setOrderPickUp(pickUp));
   };
 
-  const handleDayChange = (value) => {
-    let opts = updateTimeOptions(value);
+  const handleDayChange = (dateString) => { // Date in format YYYY.MM.DD 2021.01.01
+    const selectedDate = new Date(dateString);
+    const dayName = getDayNameByIndex(selectedDate.getDay());
+    let opts = updateTimeOptions(dateString);
     setTimeOptions(opts);
     handleOrderPickUp({
       ...orderPickUp,
       time: opts && opts.length > 0 ? opts[0].value : null,
-      day: value
+      date: dateString,
+      day: dayName,
     });
   };
   const handleTimeChange = (value) => {
@@ -57,11 +59,11 @@ export default (businessData) => {
     });
   };
 
-  const updateTimeOptions = (dayValue) => {
+  const updateTimeOptions = (dateValue) => {
     if (pickUpTimes) {
       let tmpOpts = [];
       pickUpTimes.map(({ hour, minute }) => {
-        let timeValue = getTimeString(hour, minute, dayValue, timeZone);
+        let timeValue = getTimeString(hour, minute, dateValue, timeZone);
         if (timeValue) {
           tmpOpts.push(timeValue);
         }
@@ -76,21 +78,21 @@ export default (businessData) => {
       setDayOptions([
         ...futureDays
           .filter(({ status }) => status === 'AVAILABLE')
-          .map(({ displayText, dayOfWeek }) => {
-            return { value: dayOfWeek.toLowerCase(), label: displayText };
+          .map(({ displayText, dayOfWeek, year, month, day }) => {
+            return { value: dayOfWeek.toLowerCase(), label: displayText, year, month, day };
           })
       ]);
-      if (!timeOptions.length && orderPickUp.day) {
+      if (!timeOptions.length && orderPickUp.date) {
         setTimeOptions(updateTimeOptions());
       }
     }
   }, [businessData]);
 
   useEffect(() => {
-    if (dayOptions.length && !orderPickUp.day) {
+    if (dayOptions.length && !orderPickUp.date) {
       const today = dayOptions.filter((d) => d.label === 'Today')[0];
       if (today && updateTimeOptions(today.value).length) {
-        handleDayChange(today.value);
+        handleDayChange(formatDeliveryDate(today));
       }
     }
   }, [dayOptions]);

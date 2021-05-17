@@ -22,10 +22,14 @@ export default (
   const { acceptCreditCards, paymentProcessor } = businessData.onlineOrder;
 
   const fwdConfig = {
-    checkoutMode, setCheckoutMode,
-    transactionSetup, setTransactionSetup,
-    transactionSetupUrl, setTransactionSetupUrl,
-    transactionError, setTransactionError,
+    checkoutMode, 
+    setCheckoutMode,
+    transactionSetup, 
+    setTransactionSetup,
+    transactionSetupUrl, 
+    setTransactionSetupUrl,
+    transactionError, 
+    setTransactionError,
     priceTotal,
     shoppingCartItems,
     orderRequestError,

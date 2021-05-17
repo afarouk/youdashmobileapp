@@ -37,12 +37,19 @@ export default (businessData, user) => {
 
   const handleResetOrderError = () => dispatch(resetOrderError());
 
-  const handleCreateOrder = (newUser = null, transactionData = null) => {
+  const handleCreateOrder = ({
+    newUser = null,
+    transactionData = null, // iframe data
+    creditCardData = null, // custom credit card data
+    nextOrderData = null,
+  } = {}) => {
     const {
       serviceAccommodatorId,
       serviceLocationId,
       catalogId,
       pickUp,
+      extraFees,
+      promotions,
       onlineOrder: {
         paymentProcessor,
         provisioningParam1,
@@ -55,14 +62,9 @@ export default (businessData, user) => {
 
     let requestedDeliveryDate = '';
 
-    if (pickUp && pickUp.futureDays && pickUp.futureDays.length) {
-      let selectedDay = pickUp.futureDays.filter(
-        ({ displayText }) => displayText === orderPickUp.day
-      );
-      if (selectedDay && selectedDay.length) {
-        const { displayText, day, month, year } = selectedDay[0];
-        requestedDeliveryDate = `${year}-${pad(month)}-${day}T${orderPickUp.time}:PDT`;
-      }
+    if (orderPickUp && orderPickUp.date) {
+      const orderPickUpDate = new Date(orderPickUp.date);
+      requestedDeliveryDate = `${orderPickUpDate.getFullYear()}-${pad(orderPickUpDate.getMonth())}-${pad(orderPickUpDate.getDate())}T${orderPickUp.time}:PDT`;
     }
 
     let orderData = formatOrderData({
@@ -84,9 +86,15 @@ export default (businessData, user) => {
       tipAmount: tips,
       taxAmount: taxes.value,
       totalAmount: priceTotal,
-      tablePath
+      tablePath,
+      transactionData,
+      creditCardData,
+      nextOrderData,
+      calculatedExtraFee: extraFee.value,
+      extraFees,
+      promotions,
     });
-
+    
     switch (paymentProcessor) {
       case paymentProcessors.TSYS_ECOMMERCE:
         orderData = {
@@ -97,17 +105,18 @@ export default (businessData, user) => {
           provisioningParam3,
           provisioningParam4,
           provisioningParam5,
-          processorParam1: transactionData.token,
+        };
+        break;
+      case paymentProcessors.VANTIV_ECOMMERCE:
+        orderData = {
+          ...orderData,
         };
         break;
       default:
-        orderData = {
-          ...orderData,
-          ...transactionData
-        };
-        break;
+        throw new Error('Payment Processor is not specified')
     }
 
+    console.log("ALEX ", JSON.stringify(orderData))
     dispatch(createOrder(orderData))
     .then(({ payload, error }) => {
       if (payload && payload.orderUUID && !error) {

@@ -83,13 +83,11 @@ export default (initLoad = false) => {
               }
               break;
             case 'FORCE_RELOGIN':
-              console.log('FORCE_RELOGIN');
               break;
             case 'FORCE_LOGOUT':
               logOut();
               break;
             case 'REFRESH_UID':
-              console.log('REFRESH_UID');
               break;
           }
           dispatch(setAuthenticationStatus(action.enumText));
