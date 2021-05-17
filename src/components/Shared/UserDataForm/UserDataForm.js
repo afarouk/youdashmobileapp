@@ -18,9 +18,11 @@ export const UserDataForm = ({
     {user && updateMode && (
       <h4 className="flex font-size-lg primary-text">
         <span>How will we contact you?</span>
-        <span onClick={toggleUpdateMode}>
-          <EditIcon />
-        </span>
+        {toggleUpdateMode && (
+          <span onClick={toggleUpdateMode}>
+            <EditIcon />
+          </span>
+        )}
       </h4>
     )}
     <div className="user-data-form">

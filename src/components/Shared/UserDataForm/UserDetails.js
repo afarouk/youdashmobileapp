@@ -10,9 +10,11 @@ export const UserDetails = ({ user, toggleUpdateMode }) => {
     <Card className="user-details">
       <h4 className="flex font-size-lg primary-text">
         <span>How will we contact you?</span>
-        <span onClick={toggleUpdateMode}>
-          <EditIcon />
-        </span>
+        {toggleUpdateMode && (
+          <span onClick={toggleUpdateMode}>
+            <EditIcon />
+          </span>
+        )}
       </h4>
       <h5 className="flex">
         <span>Name:</span>
