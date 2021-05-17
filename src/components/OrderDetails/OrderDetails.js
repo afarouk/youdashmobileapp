@@ -195,7 +195,6 @@ export const OrderDetails = (props) => {
             <Card>
               <UserDataForm
                 user={user}
-                toggleUpdateMode={toggleUpdateMode}
                 updateMode={updateMode}
                 shouldChangeUpdateMode={true}
                 onChange={onCredentialsChange}
@@ -204,7 +203,7 @@ export const OrderDetails = (props) => {
             </Card>
           )}
 
-          {user && !updateMode && <UserDetails user={user} toggleUpdateMode={toggleUpdateMode} />}
+          {user && !updateMode && <UserDetails user={user} />}
 
           {user && !isMobileVerified && (
             <VerificationCode
