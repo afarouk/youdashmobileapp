@@ -19,6 +19,12 @@ export const scrollToElement = (el, offset = 80) => {
   }
 };
 
+export const formatDeliveryDate = (dateLike) => {
+  return Object.prototype.toString.call(dateLike) === '[object Date]'
+    ? `${dateLike.getFullYear()}.${pad(dateLike.getMonth() + 1)}.${pad(dateLike.getDate())}`
+    : `${dateLike.year}.${pad(dateLike.month)}.${pad(dateLike.day)}`
+} 
+
 export const addLeadingZero = (time) => (time === 0 ? '00' : time);
 
 export const getQueryStringParams = () =>
@@ -39,12 +45,13 @@ export const formatGMapAddress = ({
   zip
 }) => `${number}+${street}+${city}+${state}+${zip}`;
 
-export const pad = (n) => (n < 10 ? '0' + n : n);
+export const pad = (n) => (n < 10 ? '0' + n : `${n}`);
 
 export const getDayNameByIndex = (index) =>
   ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'][index];
-export const isToday = (dayOfWeek) => {
-  return dayOfWeek === getDayNameByIndex(new Date().getDay());
+export const isToday = (date) => {
+  const today = new Date();
+  return date === formatDeliveryDate(today);
 };
 
 export const changeTimezone = (date, timeZone) =>
@@ -102,23 +109,33 @@ const itemShape = {
   sentTimeToKitchen: null
 };
 
-const mapTransactionData = (data) => ({
-  paymentProcessor: data.paymentProcessor,
+const mapTransactionData = (transactionData) => ({
+  paymentProcessor: transactionData.paymentProcessor,
   cashSelected: false,
   creditCardSelected: true,
-  orderUUID: data.orderUUID,
-  orderId: data.orderId,
-  cyclicOrderIdInt: data.cyclicOrderId,
-  transactionId1: data.hostedPaymentStatus,
-  transactionId2: data.transactionID,
-  transactionId3: data.expressResponseCode,
-  transactionId4: data.expressResponseMessage,
-  transactionId5: data.CVVResponseCode,
-  transactionId6: data.approvalNumber,
-  transactionId7: data.lastFour,
-  transactionId8: data.cardLogo,
-  transactionId9: data.approvedAmount
+  orderUUID: transactionData.transactionSetup.orderUUID,
+  orderId: transactionData.transactionSetup.orderId,
+  cyclicOrderIdInt: transactionData.transactionSetup.cyclicOrderId,
+  transactionId1: transactionData.hostedPaymentStatus,
+  transactionId2: transactionData.transactionID,
+  transactionId3: transactionData.expressResponseCode,
+  transactionId4: transactionData.expressResponseMessage,
+  transactionId5: transactionData.CVVResponseCode,
+  transactionId6: transactionData.approvalNumber,
+  transactionId7: transactionData.lastFour,
+  transactionId8: transactionData.cardLogo,
+  transactionId9: transactionData.approvedAmount
 });
+
+const prepareCreditCardData = (creditCardData) => ({
+  processorParam1: creditCardData.token,
+  cashSelected: false,
+  creditCardSelected: true,
+  processorParam2: null,
+  processorParam3: null,
+  processorParam4: null,
+  processorParam5: null,
+})
 
 export const formatOrderData = ({
   comment,
@@ -138,13 +155,18 @@ export const formatOrderData = ({
   tipAmount,
   taxAmount,
   tablePath,
-  transactionData
+  transactionData,
+  creditCardData,
+  nextOrderData,
+  extraFees,
+  calculatedExtraFee,
+  promotions,
 }) => {
   let authorizationsAndDiscounts = {
     authorizations: null,
     discounts: null,
-    promotions: null,
-    loyaltyStatus: null
+    promotions: promotions,
+    loyaltyStatus: loyaltyStatus,
   };
   if (itemsWithDiscounts && Object.keys(itemsWithDiscounts).length > 0) {
     Object.keys(itemsWithDiscounts).map((key) => {
@@ -175,10 +197,24 @@ export const formatOrderData = ({
     transactionDataFields = mapTransactionData(transactionData);
   }
 
+  let creditCardDataFields;
+  if (creditCardData) {
+    creditCardDataFields = prepareCreditCardData(creditCardData);
+  }
+
+  let nextOrderDataFields;
+  if (nextOrderData) {
+    nextOrderDataFields = {
+      orderUUID: nextOrderData.orderUUID,
+      orderId: nextOrderData.idOrder,
+      cyclicOrderIdInt: nextOrderData.cyclicOrderIdInt,
+    }
+  }
+
   let orderShape = {
     userName: null,
     userLevel: null,
-    adHoc: false,
+    adhoc: false,
     tablePath,
     items: items.map((item) => {
       const {
@@ -211,8 +247,8 @@ export const formatOrderData = ({
       };
     }),
     authorizationsAndDiscounts: authorizationsAndDiscounts,
-    deliveryType: deliveryType, //TODO: ENUM
-    futureOrRegular: futureOrRegular, //TODO: ENUM'BOTH'
+    deliveryType,
+    futureOrRegular,
     deliveryContactName: null,
     deliveryPhone: null,
     deliveryEmail: null,
@@ -231,7 +267,7 @@ export const formatOrderData = ({
     serviceAccommodatorId: serviceAccommodatorId,
     serviceLocationId: serviceLocationId,
     pickupSelected: true,
-    deliverySelected: null, //TODO: bool
+    deliverySelected: false,
     levelId: null,
     zoneId: null,
     tableId: null,
@@ -248,11 +284,6 @@ export const formatOrderData = ({
     invoiceClaimed: 0.0,
     compPrice: 0.0,
     currencyCode: 'USD',
-    addExtraFeeToTotalAmount: false, //TODO: later
-    extraFeeLabel: null, //TODO: later
-    extraFeeType: null, //TODO: later
-    extraFeeValue: null, //TODO: later
-    calculatedExtraFeeValue: null, //TODO: later
     //CC
     v_acceptorId: null,
     v_accountId: null,
@@ -296,15 +327,35 @@ export const formatOrderData = ({
     billingAddress: null,
     paymentProcessor: 'UNDEFINED',
     cardReaderType: 'UNDEFINED',
-    taxRate: null, //TODO: later from extraFees
     invoiceType: null,
     cashTendered: null,
     idAdhocOrderInvoiceParent: null,
+    userSASLid: null,
     uid: user ? user.uid : null,
-    ...transactionDataFields
+    calculatedExtraFee,
+    ...transactionDataFields,
+    ...creditCardDataFields,
+    ...nextOrderDataFields,
+    ...prepareExtraFeeFields(extraFees),
   };
   return orderShape;
 };
+
+const prepareExtraFeeFields = ({
+  addExtraFeeToTotalAmount,
+  extraFeeLabel,
+  extraFeeType,
+  extraFeeValue,
+  taxRate,
+}) => {
+  return {
+    addExtraFeeToTotalAmount,
+    extraFeeLabel,
+    extraFeeType,
+    extraFeeValue,
+    taxRate,
+  }
+}
 
 const discountMetaDataShape = {
   promoCode: '',

@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
 import { paymentProcessors } from '../../config/constants';
-import { paymentAPI } from '../../services/api';
+import { paymentAPI, orderAPI } from '../../services/api';
 
 import {
   formatCreditCardNumber,
@@ -31,6 +31,7 @@ export default (
   orderRequestError
 ) => {
   const { paymentProcessor } = businessData.onlineOrder;
+  const { serviceAccommodatorId, serviceLocationId } = businessData
   const dispatch = useDispatch();
 
   const ccData = useSelector((state) => {
@@ -98,27 +99,46 @@ export default (
     }, {});
   }
 
-  const handleCardSubmit = (evt) => {
+  const handleCardSubmit = async (evt) => {
     if (evt && evt.preventDefault) {
       evt.preventDefault();
     }
     // const domFormData = formToObject(evt.target);
     // console.log(domFormData);
+    let creditCardData;
 
-    paymentAPI.getPaymentToken()
-      .then((res) => {
-        const { token, created, expires } = res;
-        const postData = {
+    try {
+      const { token, created, expires } = await paymentAPI.getPaymentToken()
+        creditCardData = {
           token,
           created,
           expires,
           paymentProcessor
         };
-        handleCreateOrder(null, postData);
+    } catch (err) {
+      console.error('TOKEN_ERROR', err);
+    }
+
+    if (!creditCardData) {
+      return;
+    }
+
+    let nextOrderData;
+    try {
+      const nextOrderIdResponse = await orderAPI.getNextOrderId({
+        serviceAccommodatorId,
+        serviceLocationId,
       })
-      .catch((err) => {
-        console.error(err);
-      })
+      nextOrderData = nextOrderIdResponse.data;
+    } catch (err) {
+      console.error('GET_NEXT_ORDER_DATA_ERROR', err);
+    }
+
+    if (!nextOrderData) {
+      return;
+    }
+
+    handleCreateOrder({ creditCardData, nextOrderData })
   };
 
   return [

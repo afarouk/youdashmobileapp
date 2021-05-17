@@ -32,7 +32,6 @@ export default () => {
       dispatch(getBusinessData(businessUrlKey))
       .then(() => {
         setIsLoadedFromClient(true);
-        // console.log('Business Data loaded.');
       });
     }
 
@@ -52,8 +51,6 @@ export default () => {
         document[qs]('meta[name="description"]')[sa]('content', description);
 
         setIsLoadedFromClient(false);
-
-        // console.log('CSR: Updated meta tags.');
       }
     }
   }, [isLoadedFromClient]);
@@ -61,7 +58,7 @@ export default () => {
   useEffect(() => {
     if (
       businessData.hasGroupsBasedOnDay &&
-      orderPickUp.day &&
+      orderPickUp.date &&
       businessData.catalogs &&
       businessData.catalogs.length > 0
     ) {

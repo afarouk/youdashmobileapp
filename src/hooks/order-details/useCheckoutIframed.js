@@ -76,8 +76,11 @@ export function useHooksIframe(config, handleCreateorder) {
         return;
       }
 
-      handleCreateOrder(null, {
-        ...transactionSetup,
+      const transactionSetupCopy = {...transactionSetup};
+      delete transactionSetupCopy['transactionSetupId'];
+
+      const transactionData = {
+        transactionSetup,
         hostedPaymentStatus,
         transactionID,
         expressResponseCode,
@@ -87,8 +90,10 @@ export function useHooksIframe(config, handleCreateorder) {
         lastFour,
         cardLogo,
         approvedAmount,
-        paymentProcessor
-      });
+        paymentProcessor,
+      }
+
+      handleCreateOrder({ transactionData });
     };
 
     window.addEventListener('message', handler);

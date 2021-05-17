@@ -73,8 +73,8 @@ export const OrderDetails = (props) => {
     handleInputFocus,
     handleInputChange,
     handleCardSubmit,
+    checkoutMode,
   } = props;
-  console.log('order details props', props)
   const { saslName } = businessData;
 
   const submitForm = useRef(null);
@@ -85,17 +85,19 @@ export const OrderDetails = (props) => {
   };
 
   const onCardSubmitHandler = async (evt = window.event) => {
-    const res = await handleCardSubmit(evt);
+    handleCardSubmit(evt);
   };
 
   const clickSubmitBtn = (event) => {
-    // TODO: handle button click
-    onCreateOrder(event)
     if (isMobileVerified) {
-      // let portalFormBtn = portalForm.current.querySelector('[type=submit]');
-      // portalFormBtn.click();
+      if (isIframePayment) {
+        onCreateOrder(event)
+      } else {
+        let portalFormBtn = portalForm.current.querySelector('[type=submit]');
+        portalFormBtn.click();
+      }
     } else {
-      // onCreateOrder(event)
+      onCreateOrder(event)
     }
     
   };
@@ -120,11 +122,10 @@ export const OrderDetails = (props) => {
     // !credentials.firstName || !credentials.email || !credentials.mobile
     const orderingEnabled = !preventOrdering;
     const hasCartItems = shoppingCartItems.length > 0;
-    const dataProvided = credentials.firstName && credentials.email && credentials.mobile;
+    const dataProvided = Boolean(credentials.firstName && credentials.email && credentials.mobile);
     const valid = orderingEnabled
       && hasCartItems
       && dataProvided;
-    console.log('[hook][formvalid]', valid)
     setIsFormValid(valid);
   }, [preventOrdering, shoppingCartItems, credentials])
 
@@ -136,14 +137,16 @@ export const OrderDetails = (props) => {
     }
     const fs = formState;
     const valid = (fs.valid && fs.name && fs.expiry && fs.cvc) ? true : false;
-    // console.log('[hook][payformvalid]', valid)
     setIsPayFormValid(valid);
   }, [isIframePayment, formState]);
 
   const [btnProps, setBtnProps] = useState({disabled: true});
   useEffect(() => {
-    setBtnProps({ disabled : !isFormValid || !isPayFormValid });
-    // console.log('[hook][btnprops]', !isFormValid || !isPayFormValid)
+    if (checkoutMode) {
+      setBtnProps({ disabled : !isFormValid || !isPayFormValid });
+    } else {
+      setBtnProps({ disabled: !isFormValid })
+    }
   }, [isFormValid, isPayFormValid]);
 
   return (
@@ -220,12 +223,12 @@ export const OrderDetails = (props) => {
             <CheckoutIFrame transactionSetupUrl={transactionSetupUrl} />
           )}
 
-          { isResolved && !isIframePayment && portalForm.current &&
-            createPortal(<CreditcardForm {...ccProps} />, portalForm.current)
-          }
-
           <button ref={submitForm} type="submit" className="hidden">formsubmit</button>
         </Form>
+
+        { isResolved && isMobileVerified && !isIframePayment && portalForm.current &&
+          createPortal(<CreditcardForm {...ccProps} />, portalForm.current)
+        }
 
         <div ref={portalForm}></div>
 

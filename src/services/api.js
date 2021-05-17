@@ -86,7 +86,15 @@ export const orderAPI = {
   getOrderStatus: (params) =>
     request.get(`/apptsvc/rest/retail/retrieveOrderStatusData`, {
       params
+    }),
+  getNextOrderId: ({ serviceAccommodatorId, serviceLocationId  }) => {
+    return request.get('apptsvc/rest/retail/getNextOrderId', {
+      params: {
+        serviceAccommodatorId,
+        serviceLocationId,
+      }
     })
+  }
 };
 
 const gwApis = {
@@ -97,8 +105,8 @@ const gwApis = {
 function getCayanToken(CayanCheckout) {
   return new Promise((resolve, reject) => {
     CayanCheckout.createPaymentToken({
-      success: (...args) => resolve(...args),
-      error: (...args) => reject(...args)
+      success: resolve,
+      error: reject,
     })
   })
 }
@@ -118,6 +126,7 @@ export const paymentAPI = {
   getPaymentToken: (data) => {
     const { CayanCheckout } = window;
     return new Promise((resolve, reject) => {
+      CayanCheckout.setWebApiKey("CAQIJ8EHM0VHSCC8")
       getCayanToken(CayanCheckout)
       .then(resolve)
       .catch((err) => {

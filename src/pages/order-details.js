@@ -63,11 +63,15 @@ const OrderDetailsPage = ({ businessData, user }) => {
   ] = useCreateOrder(businessData, user);
 
   const [
-    checkoutMode, setCheckoutMode,
-    transactionSetupUrl, transactionError
+    checkoutMode, 
+    setCheckoutMode,
+    transactionSetupUrl, 
+    transactionError,
   ] = useCheckout(
-    businessData, shoppingCartItems,
-    priceTotal, onCreateOrder,
+    businessData, 
+    shoppingCartItems,
+    priceTotal, 
+    onCreateOrder,
     orderRequestError
   );
 
@@ -116,7 +120,7 @@ const OrderDetailsPage = ({ businessData, user }) => {
   }
 
   async function orderHandler() {
-    if (!orderPickUp.day || !orderPickUp.time) {
+    if (!orderPickUp.date || !orderPickUp.time) {
       return scrollToElement(document.getElementById('pickup-selectors'));
     }
 
@@ -160,16 +164,22 @@ const OrderDetailsPage = ({ businessData, user }) => {
         }
       } else {
         if (!adhoc && verified) {
-          onCreateOrder(userData);
+          onCreateOrder({ newUser: userData });
         } else if (adhoc && !verified && verificationCode) {
           await onSendVerificationCode();
-          onCreateOrder(userData);
+          onCreateOrder({ newUser: userData });
         } else {
           setOrderInProgress(false);
         }
       }
     }
   };
+
+  console.log('Alex !(acceptCreditCards && checkoutMode)', !(acceptCreditCards && checkoutMode), checkoutMode)
+
+  const showSubmitButton = isIframePayment
+    ? !(acceptCreditCards && checkoutMode)
+    : true;
 
   return (
     <OrderDetails
@@ -205,7 +215,7 @@ const OrderDetailsPage = ({ businessData, user }) => {
       onDeleteItem={handleDeleteCartItem}
       onCreateOrder={handlePlaceOrder}
       user={user}
-      showSubmitButton={!(acceptCreditCards && checkoutMode)}
+      showSubmitButton={showSubmitButton}
       updateMode={updateMode}
       checkoutMode={checkoutMode}
       toggleUpdateMode={toggleUpdateMode}
