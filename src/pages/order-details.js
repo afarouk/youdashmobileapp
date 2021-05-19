@@ -175,8 +175,6 @@ const OrderDetailsPage = ({ businessData, user }) => {
     }
   };
 
-  console.log('Alex !(acceptCreditCards && checkoutMode)', !(acceptCreditCards && checkoutMode), checkoutMode)
-
   const showSubmitButton = isIframePayment
     ? !(acceptCreditCards && checkoutMode)
     : true;

@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory, useLocation, useParams } from 'react-router-dom';
 import useCalculateOrderPrice from './useCalculateOrderPrice';
-import { formatOrderData, isToday, pad } from '../../utils/helpers';
+import { formatOrderData, isToday, pad, toIsoString } from '../../utils/helpers';
 import { clearCart, createOrder, resetOrderError } from '../../redux/slices/shoppingCart';
 import { paymentProcessors } from '../../config/constants';
 
@@ -64,7 +64,10 @@ export default (businessData, user) => {
 
     if (orderPickUp && orderPickUp.date) {
       const orderPickUpDate = new Date(orderPickUp.date);
-      requestedDeliveryDate = `${orderPickUpDate.getFullYear()}-${pad(orderPickUpDate.getMonth())}-${pad(orderPickUpDate.getDate())}T${orderPickUp.time}:PDT`;
+      const [hours, minutes] = orderPickUp.time.split(':');
+      orderPickUpDate.setHours(hours, minutes);
+      
+      requestedDeliveryDate = toIsoString(orderPickUpDate);
     }
 
     let orderData = formatOrderData({
@@ -90,7 +93,7 @@ export default (businessData, user) => {
       transactionData,
       creditCardData,
       nextOrderData,
-      calculatedExtraFee: extraFee.value,
+      calculatedExtraFeeValue: extraFee.value,
       extraFees,
       promotions,
     });
@@ -113,10 +116,12 @@ export default (businessData, user) => {
         };
         break;
       default:
-        throw new Error('Payment Processor is not specified')
+        orderData = {
+          ...orderData,
+          ...transactionData,
+        };
     }
 
-    console.log("ALEX ", JSON.stringify(orderData))
     dispatch(createOrder(orderData))
     .then(({ payload, error }) => {
       if (payload && payload.orderUUID && !error) {
