@@ -177,7 +177,7 @@ export const formatOrderData = ({
   creditCardData,
   nextOrderData,
   extraFees,
-  calculatedExtraFee,
+  calculatedExtraFeeValue,
   promotions,
 }) => {
   let authorizationsAndDiscounts = {
@@ -350,7 +350,7 @@ export const formatOrderData = ({
     idAdhocOrderInvoiceParent: null,
     userSASLid: null,
     uid: user ? user.uid : null,
-    calculatedExtraFee,
+    calculatedExtraFeeValue,
     ...transactionDataFields,
     ...creditCardDataFields,
     ...nextOrderDataFields,
