@@ -231,6 +231,8 @@ export const OrderDetails = (props) => {
 
         <div ref={portalForm}></div>
 
+        { <OrderFormErrors {...{transactionError, orderRequestError, preventOrdering}} />}
+
         { showSubmitButton && (
           <Button
             block
@@ -243,9 +245,6 @@ export const OrderDetails = (props) => {
             {submitLabel}
           </Button>
         )}
-
-
-        { <OrderFormErrors {...{transactionError, orderRequestError, preventOrdering}} />}
 
       </div>
     </div>

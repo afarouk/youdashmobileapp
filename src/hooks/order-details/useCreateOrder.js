@@ -122,7 +122,7 @@ export default (businessData, user) => {
         };
     }
 
-    dispatch(createOrder(orderData))
+    return dispatch(createOrder(orderData))
     .then(({ payload, error }) => {
       if (payload && payload.orderUUID && !error) {
         dispatch(clearCart());

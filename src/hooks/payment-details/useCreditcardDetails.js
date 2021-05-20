@@ -23,13 +23,15 @@ import {
   setFormState
 } from '../../redux/slices/cc';
 
-export default (
+export default ({
   businessData,
   shoppingCartItems,
   priceTotal,
-  handleCreateOrder,
-  orderRequestError
-) => {
+  onCreateOrder,
+  orderRequestError,
+  setOrderInProgress,
+  resetOrderError,
+}) => {
   const { paymentProcessor } = businessData.onlineOrder;
   const { serviceAccommodatorId, serviceLocationId } = businessData
   const dispatch = useDispatch();
@@ -103,8 +105,14 @@ export default (
     if (evt && evt.preventDefault) {
       evt.preventDefault();
     }
-    // const domFormData = formToObject(evt.target);
-    // console.log(domFormData);
+
+    resetOrderError();
+    setOrderInProgress(true);
+    await processCardOrder();
+    setOrderInProgress(false);
+  };
+
+  const processCardOrder = async () => {
     let creditCardData;
 
     try {
@@ -138,8 +146,12 @@ export default (
       return;
     }
 
-    handleCreateOrder({ creditCardData, nextOrderData })
-  };
+    try {
+      await onCreateOrder({ creditCardData, nextOrderData })
+    } catch (err) {
+      console.error('CREATE_ORDER_ERROR', err);
+    }
+  }
 
   return [
     isResolved, 

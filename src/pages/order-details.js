@@ -76,18 +76,25 @@ const OrderDetailsPage = ({ businessData, user }) => {
   );
 
   const [
-    isResolved, isIframePayment,
-    ccData, issuer, formState, focused,
+    isResolved, 
+    isIframePayment,
+    ccData, 
+    issuer, 
+    formState, 
+    focused,
     handleCallback,
     handleInputFocus,
     handleInputChange,
     handleCardSubmit,
-  ] = useCreditcardDetails(
+  ] = useCreditcardDetails({
     businessData,
     shoppingCartItems,
     priceTotal,
     onCreateOrder,
-    orderRequestError);
+    orderRequestError,
+    setOrderInProgress,
+    resetOrderError: onResetOrderError,
+  });
 
   const [preventOrdering] = usePreventOrdering(businessData);
 
