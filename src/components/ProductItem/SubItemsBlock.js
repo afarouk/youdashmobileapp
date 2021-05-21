@@ -4,8 +4,7 @@ import React from 'react';
 export const SubItemsBlock = ({ subItems, onCheckboxChange, parentPropName }) => {
   return (subItems || []).map((subItem, i) => {
     if (!subItem.selectorType) return null;
-    /* console.log(subItem.maxSubSubCount);
-        console.log(subItem.minSubSubCount);*/
+
     return (
       <SubItems
         maxSubSubCount={subItem.maxSubSubCount}

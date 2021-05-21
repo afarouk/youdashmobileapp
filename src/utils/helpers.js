@@ -183,8 +183,10 @@ export const formatOrderData = ({
   let authorizationsAndDiscounts = {
     authorizations: null,
     discounts: null,
-    promotions: promotions,
-    loyaltyStatus: loyaltyStatus,
+    loyaltyStatus: null,
+    promotions: null,
+    // promotions: promotions,
+    // loyaltyStatus: loyaltyStatus,
   };
   if (itemsWithDiscounts && Object.keys(itemsWithDiscounts).length > 0) {
     Object.keys(itemsWithDiscounts).map((key) => {
@@ -362,6 +364,7 @@ export const formatOrderData = ({
 const prepareExtraFeeFields = ({
   addExtraFeeToTotalAmount,
   extraFeeLabel,
+  extraFeeDisplayLabel,
   extraFeeType,
   extraFeeValue,
   taxRate,
@@ -369,6 +372,7 @@ const prepareExtraFeeFields = ({
   return {
     addExtraFeeToTotalAmount,
     extraFeeLabel,
+    // extraFeeDisplayLabel: extraFeeLabel,
     extraFeeType,
     extraFeeValue,
     taxRate,

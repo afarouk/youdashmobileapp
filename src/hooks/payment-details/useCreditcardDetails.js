@@ -2,7 +2,8 @@ import { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
 import { paymentProcessors } from '../../config/constants';
-import { paymentAPI, orderAPI } from '../../services/api';
+import { orderAPI } from '../../services/api';
+import { getPaymentToken, getNextOrderId } from '../../redux/slices/shoppingCart';
 
 import {
   formatCreditCardNumber,
@@ -116,13 +117,19 @@ export default ({
     let creditCardData;
 
     try {
-      const { token, created, expires } = await paymentAPI.getPaymentToken()
-        creditCardData = {
-          token,
-          created,
-          expires,
-          paymentProcessor
-        };
+      const data = await dispatch(getPaymentToken());
+      const { token, created, expires } = data.payload
+      
+      if (!token) {
+        throw new Error('PAYMENT_TOKEN_NOT_GENERATED');
+      }
+
+      creditCardData = {
+        token,
+        created,
+        expires,
+        paymentProcessor
+      };
     } catch (err) {
       console.error('TOKEN_ERROR', err);
     }
@@ -133,11 +140,11 @@ export default ({
 
     let nextOrderData;
     try {
-      const nextOrderIdResponse = await orderAPI.getNextOrderId({
+      const nextOrderIdActionData = await dispatch(getNextOrderId({
         serviceAccommodatorId,
         serviceLocationId,
-      })
-      nextOrderData = nextOrderIdResponse.data;
+      }))
+      nextOrderData = nextOrderIdActionData.payload;
     } catch (err) {
       console.error('GET_NEXT_ORDER_DATA_ERROR', err);
     }

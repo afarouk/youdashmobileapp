@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { orderAPI } from '../../services/api';
+import { paymentAPI } from '../../services/api';
 import {
   formatCreditCardNumber,
   formatCVC,
@@ -24,7 +24,9 @@ const initialState = {
     "number" : "",
     "expiry" : "",
     "cvc": "",
-  }
+  },
+  loading: false,
+  error: false
 };
 
 const ccSlice = createSlice({
@@ -65,7 +67,7 @@ const ccSlice = createSlice({
       const { name, value } = action.payload;
       state.formState[name] = value;
     },
-  }
+  },
 });
 
 export const {

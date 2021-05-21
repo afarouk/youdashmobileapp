@@ -74,6 +74,7 @@ export const OrderDetails = (props) => {
     handleInputChange,
     handleCardSubmit,
     checkoutMode,
+    acceptCreditCards,
   } = props;
   const { saslName } = businessData;
 
@@ -89,15 +90,21 @@ export const OrderDetails = (props) => {
   };
 
   const clickSubmitBtn = (event) => {
-    if (isMobileVerified) {
-      if (isIframePayment) {
-        onCreateOrder(event)
-      } else {
-        let portalFormBtn = portalForm.current.querySelector('[type=submit]');
-        portalFormBtn.click();
-      }
-    } else {
+    if (!isMobileVerified) {
+      onCreateOrder(event);
+      return;
+    }
+
+    if (!acceptCreditCards) {
+      onCreateOrder(event);
+      return;
+    }
+
+    if (isIframePayment) {
       onCreateOrder(event)
+    } else {
+      let portalFormBtn = portalForm.current.querySelector('[type=submit]');
+      portalFormBtn.click();
     }
     
   };
@@ -148,6 +155,8 @@ export const OrderDetails = (props) => {
       setBtnProps({ disabled: !isFormValid })
     }
   }, [isFormValid, isPayFormValid]);
+
+  const isCreditCardNotIframePayment = isResolved && isMobileVerified && acceptCreditCards && !isIframePayment && portalForm.current;
 
   return (
     <div className="p-default">
@@ -225,9 +234,7 @@ export const OrderDetails = (props) => {
           <button ref={submitForm} type="submit" className="hidden">formsubmit</button>
         </Form>
 
-        { isResolved && isMobileVerified && !isIframePayment && portalForm.current &&
-          createPortal(<CreditcardForm {...ccProps} />, portalForm.current)
-        }
+        {isCreditCardNotIframePayment && createPortal(<CreditcardForm {...ccProps} />, portalForm.current)}
 
         <div ref={portalForm}></div>
 
@@ -249,13 +256,4 @@ export const OrderDetails = (props) => {
       </div>
     </div>
   );
-};
-
-OrderDetails.propTypes = {
-  allowOrderComments: PropTypes.bool,
-  pickUp: PropTypes.object,
-  products: PropTypes.array,
-  onDeleteItem: PropTypes.func.isRequired,
-  priceSubTotal: PropTypes.number,
-  onCreateOrder: PropTypes.func.isRequired
 };

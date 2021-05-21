@@ -120,8 +120,18 @@ export function useHooksIframe(config, handleCreateorder) {
         customCSS: customVantivStyles
       };
 
-      const {data} = await paymentAPI.getTransactionSetupID(configTransaction);
-      if (!data) return;
+      let data;
+      try {
+        const response = await paymentAPI.getTransactionSetupID(configTransaction);
+        data = response.data;
+      } catch (err) {
+        console.error('GET_TRANSACTION_SETUP_ID_ERROR', err);
+      }
+      if (!data) {
+        setTransactionError(true);
+        setCheckoutMode(false);
+        return;
+      };
 
       const { transactionSetupId, iframeSrc, orderUUID } = data;
       if (transactionSetupId && iframeSrc) {
