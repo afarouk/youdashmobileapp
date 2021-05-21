@@ -5,6 +5,7 @@ import useCalculateOrderPrice from './useCalculateOrderPrice';
 import { formatOrderData, isToday, pad, toIsoString } from '../../utils/helpers';
 import { clearCart, createOrder, resetOrderError } from '../../redux/slices/shoppingCart';
 import { paymentProcessors } from '../../config/constants';
+import { getLoyaltyAndOrderHistory } from '../../redux/slices/loyaltyAndOrderHistory';
 
 export default (businessData, user) => {
   const dispatch = useDispatch();
@@ -127,6 +128,13 @@ export default (businessData, user) => {
         if (payload && payload.orderUUID && !error) {
           dispatch(clearCart());
           history.push(`/${businessUrlKey}/order-status/${payload.orderUUID}${search}`);
+          if (user) {
+            dispatch(getLoyaltyAndOrderHistory({
+              UID: user.uid,
+              serviceAccommodatorId,
+              serviceLocationId,
+            }))
+          }
         }
         if (error) {
           setOrderInProgress(false);
