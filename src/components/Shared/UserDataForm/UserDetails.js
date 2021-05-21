@@ -40,5 +40,4 @@ export const UserDetails = ({ user, toggleUpdateMode }) => {
 
 UserDetails.propTypes = {
   user: PropTypes.object,
-  toggleUpdateMode: PropTypes.func.isRequired
 };
