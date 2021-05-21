@@ -1,10 +1,14 @@
 import React from 'react';
 import { Alert } from 'antd';
 
-function makeAlert(type = "warning", { showIcon, message, closable } = {
-  showIcon: true,
-  message: "unknown"
-}) {
+function AlertWrapper(props) {
+  const { 
+    type = 'warning',
+    showIcon = true,
+    message = 'unknown',
+    closable,
+  } = props;
+
   const fwdProps = {
     type,
     showIcon,
@@ -23,13 +27,19 @@ export default function OrderFormErrors({
   let alerts = [];
 
   if (transactionError) {
-    alerts.push(makeAlert("error", {message: "Checkout error.", closable: true}))
+    alerts.push(
+      <AlertWrapper key="transaction" type="error" message="Checkout error." closable />
+    )
   }
   if (orderRequestError) {
-    alerts.push(makeAlert("error", {message: "Placing order error.", closable: true}))
+    alerts.push(
+      <AlertWrapper key="orderRequest" type="error" message="Placing order error." closable />
+    )
   }
   if (preventOrdering) {
-    alerts.push(makeAlert("warning", {message: "Business doesn't accept orders at this moment."}))
+    alerts.push(
+      <AlertWrapper key="preventOrdering" type="warning" message="Business doesn't accept orders at this moment." false />
+    )
   }
 
   return alerts;

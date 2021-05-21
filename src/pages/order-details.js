@@ -132,7 +132,7 @@ const OrderDetailsPage = ({ businessData, user }) => {
     }
 
     if (orderRequestError) {
-      return onResetOrderError();
+      onResetOrderError();
     }
 
     const sendVerificationAnd = async (fn) => {
@@ -225,6 +225,7 @@ const OrderDetailsPage = ({ businessData, user }) => {
       checkoutMode={checkoutMode}
       toggleUpdateMode={toggleUpdateMode}
       submitLabel={acceptCreditCards ? 'Checkout' : 'Place Order'}
+      acceptCreditCards={acceptCreditCards}
       isResolved={isResolved}
       isIframePayment={isIframePayment}
       ccData={ccData}

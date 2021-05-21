@@ -37,7 +37,7 @@ export default (businessData, user) => {
 
   const handleResetOrderError = () => dispatch(resetOrderError());
 
-  const handleCreateOrder = ({
+  const handleCreateOrder = async({
     newUser = null,
     transactionData = null, // iframe data
     creditCardData = null, // custom credit card data
@@ -62,7 +62,7 @@ export default (businessData, user) => {
 
     let requestedDeliveryDate = '';
 
-    if (orderPickUp && orderPickUp.date) {
+    if (orderPickUp && orderPickUp.date && orderPickUp.time) {
       const orderPickUpDate = new Date(orderPickUp.date);
       const [hours, minutes] = orderPickUp.time.split(':');
       orderPickUpDate.setHours(hours, minutes);
@@ -122,17 +122,18 @@ export default (businessData, user) => {
         };
     }
 
-    return dispatch(createOrder(orderData))
-    .then(({ payload, error }) => {
-      if (payload && payload.orderUUID && !error) {
-        dispatch(clearCart());
-        history.push(`/${businessUrlKey}/order-status/${payload.orderUUID}${search}`);
-      }
-      if (error) {
-        setOrderInProgress(false);
-      }
-    });
+    await dispatch(createOrder(orderData))
+      .then(({ payload, error }) => {
+        if (payload && payload.orderUUID && !error) {
+          dispatch(clearCart());
+          history.push(`/${businessUrlKey}/order-status/${payload.orderUUID}${search}`);
+        }
+        if (error) {
+          setOrderInProgress(false);
+        }
+      });
 
+      setOrderInProgress(false)
   };
   return [
     orderInProgress,

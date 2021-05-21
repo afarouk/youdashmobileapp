@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { orderAPI } from '../../services/api';
+import { orderAPI, paymentAPI } from '../../services/api';
 import { calculateDiscountedPrice } from '../../utils/helpers';
 
 const initialState = {
@@ -22,10 +22,21 @@ const initialState = {
   loading: false,
   error: false
 };
+
 export const createOrder = createAsyncThunk('order/create', async (orderData) => {
   const response = await orderAPI.createOrder(orderData);
   return response.data;
 });
+
+export const getPaymentToken = createAsyncThunk('cc/getPaymentToken', async () => {
+  return await paymentAPI.getPaymentToken();
+});
+
+export const getNextOrderId = createAsyncThunk('order/getNextOrderId', async (data) => {
+  const response = await orderAPI.getNextOrderId(data);
+  return response.data;
+});
+
 const getPriceSubTotal = (items) =>
   items.reduce(
     (a, b) => a + (b.discountedPrice !== undefined ? b.discountedPrice : b.price) * b.quantity,
@@ -76,6 +87,28 @@ const shoppingCartSlice = createSlice({
         state.orderStatus = action.payload;
       })
       .addCase(createOrder.rejected, (state, action) => {
+        state.loading = false;
+        state.error = true;
+      })
+      .addCase(getPaymentToken.pending, (state, action) => {
+        state.loading = true;
+        state.error = false;
+      })
+      .addCase(getPaymentToken.fulfilled, (state, action) => {
+        state.orderStatus = action.payload;
+      })
+      .addCase(getPaymentToken.rejected, (state, action) => {
+        state.loading = false;
+        state.error = true;
+      })
+      .addCase(getNextOrderId.pending, (state, action) => {
+        state.loading = true;
+        state.error = false;
+      })
+      .addCase(getNextOrderId.fulfilled, (state, action) => {
+        state.orderStatus = action.payload;
+      })
+      .addCase(getNextOrderId.rejected, (state, action) => {
         state.loading = false;
         state.error = true;
       })

@@ -102,7 +102,7 @@ const gwApis = {
 
 }
 
-function getCayanToken(CayanCheckout) {
+const getCayanToken = (CayanCheckout) => {
   return new Promise((resolve, reject) => {
     CayanCheckout.createPaymentToken({
       success: resolve,
@@ -123,19 +123,10 @@ export const paymentAPI = {
     request.get(`/apptsvc/rest/retail/retrieveOrderStatusData`, {
       params
     }),
-  getPaymentToken: (data) => {
+  getPaymentToken: async (data) => {
     const { CayanCheckout } = window;
-    return new Promise((resolve, reject) => {
-      CayanCheckout.setWebApiKey("CAQIJ8EHM0VHSCC8")
-      getCayanToken(CayanCheckout)
-      .then(resolve)
-      .catch((err) => {
-        CayanCheckout.setWebApiKey("CAQIJ8EHM0VHSCC8");
-        return getCayanToken(CayanCheckout);
-      })
-      .catch((err) => reject(err));
-    })
-
+    CayanCheckout.setWebApiKey("CAQIJ8EHM0VHSCC8")
+    return await getCayanToken(CayanCheckout)
   }
 };
 
