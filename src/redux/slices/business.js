@@ -100,10 +100,10 @@ const mapUnSubgroupedItems = (items, groupId) => {
     if (rest.canSplitLeftRight && rest.itemOptions && rest.itemOptions.subItems) {
       rest.itemOptions = {
         ...rest.itemOptions,
-        subItemsLeft: {...rest.itemOptions.subItems},
+        subItemsLeft: [...rest.itemOptions.subItems],
       }
     }
-    
+
     if (!rest.quantity) {
       rest.quantity = 1;
     }
