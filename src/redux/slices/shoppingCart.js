@@ -20,16 +20,26 @@ const initialState = {
   },
   orderStatus: null, //used to get data on order-status page without additional request
   loading: false,
-  error: false
+  error: false,
+  errorMessage: null,
+  paymentTokenError: null,
 };
 
-export const createOrder = createAsyncThunk('order/create', async (orderData) => {
-  const response = await orderAPI.createOrder(orderData);
-  return response.data;
+export const createOrder = createAsyncThunk('order/create', async (orderData, { rejectWithValue }) => {
+  try {
+    const response = await orderAPI.createOrder(orderData);
+    return response.data;
+  } catch (err) {
+    return rejectWithValue(err);
+  }
 });
 
-export const getPaymentToken = createAsyncThunk('cc/getPaymentToken', async () => {
-  return await paymentAPI.getPaymentToken();
+export const getPaymentToken = createAsyncThunk('cc/getPaymentToken', async (_, { rejectWithValue }) => {
+  try {
+    return await paymentAPI.getPaymentToken();
+  } catch (err) {
+    return rejectWithValue(err);
+  }
 });
 
 export const getNextOrderId = createAsyncThunk('order/getNextOrderId', async (data) => {
@@ -75,6 +85,8 @@ const shoppingCartSlice = createSlice({
     },
     resetOrderError: (state, action) => {
       state.error = false;
+      state.errorMessage = null;
+      state.paymentTokenError = null;
     }
   },
   extraReducers: (builder) =>
@@ -82,17 +94,23 @@ const shoppingCartSlice = createSlice({
       .addCase(createOrder.pending, (state, action) => {
         state.loading = true;
         state.error = false;
+        state.errorMessage = null;
+        state.paymentTokenError = null;
       })
       .addCase(createOrder.fulfilled, (state, action) => {
         state.orderStatus = action.payload;
       })
       .addCase(createOrder.rejected, (state, action) => {
+        const errorText = action.payload;
         state.loading = false;
-        state.error = true;
+        state.error = errorText || true;
+        state.errorMessage = errorText
       })
       .addCase(getPaymentToken.pending, (state, action) => {
         state.loading = true;
         state.error = false;
+        state.errorMessage = null;
+        state.paymentTokenError = null;
       })
       .addCase(getPaymentToken.fulfilled, (state, action) => {
         state.orderStatus = action.payload;
@@ -100,10 +118,13 @@ const shoppingCartSlice = createSlice({
       .addCase(getPaymentToken.rejected, (state, action) => {
         state.loading = false;
         state.error = true;
+        state.paymentTokenError = action.payload;
       })
       .addCase(getNextOrderId.pending, (state, action) => {
         state.loading = true;
         state.error = false;
+        state.errorMessage = null;
+        state.paymentTokenError = null;
       })
       .addCase(getNextOrderId.fulfilled, (state, action) => {
         state.orderStatus = action.payload;

@@ -13,7 +13,7 @@ export const Cart = ({ itemsCount, price }) => {
     <div className="footer-fixed-cart p-default">
       <Button type="primary" size="large" block className="flex" onClick={handleOrderDetails}>
         <span className="footer-fixed-cart-items font-size-lg">{itemsCount} items in cart</span>
-        <span className="footer-fixed-cart-price font-size-lg">${price}</span>
+        <span className="footer-fixed-cart-price font-size-lg">${price.toFixed(2)}</span>
       </Button>
     </div>
   );

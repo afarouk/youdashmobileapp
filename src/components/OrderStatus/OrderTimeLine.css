@@ -1,0 +1,3 @@
+.order-timeline__item--active .ant-timeline-item-head {
+  background-color: var(--primary-color);
+}

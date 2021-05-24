@@ -17,6 +17,8 @@ export default (businessData, user) => {
   const [orderInProgress, setOrderInProgress] = useState(false);
   const shoppingCartItems = useSelector((state) => state.shoppingCart.items);
   const orderRequestError = useSelector((state) => state.shoppingCart.error);
+  const orderRequestErrorMessage = useSelector((state) => state.shoppingCart.errorMessage);
+  const paymentTokenError = useSelector((state) => state.shoppingCart.paymentTokenError);
   const priceSubTotal = useSelector((state) => state.shoppingCart.priceSubTotal);
   const itemsWithDiscounts = useSelector((state) => state.shoppingCart.itemsWithDiscounts);
   const itemsWithGroupDiscounts = useSelector(
@@ -160,6 +162,7 @@ export default (businessData, user) => {
     priceSubTotal,
     orderRequestError,
     comment,
-    handleCommentChange
+    handleCommentChange,
+    paymentTokenError,
   ];
 };

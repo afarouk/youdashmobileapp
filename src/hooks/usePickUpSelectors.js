@@ -13,9 +13,10 @@ const getTimeString = (hours, minutes, pickupDate, timeZone) => {
     minute: 'numeric',
     hour12: true
   };
-  let dateToCompare = changeTimezone(new Date(), timeZone);
+  let currentDate = changeTimezone(new Date(), timeZone);
+
   if (pickupDate && isToday(pickupDate)) {
-    return differenceInMinutes(dateToCompare, date) < 0
+    return differenceInMinutes(currentDate, date) < 0
       ? {
           label: date.toLocaleString('en-US', options),
           value: `${hours}:${addLeadingZero(minutes)}:00`
@@ -62,12 +63,11 @@ export default (businessData) => {
   const updateTimeOptions = (dateValue) => {
     if (pickUpTimes) {
       let tmpOpts = [];
-      pickUpTimes.map(({ hour, minute }) => {
+      pickUpTimes.forEach(({ hour, minute }) => {
         let timeValue = getTimeString(hour, minute, dateValue, timeZone);
         if (timeValue) {
           tmpOpts.push(timeValue);
         }
-        return timeValue ? { value: timeValue, label: timeValue } : null;
       });
 
       return tmpOpts;
@@ -83,7 +83,7 @@ export default (businessData) => {
           })
       ]);
       if (!timeOptions.length && orderPickUp.date) {
-        setTimeOptions(updateTimeOptions());
+        setTimeOptions(updateTimeOptions(orderPickUp.date));
       }
     }
   }, [businessData]);

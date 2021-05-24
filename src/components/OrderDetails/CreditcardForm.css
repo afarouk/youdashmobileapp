@@ -43,3 +43,7 @@ form.cc .rccs {
   right: 0px;
   top: 0px;*/
 }
+
+.ant-input.ant-input--error {
+  border-color: #ff4d4f;
+}

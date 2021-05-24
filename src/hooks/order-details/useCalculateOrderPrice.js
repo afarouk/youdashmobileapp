@@ -28,11 +28,11 @@ export default (businessData, priceSubTotal, shoppingCartItems) => {
     minimumPurchase: 0
   });
   const handleTipsChange = (value) => {
+    const totalBeforeTaxes = discountedPriceSubTotal + +(+extraFee.value);
     setTips({
       value: value ? value : 0,
       percentValue: value
-        ? //TODO: check if tips should be calculated with taxes + fees
-          getPercent(discountedPriceSubTotal + +(+extraFee.value) + +taxes.value, value)
+        ? getPercent(totalBeforeTaxes, value)
         : 0
     });
   };

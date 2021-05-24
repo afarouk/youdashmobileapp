@@ -126,7 +126,7 @@ export const paymentAPI = {
   getPaymentToken: async (data) => {
     const { CayanCheckout } = window;
     CayanCheckout.setWebApiKey("CAQIJ8EHM0VHSCC8")
-    return await getCayanToken(CayanCheckout)
+    return getCayanToken(CayanCheckout)
   }
 };
 

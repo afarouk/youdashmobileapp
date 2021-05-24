@@ -20,6 +20,7 @@ import { Comments } from '../Shared/Comments/Comments';
 import { VerificationCode } from './VerificationCode/VerificationCode';
 
 import './OrderDetails.css';
+import { getPaymentTokenFieldsErrors } from '../../utils/helpers';
 
 export const OrderDetails = (props) => {
   const {
@@ -40,6 +41,7 @@ export const OrderDetails = (props) => {
     toggleUpdateMode,
     orderInProgress,
     orderRequestError,
+    paymentTokenError,
     submitLabel,
   
     transactionSetupUrl,
@@ -75,6 +77,7 @@ export const OrderDetails = (props) => {
     handleCardSubmit,
     checkoutMode,
     acceptCreditCards,
+    acceptCash,
   } = props;
   const { saslName } = businessData;
 
@@ -109,6 +112,8 @@ export const OrderDetails = (props) => {
     
   };
 
+  const paymentTokenFieldsErrors = getPaymentTokenFieldsErrors(paymentTokenError);
+
   const ccProps = {
     isResolved,
     isIframePayment,
@@ -120,7 +125,8 @@ export const OrderDetails = (props) => {
     handleInputFocus,
     handleInputChange,
     onCardSubmitHandler,
-    priceTotal
+    priceTotal,
+    paymentTokenFieldsErrors,
   };
 
   const [isFormValid, setIsFormValid] = useState(false);
@@ -157,6 +163,8 @@ export const OrderDetails = (props) => {
   }, [isFormValid, isPayFormValid]);
 
   const isCreditCardNotIframePayment = isResolved && isMobileVerified && acceptCreditCards && !isIframePayment && portalForm.current;
+  const isCashPayment = !acceptCreditCards && acceptCash;
+
 
   return (
     <div className="p-default">
@@ -180,9 +188,11 @@ export const OrderDetails = (props) => {
             discountedPriceSubTotal={discountedPriceSubTotal}
             taxes={taxes}
             tips={tips}
-            extraFee={extraFee}/>
+            extraFee={extraFee}
+            isCashPayment={isCashPayment}
+          />
 
-          <Tips tips={tips} onChange={onTipsChange} />
+          {!isCashPayment && <Tips tips={tips} onChange={onTipsChange} />}
 
           <GrossTotal total={priceTotal} />
         </Card>
@@ -238,7 +248,12 @@ export const OrderDetails = (props) => {
 
         <div ref={portalForm}></div>
 
-        { <OrderFormErrors {...{transactionError, orderRequestError, preventOrdering}} />}
+        <OrderFormErrors 
+          transactionError={transactionError}
+          orderRequestError={orderRequestError}
+          preventOrdering={preventOrdering}
+          paymentTokenError={paymentTokenError}
+        />
 
         { showSubmitButton && (
           <Button

@@ -21,7 +21,7 @@ const OrderDetailsPage = ({ businessData, user }) => {
   const { search } = useLocation();
   const history = useHistory();
 
-  const { acceptCreditCards, paymentProcessor, allowOrderComments } = businessData.onlineOrder;
+  const { acceptCreditCards, paymentProcessor, allowOrderComments, acceptCash } = businessData.onlineOrder;
   const [updateMode, setUpdateMode] = useState(false);
   const toggleUpdateMode = () => setUpdateMode(!updateMode);
 
@@ -59,7 +59,8 @@ const OrderDetailsPage = ({ businessData, user }) => {
     priceSubTotal,
     orderRequestError,
     comment,
-    onCommentChange
+    onCommentChange,
+    paymentTokenError,
   ] = useCreateOrder(businessData, user);
 
   const [
@@ -153,7 +154,15 @@ const OrderDetailsPage = ({ businessData, user }) => {
       }
     } else {
       setOrderInProgress(true);
-      const userData = await onSignUpSubmit(updateMode, user, true);
+      let userData;
+
+      try {
+        userData = await onSignUpSubmit(updateMode, user, true);
+      } catch (err) {
+        console.error('onSignUpSubmit ERROR', err)
+        setOrderInProgress(false);
+        return;
+      }
 
       const adhoc = userData.adhocEntry;
       const verified = userData.mobileVerified;
@@ -202,6 +211,7 @@ const OrderDetailsPage = ({ businessData, user }) => {
       orderRequestError={orderRequestError}
       transactionSetupUrl={transactionSetupUrl}
       transactionError={transactionError}
+      paymentTokenError={paymentTokenError}
       onTipsChange={onTipsChange}
       taxes={taxes}
       extraFee={extraFee}
@@ -226,6 +236,7 @@ const OrderDetailsPage = ({ businessData, user }) => {
       toggleUpdateMode={toggleUpdateMode}
       submitLabel={acceptCreditCards ? 'Checkout' : 'Place Order'}
       acceptCreditCards={acceptCreditCards}
+      acceptCash={acceptCash}
       isResolved={isResolved}
       isIframePayment={isIframePayment}
       ccData={ccData}

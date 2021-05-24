@@ -31,8 +31,8 @@ export const SubItems = ({
       {selectorType === 'CHECKBOX' && (
         <div className="addons-row">
           {(addOns || []).map(
-            ({ subSubItemName, id, isSelected, isDisabled, priceAdjustment }, index) => {
-              // console.log(`${subSubItemName} ${priceAdjustment}`);
+            (addOn, index) => {
+              const { subSubItemName, id, isSelected, isDisabled, priceAdjustment } = addOn
               return (
                 <div key={`${parentPropName}${parentPropIndex}${index}`} className="choice">
                   <Checkbox
@@ -44,7 +44,7 @@ export const SubItems = ({
                       {subSubItemName}
                       {priceAdjustment ? (
                         <span className="addon-label-checkbox__price font-size-xs">
-                          (${priceAdjustment})
+                          (${priceAdjustment.toFixed(2)})
                         </span>
                       ) : null}
                     </span>
@@ -74,7 +74,7 @@ export const SubItems = ({
                         {subSubItemName}
                         {priceAdjustment ? (
                           <span className="addon-label-checkbox__price font-size-xs">
-                            (${priceAdjustment})
+                            (${priceAdjustment.toFixed(2)})
                           </span>
                         ) : null}
                       </span>
