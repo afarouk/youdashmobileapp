@@ -1,5 +1,6 @@
 import React from 'react';
 import { Alert } from 'antd';
+import { getPaymentTokenFieldsErrors } from '../../utils/helpers';
 
 function AlertWrapper(props) {
   const { 
@@ -22,7 +23,8 @@ function AlertWrapper(props) {
 export default function OrderFormErrors({
   transactionError,
   orderRequestError,
-  preventOrdering
+  preventOrdering,
+  paymentTokenError,
 }) {
   let alerts = [];
 
@@ -32,9 +34,18 @@ export default function OrderFormErrors({
     )
   }
   if (orderRequestError) {
-    alerts.push(
-      <AlertWrapper key="orderRequest" type="error" message="Placing order error." closable />
-    )
+    const message = typeof orderRequestError === 'string' && orderRequestError.trim() !== ''
+      ? orderRequestError
+      : 'Placing order error.';
+
+    const paymentTokenFieldsErrors = getPaymentTokenFieldsErrors(paymentTokenError);
+    const hasPaymentTokenFieldErrors = paymentTokenFieldsErrors && paymentTokenFieldsErrors.length !== 0;
+
+    if (!hasPaymentTokenFieldErrors) {
+      alerts.push(
+        <AlertWrapper key="orderRequest" type="error" message={message} closable />
+      )
+    } 
   }
   if (preventOrdering) {
     alerts.push(

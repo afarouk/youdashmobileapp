@@ -19,7 +19,7 @@ export const PickUp = ({ order, userName }) => {
         <p className="flex font-size-md">
           <span>Payment</span>
           <span>
-            {message} ${pricePaid ? Math.abs(pricePaid) : ''}
+            {message} ${pricePaid ? Math.abs(pricePaid).toFixed(2) : ''}
           </span>
         </p>
       )}

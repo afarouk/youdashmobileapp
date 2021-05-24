@@ -19,7 +19,8 @@ export default function CreditcardForm({
   handleInputFocus,
   handleInputChange,
   onCardSubmitHandler,
-  priceTotal
+  priceTotal,
+  paymentTokenFieldsErrors,
 }) {
   const formRef = useRef(null);
   const { ccHolderName, ccNumber, ccExpiration, ccCVC, ccIssuer } = ccData;
@@ -52,6 +53,11 @@ export default function CreditcardForm({
     }
   }, [ccNumber]);
 
+  const errors = (paymentTokenFieldsErrors || []).reduce((acc, err) => {
+    acc[err.reason] = err.error_code;
+    return acc;
+  }, {})
+
   return (
 
     <form className="form cc" ref={formRef} onSubmit={onCardSubmitHandler}>
@@ -80,7 +86,7 @@ export default function CreditcardForm({
           <input
             type="tel"
             name="number"
-            className="ant-input"
+            className={`ant-input ${errors.cardnumber ? 'ant-input--error' : ''}`}
             placeholder="Card Number"
             pattern="[\d| ]{16,22}"
             required
@@ -88,7 +94,7 @@ export default function CreditcardForm({
             onFocus={handleInputFocus}/>
         </div>
 
-        <div className="form-field">
+        <div className="form-field ant-form-item-has-error">
           <label htmlFor="name" className="font-size-sm required">
             Name
           </label>
@@ -96,7 +102,7 @@ export default function CreditcardForm({
           <input
             type="text"
             name="name"
-            className="ant-input"
+            className={`ant-input ${errors.cardholder ? 'ant-input--error' : ''}`}
             placeholder="Name"
             required
             data-cayan="cardholder"
@@ -114,7 +120,7 @@ export default function CreditcardForm({
             <input
               type="tel"
               name="expiry"
-              className="ant-input"
+              className={`ant-input ${errors.expirationdate ? 'ant-input--error' : ''}`}
               placeholder="MM/YY"
               pattern="\d\d/\d\d"
               required
@@ -133,7 +139,7 @@ export default function CreditcardForm({
             <input
               type="tel"
               name="cvc"
-              className="ant-input"
+              className={`ant-input ${errors.cvv ? 'ant-input--error' : ''}`}
               placeholder="CVC"
               pattern="\d{3,4}"
               required

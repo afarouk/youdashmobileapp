@@ -30,10 +30,7 @@ export const OrderStatus = ({
         isDemo={isDemo}
       />
       <OrderBarcode value={`ocg_${orderId ? orderId : ''}`} />
-      <OrderTimeLine
-        orderStatus={orderStatus ? orderStatus : {}}
-        mobileOrderStatuses={mobileOrderStatuses}
-      />
+      <OrderTimeLine orderStatus={orderStatus} />
      {/* <Button block size="large">
         <span className="font-size-md">Add to Home Screen</span>
       </Button>*/}

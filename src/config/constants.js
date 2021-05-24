@@ -58,3 +58,32 @@ export const userSASLSummaryPriorities = {
 };
 
 export const googleMapAPIKey = 'AIzaSyDon847P6x8IUl-pBwSMvvuZd3g2186uhQ';
+
+export const ORDER_STATUS = {
+  UNDEFINED: 'UNDEFINED',
+  INITIALIZED: 'INITIALIZED',
+  PROPOSED : 'PROPOSED',
+  IN_PROCESS : 'IN_PROCESS',
+  FULFILLED : 'FULFILLED',
+  REJECTED:'REJECTED',
+  ARCHIVED:'ARCHIVED'
+ }
+
+ export const ORDER_STATUS_LABELS = {
+   [ORDER_STATUS.UNDEFINED]: 'Something went wrong...',
+   [ORDER_STATUS.INITIALIZED]: 'In transition',
+   [ORDER_STATUS.PROPOSED]: 'Sent to kitchen',
+   [ORDER_STATUS.IN_PROCESS]: 'In process',
+   [ORDER_STATUS.FULFILLED]: 'Fullfilled',
+   [ORDER_STATUS.REJECTED]: 'Rejected',
+   [ORDER_STATUS.ARCHIVED]: 'Archived',
+ }
+
+ export const PAYMENT_TOKEN_ERROR = {
+  NOT_FOUND: 'NOT_FOUND',
+  REQUIRED: 'REQUIRED',
+  VALIDATION: 'VALIDATION',
+  SERVER: 'SERVER',
+  SERVER_REQUIRED: 'SERVER_REQUIRED',
+  SERVER_VALIDATION: 'SERVER_VALIDATION',
+ }

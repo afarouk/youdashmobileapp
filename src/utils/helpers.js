@@ -1,4 +1,4 @@
-import { amountTypes, discountTypes } from '../config/constants';
+import { amountTypes, discountTypes, PAYMENT_TOKEN_ERROR } from '../config/constants';
 
 export const handleNativeShare = async (shareData) => {
   if (navigator.share !== undefined) {
@@ -295,7 +295,7 @@ export const formatOrderData = ({
     secretComment: null,
     stationId: null,
     subTotal: subTotal ? subTotal : 0.0,
-    tipAmount: tipAmount ? tipAmount.value : 0.0,
+    tipAmount: tipAmount ? tipAmount.percentValue : 0.0,
     taxAmount: taxAmount ? taxAmount : 0.0,
     totalAmount: totalAmount ? totalAmount : 0.0,
     pricePaid: totalAmount ? (transactionData ? totalAmount : -Math.abs(totalAmount)) : 0.0,
@@ -472,3 +472,18 @@ export const getSubItemsString = (itemOptions) => {
   const output = list.join(', ');
   return output ? `(${output})` : '';
 };
+
+export const getPaymentTokenFieldsErrors = (paymentTokenError) => {
+  if (!Array.isArray(paymentTokenError)) {
+    return;
+  }
+
+  const errors = paymentTokenError.filter(error => (
+    error.error_code === PAYMENT_TOKEN_ERROR.VALIDATION
+    || error.error_code === PAYMENT_TOKEN_ERROR.REQUIRED
+    || error.error_code === PAYMENT_TOKEN_ERROR.SERVER_REQUIRED
+    || error.error_code === PAYMENT_TOKEN_ERROR.SERVER_VALIDATION
+  ))
+  
+  return errors;
+}

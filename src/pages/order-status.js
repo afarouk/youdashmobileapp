@@ -40,7 +40,6 @@ const OrderStatusPage = ({ user, businessData }) => {
     <OrderStatus
       user={user}
       order={order}
-      mobileOrderStatuses={businessData.mobileOrderStatuses || {}}
       mapCoordinates={businessData.mapCoordinates || {}}
       address={address}
       saslName={businessData.saslName}

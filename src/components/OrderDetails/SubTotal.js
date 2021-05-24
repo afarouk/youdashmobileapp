@@ -7,7 +7,8 @@ export const SubTotal = ({
   orderDiscount,
   taxes,
   tips,
-  extraFee
+  extraFee,
+  isCashPayment,
 }) => {
   const hasDiscount =
     priceSubTotal !== discountedPriceSubTotal && orderDiscount && orderDiscount.discount;
@@ -38,10 +39,12 @@ export const SubTotal = ({
           <span>${taxes.value.toFixed(2)}</span>
         </h5>
       ) : null}
-      <h5 className="flex">
-        <span>Optional Tip {tips.value}%</span>
-        <span>${tips.percentValue.toFixed(2)}</span>
-      </h5>
+      {!isCashPayment && (
+        <h5 className="flex">
+          <span>Optional Tip {tips.value}%</span>
+          <span>${tips.percentValue.toFixed(2)}</span>
+        </h5>
+      )}
     </div>
   );
 };

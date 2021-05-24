@@ -28,7 +28,7 @@ export const ProductCard = ({ product, isCard = true }) => {
       <div className="group__product-card-content">
         <div className="group__product-card-title font-size-md">
           <h3>{itemName}</h3>
-          <div className="primary-text group__product-card-price">${price}</div>
+          <div className="primary-text group__product-card-price">${price.toFixed(2)}</div>
         </div>
         <div className="group__product-card-description">{shortDescription || longDescription}</div>
       </div>
