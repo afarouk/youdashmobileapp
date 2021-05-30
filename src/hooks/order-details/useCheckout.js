@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 
 import { paymentAPI } from '../../services/api';
 import { useLocation, useParams } from 'react-router-dom';
-import { paymentProcessors } from '../../config/constants';
+import { CHECKOUT_MODE, paymentProcessors } from '../../config/constants';
 
 import { useHooksIframe } from './useCheckoutIframed';
 
@@ -16,7 +16,7 @@ export default (
   const [transactionSetup, setTransactionSetup] = useState(null);
   const [transactionSetupUrl, setTransactionSetupUrl] = useState(null);
   const [transactionError, setTransactionError] = useState(false);
-  const [checkoutMode, setCheckoutMode] = useState(false);
+  const [checkoutMode, setCheckoutMode] = useState(CHECKOUT_MODE.USER_DATA);
 
   const { serviceAccommodatorId, serviceLocationId } = businessData;
   const { acceptCreditCards, paymentProcessor } = businessData.onlineOrder;

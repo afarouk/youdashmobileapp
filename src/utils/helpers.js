@@ -413,11 +413,7 @@ const discountMetaDataShape = {
   discountPurposeType: null,
   saslTimeZone: 'America/Los_Angeles',
   timeZoneId: 'America/Los_Angeles',
-  discountState: {
-    id: 1,
-    enumText: 'ACTIVE',
-    displayText: 'Active'
-  },
+  discountState: 'ACTIVE',
   userLevel: 'DEFAULT'
 };
 

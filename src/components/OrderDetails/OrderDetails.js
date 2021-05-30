@@ -21,6 +21,7 @@ import { VerificationCode } from './VerificationCode/VerificationCode';
 
 import './OrderDetails.css';
 import { getPaymentTokenFieldsErrors } from '../../utils/helpers';
+import { CHECKOUT_MODE } from '../../config/constants';
 
 export const OrderDetails = (props) => {
   const {
@@ -93,6 +94,7 @@ export const OrderDetails = (props) => {
   };
 
   const clickSubmitBtn = (event) => {
+    debugger;
     if (!isMobileVerified) {
       onCreateOrder(event);
       return;
@@ -155,10 +157,14 @@ export const OrderDetails = (props) => {
 
   const [btnProps, setBtnProps] = useState({disabled: true});
   useEffect(() => {
-    if (checkoutMode) {
+    if (checkoutMode === CHECKOUT_MODE.CARD_PAYMENT) {
       setBtnProps({ disabled : !isFormValid || !isPayFormValid });
-    } else {
+    } else if (checkoutMode === CHECKOUT_MODE.USER_DATA) {
       setBtnProps({ disabled: !isFormValid })
+    } else if (checkoutMode === CHECKOUT_MODE.CARD_PAYMENT_PRESTEP) {
+      // TODO: implement validation 
+    } else {
+      throw new Error('CHECKOUT MODE IS NOT KNOWN', checkoutMode)
     }
   }, [isFormValid, isPayFormValid]);
 
