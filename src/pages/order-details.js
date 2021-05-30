@@ -5,7 +5,7 @@ import { useParams, useHistory, useLocation } from 'react-router-dom';
 import { OrderDetails } from '../components/OrderDetails/OrderDetails';
 
 import { getPercent, scrollToElement } from '../utils/helpers';
-import { paymentProcessors } from '../config/constants';
+import { CHECKOUT_MODE, paymentProcessors } from '../config/constants';
 import { deleteCartItem } from '../redux/slices/shoppingCart';
 
 import useMemberData from '../hooks/user/useMemberData';
@@ -147,7 +147,7 @@ const OrderDetailsPage = ({ businessData, user }) => {
 
     if (user && !credentialsChanged) {
       if (acceptCreditCards) {
-        await sendVerificationAnd(() => setCheckoutMode(true));
+        await sendVerificationAnd(() => setCheckoutMode(CHECKOUT_MODE.CARD_PAYMENT));
       } else {
         setOrderInProgress(true);
         await sendVerificationAnd(() => onCreateOrder());
@@ -171,11 +171,11 @@ const OrderDetailsPage = ({ businessData, user }) => {
 
       if (acceptCreditCards) {
         if (!adhoc && verified) {
-          setCheckoutMode(true);
+          setCheckoutMode(CHECKOUT_MODE.CARD_PAYMENT);
         } else if (adhoc && !verified && verificationCode) {
           setOrderInProgress(true);
           await onSendVerificationCode();
-          setCheckoutMode(true);
+          setCheckoutMode(CHECKOUT_MODE.CARD_PAYMENT);
           setOrderInProgress(false);
         }
       } else {
@@ -191,9 +191,12 @@ const OrderDetailsPage = ({ businessData, user }) => {
     }
   };
 
-  const showSubmitButton = isIframePayment
-    ? !(acceptCreditCards && checkoutMode)
-    : true;
+  let showSubmitButton = true;
+
+  console.log('isIframePayment', isIframePayment, checkoutMode)
+  if (isIframePayment && checkoutMode === CHECKOUT_MODE.CARD_PAYMENT) {
+    showSubmitButton = false;
+  }
 
   return (
     <OrderDetails
