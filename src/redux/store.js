@@ -6,6 +6,8 @@ import { loyaltyAndOrderHistoryReducer } from './slices/loyaltyAndOrderHistory';
 import { shoppingCartReducer } from './slices/shoppingCart';
 import { globalErrorReducer } from './slices/globalError';
 import { ccReducer } from './slices/cc';
+import { creditCardPrestepFormReducer } from './slices/creditCardPrestepForm';
+import { cardConnectIframeReducer } from './slices/cardConnectIframe';
 
 const middleware = [
   ...getDefaultMiddleware()
@@ -19,7 +21,9 @@ export const store = configureStore({
     shoppingCart: shoppingCartReducer,
     loyaltyAndOrderHistory: loyaltyAndOrderHistoryReducer,
     globalError: globalErrorReducer,
-    cc: ccReducer
+    cc: ccReducer,
+    creditCardPrestepForm: creditCardPrestepFormReducer,
+    cardConnectIframe: cardConnectIframeReducer
   },
   middleware
 });

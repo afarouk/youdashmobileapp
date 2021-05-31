@@ -1,4 +1,5 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { CHECKOUT_MODE } from '../../config/constants';
 import { orderAPI, paymentAPI } from '../../services/api';
 import { calculateDiscountedPrice } from '../../utils/helpers';
 
@@ -23,6 +24,7 @@ const initialState = {
   error: false,
   errorMessage: null,
   paymentTokenError: null,
+  checkoutMode: CHECKOUT_MODE.USER_DATA,
 };
 
 export const createOrder = createAsyncThunk('order/create', async (orderData, { rejectWithValue }) => {
@@ -87,7 +89,10 @@ const shoppingCartSlice = createSlice({
       state.error = false;
       state.errorMessage = null;
       state.paymentTokenError = null;
-    }
+    },
+    setCheckoutMode: (state, action) => {
+      state.checkoutMode = action.payload;
+    },
   },
   extraReducers: (builder) =>
     builder
@@ -241,6 +246,7 @@ export const {
   addDiscount,
   addGroupDiscount,
   setTablePath,
-  resetOrderError
+  resetOrderError,
+  setCheckoutMode,
 } = shoppingCartSlice.actions;
 export const shoppingCartReducer = shoppingCartSlice.reducer;

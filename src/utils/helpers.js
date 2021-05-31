@@ -1,4 +1,4 @@
-import { amountTypes, discountTypes, PAYMENT_TOKEN_ERROR } from '../config/constants';
+import { amountTypes, discountTypes, PAYMENT_PROCESSOR, PAYMENT_TOKEN_ERROR } from '../config/constants';
 
 export const handleNativeShare = async (shareData) => {
   if (navigator.share !== undefined) {
@@ -179,6 +179,7 @@ export const formatOrderData = ({
   extraFees,
   calculatedExtraFeeValue,
   promotions,
+  billingAddress,
 }) => {
   let authorizationsAndDiscounts = {
     authorizations: null,
@@ -344,7 +345,7 @@ export const formatOrderData = ({
     cashSelected: true,
     creditCardSelected: false,
     creditCard: null,
-    billingAddress: null,
+    billingAddress: prepareBillingAddress(billingAddress),
     paymentProcessor: 'UNDEFINED',
     cardReaderType: 'UNDEFINED',
     invoiceType: null,
@@ -376,6 +377,17 @@ const prepareExtraFeeFields = ({
     extraFeeType,
     extraFeeValue,
     taxRate,
+  }
+}
+
+const prepareBillingAddress = (billingAddress) => {
+  if (!billingAddress) {
+    return null;
+  }
+
+  return {
+    zip: billingAddress.zipCode,
+    street: billingAddress.streetAddress,
   }
 }
 

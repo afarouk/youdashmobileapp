@@ -2,9 +2,11 @@ import { useEffect, useState } from 'react';
 
 import { paymentAPI } from '../../services/api';
 import { useLocation, useParams } from 'react-router-dom';
-import { CHECKOUT_MODE, paymentProcessors } from '../../config/constants';
+import { CHECKOUT_MODE, PAYMENT_PROCESSOR } from '../../config/constants';
 
 import { useHooksIframe } from './useCheckoutIframed';
+import { useDispatch, useSelector } from 'react-redux';
+import * as shoppingCart from '../../redux/slices/shoppingCart';
 
 export default (
   businessData,
@@ -16,7 +18,13 @@ export default (
   const [transactionSetup, setTransactionSetup] = useState(null);
   const [transactionSetupUrl, setTransactionSetupUrl] = useState(null);
   const [transactionError, setTransactionError] = useState(false);
-  const [checkoutMode, setCheckoutMode] = useState(CHECKOUT_MODE.USER_DATA);
+  // const [checkoutMode, setCheckoutMode] = useState(CHECKOUT_MODE.USER_DATA);
+
+  const dispatch = useDispatch();
+  const checkoutMode = useSelector(state => state.shoppingCart.checkoutMode);
+  const setCheckoutMode = (newCheckoutMode) => {
+    dispatch(shoppingCart.setCheckoutMode(newCheckoutMode));
+  }
 
   const { serviceAccommodatorId, serviceLocationId } = businessData;
   const { acceptCreditCards, paymentProcessor } = businessData.onlineOrder;
@@ -36,7 +44,7 @@ export default (
     handleCreateOrder
   };
 
-  if (paymentProcessor === paymentProcessors.VANTIV_ECOMMERCE) {
+  if (paymentProcessor === PAYMENT_PROCESSOR.VANTIV_ECOMMERCE) {
     useHooksIframe(fwdConfig);
   }
 

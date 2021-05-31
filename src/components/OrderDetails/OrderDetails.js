@@ -22,6 +22,9 @@ import { VerificationCode } from './VerificationCode/VerificationCode';
 import './OrderDetails.css';
 import { getPaymentTokenFieldsErrors } from '../../utils/helpers';
 import { CHECKOUT_MODE } from '../../config/constants';
+import { CreditCardPrestepForm } from './CreditCardPrestepForm/CreditCardPrestepForm';
+import { CardConnectIframe } from './CardConnectIframe/CardConnectIframe';
+import { HeartlandForm } from './HeartlandForm';
 
 export const OrderDetails = (props) => {
   const {
@@ -79,6 +82,11 @@ export const OrderDetails = (props) => {
     checkoutMode,
     acceptCreditCards,
     acceptCash,
+    isCardPrestepRequired,
+    isCardConnect,
+    isTsys,
+    isHeartland,
+    setCheckoutMode,
   } = props;
   const { saslName } = businessData;
 
@@ -94,7 +102,6 @@ export const OrderDetails = (props) => {
   };
 
   const clickSubmitBtn = (event) => {
-    debugger;
     if (!isMobileVerified) {
       onCreateOrder(event);
       return;
@@ -152,25 +159,31 @@ export const OrderDetails = (props) => {
     }
     const fs = formState;
     const valid = (fs.valid && fs.name && fs.expiry && fs.cvc) ? true : false;
+    console.log({ fs })
     setIsPayFormValid(valid);
   }, [isIframePayment, formState]);
 
   const [btnProps, setBtnProps] = useState({disabled: true});
   useEffect(() => {
+    console.log({ isFormValid, isPayFormValid, checkoutMode})
+
     if (checkoutMode === CHECKOUT_MODE.CARD_PAYMENT) {
-      setBtnProps({ disabled : !isFormValid || !isPayFormValid });
+      // setBtnProps({ disabled : !isFormValid || !isPayFormValid }); // TODO: check if we need it
+      setBtnProps({ disabled: !isFormValid })
     } else if (checkoutMode === CHECKOUT_MODE.USER_DATA) {
       setBtnProps({ disabled: !isFormValid })
     } else if (checkoutMode === CHECKOUT_MODE.CARD_PAYMENT_PRESTEP) {
       // TODO: implement validation 
+      // setBtnProps({ disabled: !isFormValid })
     } else {
       throw new Error('CHECKOUT MODE IS NOT KNOWN', checkoutMode)
     }
-  }, [isFormValid, isPayFormValid]);
+  }, [isFormValid, isPayFormValid, checkoutMode]);
 
-  const isCreditCardNotIframePayment = isResolved && isMobileVerified && acceptCreditCards && !isIframePayment && portalForm.current;
+  const showCustomCreditCardForm = isTsys && isResolved && isMobileVerified && portalForm.current && checkoutMode === CHECKOUT_MODE.CARD_PAYMENT;
   const isCashPayment = !acceptCreditCards && acceptCash;
-
+  const showCardConnectIframe = isCardConnect && checkoutMode === CHECKOUT_MODE.CARD_PAYMENT;
+  const showHeartlandForm = isHeartland && checkoutMode === CHECKOUT_MODE.CARD_PAYMENT;
 
   return (
     <div className="p-default">
@@ -250,7 +263,25 @@ export const OrderDetails = (props) => {
           <button ref={submitForm} type="submit" className="hidden">formsubmit</button>
         </Form>
 
-        {isCreditCardNotIframePayment && createPortal(<CreditcardForm {...ccProps} />, portalForm.current)}
+        {isCardPrestepRequired && ([CHECKOUT_MODE.CARD_PAYMENT, CHECKOUT_MODE.CARD_PAYMENT_PRESTEP].includes(checkoutMode)) && (
+          <CreditCardPrestepForm 
+            onSubmit={() => setCheckoutMode(CHECKOUT_MODE.CARD_PAYMENT)} 
+            mode={checkoutMode === CHECKOUT_MODE.CARD_PAYMENT_PRESTEP ? 'edit' : 'preview'}
+          />
+        )}
+        {showCardConnectIframe && (
+          <CardConnectIframe 
+            submitLabel={submitLabel}
+            orderInProgress={orderInProgress}
+            onSubmit={handleCardSubmit}
+          />
+        )}
+
+        {showHeartlandForm && (
+          <HeartlandForm />
+        )}
+
+        {showCustomCreditCardForm && createPortal(<CreditcardForm {...ccProps} />, portalForm.current)}
 
         <div ref={portalForm}></div>
 
@@ -261,7 +292,7 @@ export const OrderDetails = (props) => {
           paymentTokenError={paymentTokenError}
         />
 
-        { showSubmitButton && (
+        { checkoutMode !== CHECKOUT_MODE.CARD_PAYMENT_PRESTEP && !showCardConnectIframe && !showHeartlandForm && showSubmitButton && (
           <Button
             block
             size="large"

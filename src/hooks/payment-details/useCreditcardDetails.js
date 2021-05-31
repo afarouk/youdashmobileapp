@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
-import { paymentProcessors } from '../../config/constants';
+import { PAYMENT_PROCESSOR } from '../../config/constants';
 import { orderAPI } from '../../services/api';
 import { getPaymentToken, getNextOrderId } from '../../redux/slices/shoppingCart';
 
@@ -49,12 +49,13 @@ export default ({
   const issuer = useSelector((state) => state.cc.ccIssuer);
   const focused = useSelector((state) => state.cc.focused);
   const formState = useSelector((state) => state.cc.formState);
+  const cardConnectToken = useSelector((state) => state.cardConnectIframe.token);
 
   useEffect(() => {
     if (!paymentProcessor) return;
 
     // only when vantiv, it is externally managed
-    let isIframePayment = paymentProcessor === paymentProcessors.VANTIV_ECOMMERCE;
+    let isIframePayment = paymentProcessor === PAYMENT_PROCESSOR.VANTIV_ECOMMERCE;
 
     dispatch(setIsResolved(true))
     dispatch(setIsIframePayment(isIframePayment))
@@ -116,22 +117,37 @@ export default ({
   const processCardOrder = async () => {
     let creditCardData;
 
-    try {
-      const data = await dispatch(getPaymentToken());
-      const { token, created, expires } = data.payload
-      
+    console.log('paymentProcessor', paymentProcessor)
+
+    if (paymentProcessor === PAYMENT_PROCESSOR.TSYS_ECOMMERCE) {
+      try {
+        const data = await dispatch(getPaymentToken());
+        const { token, created, expires } = data.payload
+        
+        if (!token) {
+          throw new Error('PAYMENT_TOKEN_NOT_GENERATED');
+        }
+
+        creditCardData = {
+          token,
+          created,
+          expires,
+          paymentProcessor
+        };
+      } catch (err) {
+        console.error('TOKEN_ERROR', err);
+      }
+    } else if (paymentProcessor === PAYMENT_PROCESSOR.CARDCONNECT_ECOMMERCE) {
+      const token = cardConnectToken;
+
       if (!token) {
-        throw new Error('PAYMENT_TOKEN_NOT_GENERATED');
+        return
       }
 
       creditCardData = {
         token,
-        created,
-        expires,
-        paymentProcessor
-      };
-    } catch (err) {
-      console.error('TOKEN_ERROR', err);
+        paymentProcessor,
+      }
     }
 
     if (!creditCardData) {

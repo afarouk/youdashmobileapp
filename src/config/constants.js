@@ -13,7 +13,7 @@ export const amountTypes = {
   AMOUNT: 'AMOUNT'
 };
 
-export const paymentProcessors = { 
+export const PAYMENT_PROCESSOR = { 
    
   UNDEFINED:'UNDEFINED', 
   STRIPE:'STRIPE', 
@@ -93,3 +93,4 @@ export const ORDER_STATUS = {
    CARD_PAYMENT_PRESTEP: 'CARD_PAYMENT_PRESTEP',
    CARD_PAYMENT: 'CARD_PAYMENT',
  }
+ export const CARD_CONNECT_TOKEN_KEY = 'cardConnectToken';
