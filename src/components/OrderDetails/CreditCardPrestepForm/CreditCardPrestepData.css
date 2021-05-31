@@ -1,0 +1,22 @@
+/* .credit-card-prestep-data label {
+  position: relative;
+}
+.credit-card-prestep-data label.required-field:after {
+  content: '*';
+  font-size: 1.1em;
+  color: #f44336;
+  position: absolute;
+  top: -2px;
+  right: -8px;
+  display: block;
+}
+.credit-card-prestep-data > * {
+  margin-bottom: var(--default-margin-bottom);
+} */
+.credit-card-prestep-data h4,
+.credit-card-prestep-data h5 {
+  margin-bottom: var(--default-margin-bottom);
+}
+.credit-card-prestep-data h4 > span:nth-child(2) {
+  font-weight: 600;
+}

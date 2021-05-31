@@ -5,7 +5,7 @@ import { useParams, useHistory, useLocation } from 'react-router-dom';
 import { OrderDetails } from '../components/OrderDetails/OrderDetails';
 
 import { getPercent, scrollToElement } from '../utils/helpers';
-import { CHECKOUT_MODE, paymentProcessors } from '../config/constants';
+import { CHECKOUT_MODE, PAYMENT_PROCESSOR } from '../config/constants';
 import { deleteCartItem } from '../redux/slices/shoppingCart';
 
 import useMemberData from '../hooks/user/useMemberData';
@@ -105,6 +105,12 @@ const OrderDetailsPage = ({ businessData, user }) => {
     }
   }, []);
 
+  useEffect(() => {
+    if (acceptCreditCards && checkoutMode === CHECKOUT_MODE.USER_DATA && isMobileVerified) {
+      proceedToNextStepForCardPayment();
+    }
+  }, [acceptCreditCards, checkoutMode, isMobileVerified])
+
   const handleEditItem = (index) =>
     history.push(`/${businessUrlKey}/shopping-cart/${index}${search}`);
 
@@ -127,6 +133,34 @@ const OrderDetailsPage = ({ businessData, user }) => {
     }
   }
 
+  const signUpUser = async () => {
+    setOrderInProgress(true);
+    let userData;
+
+    try {
+      userData = await onSignUpSubmit(updateMode, user, true);
+    } catch (err) {
+      console.error('onSignUpSubmit ERROR', err)
+      setOrderInProgress(false);
+      return;
+    }
+
+    setUpdateMode(false);
+    setOrderInProgress(false);
+
+    return { userData };
+  }
+
+  const proceedToNextStepForCardPayment = () => {
+    let newCheckoutMode = CHECKOUT_MODE.CARD_PAYMENT;
+
+    if (paymentProcessor === PAYMENT_PROCESSOR.CARDCONNECT_ECOMMERCE & checkoutMode === CHECKOUT_MODE.USER_DATA) {
+      newCheckoutMode = CHECKOUT_MODE.CARD_PAYMENT_PRESTEP;
+    }
+
+    setCheckoutMode(newCheckoutMode);
+  }
+
   async function orderHandler() {
     if (!orderPickUp.date || !orderPickUp.time) {
       return scrollToElement(document.getElementById('pickup-selectors'));
@@ -145,58 +179,60 @@ const OrderDetailsPage = ({ businessData, user }) => {
       }
     }
 
-    if (user && !credentialsChanged) {
-      if (acceptCreditCards) {
-        await sendVerificationAnd(() => setCheckoutMode(CHECKOUT_MODE.CARD_PAYMENT));
+    if (acceptCreditCards) {
+      if (user && !credentialsChanged) {
+        await sendVerificationAnd(() => proceedToNextStepForCardPayment());
       } else {
-        setOrderInProgress(true);
-        await sendVerificationAnd(() => onCreateOrder());
-      }
-    } else {
-      setOrderInProgress(true);
-      let userData;
+        const { userData } = await signUpUser();
+        const { adhocEntry, mobileVerified} = userData;
 
-      try {
-        userData = await onSignUpSubmit(updateMode, user, true);
-      } catch (err) {
-        console.error('onSignUpSubmit ERROR', err)
-        setOrderInProgress(false);
-        return;
-      }
-
-      const adhoc = userData.adhocEntry;
-      const verified = userData.mobileVerified;
-      setUpdateMode(false);
-      setOrderInProgress(false);
-
-      if (acceptCreditCards) {
-        if (!adhoc && verified) {
-          setCheckoutMode(CHECKOUT_MODE.CARD_PAYMENT);
-        } else if (adhoc && !verified && verificationCode) {
+        if (!adhocEntry && mobileVerified) {
+          proceedToNextStepForCardPayment();
+        } else if (adhocEntry && !mobileVerified && verificationCode) {
           setOrderInProgress(true);
           await onSendVerificationCode();
-          setCheckoutMode(CHECKOUT_MODE.CARD_PAYMENT);
+          proceedToNextStepForCardPayment();
           setOrderInProgress(false);
         }
+      }
+      return 
+    }
+
+    if (acceptCash) {
+      if (user && !credentialsChanged) {
+        setOrderInProgress(true);
+        await sendVerificationAnd(() => onCreateOrder());
       } else {
-        if (!adhoc && verified) {
+        const { userData } = await signUpUser();
+        const { adhocEntry, mobileVerified} = userData;
+        
+        if (!adhocEntry && mobileVerified) {
           onCreateOrder({ newUser: userData });
-        } else if (adhoc && !verified && verificationCode) {
+        } else if (adhocEntry && !mobileVerified && verificationCode) {
           await onSendVerificationCode();
           onCreateOrder({ newUser: userData });
         } else {
           setOrderInProgress(false);
         }
       }
+
+      return;
     }
+    
+    
+
+    throw new Error('ACCEPT METHOD NOT KNOWN');
   };
 
   let showSubmitButton = true;
-
-  console.log('isIframePayment', isIframePayment, checkoutMode)
   if (isIframePayment && checkoutMode === CHECKOUT_MODE.CARD_PAYMENT) {
     showSubmitButton = false;
   }
+
+  const isTsys = paymentProcessor === PAYMENT_PROCESSOR.TSYS_ECOMMERCE;
+  const isHeartland = paymentProcessor === PAYMENT_PROCESSOR.HEARTLAND_ECOMMERCE;
+  const isCardConnect = paymentProcessor === PAYMENT_PROCESSOR.CARDCONNECT_ECOMMERCE;
+  const isCardPrestepRequired = isCardConnect;
 
   return (
     <OrderDetails
@@ -250,6 +286,11 @@ const OrderDetailsPage = ({ businessData, user }) => {
       handleInputFocus={handleInputFocus}
       handleInputChange={handleInputChange}
       handleCardSubmit={handleCardSubmit}
+      setCheckoutMode={setCheckoutMode}
+      isCardPrestepRequired={isCardPrestepRequired}
+      isTsys={isTsys}
+      isCardConnect={isCardConnect}
+      isHeartland={isHeartland}
     />
   );
 };

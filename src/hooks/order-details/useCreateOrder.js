@@ -3,8 +3,8 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useHistory, useLocation, useParams } from 'react-router-dom';
 import useCalculateOrderPrice from './useCalculateOrderPrice';
 import { formatOrderData, isToday, pad, toIsoString } from '../../utils/helpers';
-import { clearCart, createOrder, resetOrderError } from '../../redux/slices/shoppingCart';
-import { paymentProcessors } from '../../config/constants';
+import { clearCart, createOrder, resetOrderError, setCheckoutMode } from '../../redux/slices/shoppingCart';
+import { CHECKOUT_MODE, PAYMENT_PROCESSOR } from '../../config/constants';
 import { getLoyaltyAndOrderHistory } from '../../redux/slices/loyaltyAndOrderHistory';
 
 export default (businessData, user) => {
@@ -26,6 +26,7 @@ export default (businessData, user) => {
   );
   const orderPickUp = useSelector((state) => state.shoppingCart.orderPickUp);
   const tablePath = useSelector((state) => state.shoppingCart.tablePath);
+  const billingAddress = useSelector(state => state.creditCardPrestepForm.formState);
   const [comment, setComment] = useState('');
   const handleCommentChange = (e) => setComment(e.target.value);
   const [
@@ -99,10 +100,12 @@ export default (businessData, user) => {
       calculatedExtraFeeValue: extraFee.value,
       extraFees,
       promotions,
+      billingAddress,
     });
     
     switch (paymentProcessor) {
-      case paymentProcessors.TSYS_ECOMMERCE:
+      case PAYMENT_PROCESSOR.TSYS_ECOMMERCE:
+      case PAYMENT_PROCESSOR.CARDCONNECT_ECOMMERCE:
         orderData = {
           ...orderData,
           paymentProcessor,
@@ -113,7 +116,7 @@ export default (businessData, user) => {
           provisioningParam5,
         };
         break;
-      case paymentProcessors.VANTIV_ECOMMERCE:
+      case PAYMENT_PROCESSOR.VANTIV_ECOMMERCE:
         orderData = {
           ...orderData,
         };
@@ -139,6 +142,9 @@ export default (businessData, user) => {
           }
         }
         if (error) {
+          if (paymentProcessor === PAYMENT_PROCESSOR.CARDCONNECT_ECOMMERCE) {
+            dispatch(setCheckoutMode(CHECKOUT_MODE.CARD_PAYMENT_PRESTEP));
+          }
           setOrderInProgress(false);
         }
       });

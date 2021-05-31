@@ -1,0 +1,22 @@
+.credit-card-prestep-form .form-row {
+  display: flex;
+  flex-direction: row;
+}
+
+.credit-card-prestep-form .divider-vertical {
+  width: 50px;
+}
+
+.credit-card-prestep-form .form-field {
+  margin-bottom: var(--default-margin-bottom);
+}
+
+.credit-card-prestep-form .submit-button {
+  margin-bottom: var(--default-margin-bottom);
+  align-self: flex-end;
+  height: 32px;
+  line-height: 32px;
+  padding: 0;
+  box-sizing: border-box;
+}
+
