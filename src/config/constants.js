@@ -99,3 +99,9 @@ export const ORDER_STATUS = {
  export const GLOBAL_PAYMENTS_KEY = 'pkapi_cert_bXkCMqQvfOTdXnjPGE';
  export const NABANCARD_PUBLIC_KEY = 'eyAidGVybWluYWxQcm9maWxlSWQiOiAxNTIwOSB9';
  export const GOOGLE_RECAPTCHA_KEY = '6LcCXwwUAAAAAO8617hw-277eL5cMAJ5SBsebhWk';
+
+ export const IS_DEMO = (new URLSearchParams(window.location.search)).get('demo') === 'true';
+ 
+ export const CARD_CONNECT_IFRAME_URL = IS_DEMO
+  ? 'https://boltgw-uat.cardconnect.com'
+  : 'https://boltgw.cardconnect.com';
