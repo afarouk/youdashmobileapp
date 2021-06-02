@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux'
-import { CARD_CONNECT_TOKEN_KEY } from '../../../config/constants';
+import { CARD_CONNECT_IFRAME_URL, CARD_CONNECT_TOKEN_KEY } from '../../../config/constants';
 import { setToken } from '../../../redux/slices/cardConnectIframe';
 import { Alert, Button } from 'antd';
 
@@ -27,8 +27,13 @@ export const CardConnectIframe = React.memo((props) => {
   }
 
   const handleToken = useCallback((event) => {
+    if (event.origin !== CARD_CONNECT_IFRAME_URL) {
+      return;
+    }
+
     try {
       const data = JSON.parse(event.data);
+      console.log('data', data)
       if (CARD_CONNECT_TOKEN_KEY in data) {
         dispatch(setToken(data[CARD_CONNECT_TOKEN_KEY]));
       }
@@ -47,7 +52,7 @@ export const CardConnectIframe = React.memo((props) => {
 
   const cssStyles = [
     'input[name="ccnumfield"], #cccvvfield{background-color: #faf9ff;width:100%;padding: 4px 11px;transition: all 0.3s;border:1px solid #d9d9d9;border-radius:2px;font-size: 14px;color: rgba(0, 0, 0, 0.85);box-sizing: border-box;margin-bottom: 1em;}',
-    // 'input[name="ccnumfield"].error, #cccvvfield.error{color: red;border-color: red;}',
+    'input[name="ccnumfield"].error, #cccvvfield.error{color: red;border-color: red;}',
     'input[name="ccnumfield"]:hover{border-color: #40a9ff;}',
     'input[name="ccnumfield"]:focus{border-color: #40a9ff;outline:none;box-shadow: 0 0 0 2px rgb(24, 144, 255, 0.2)}',
     '#cccvvfield{width: 100px;}',
@@ -61,10 +66,10 @@ export const CardConnectIframe = React.memo((props) => {
     cardnumbernumericonly: true,
     enhancedresponse: true,
 
-    invalidcreditcardevent: false,
-    invalidcvvevent: false,
-    invalidexpiryevent: false,
-    invalidinputevent: false,
+    invalidcreditcardevent: true,
+    invalidcvvevent: true,
+    invalidexpiryevent: true,
+    invalidinputevent: true,
 
     tokenizewheninactive: true,
     
@@ -91,7 +96,7 @@ export const CardConnectIframe = React.memo((props) => {
   return (
     <Card>
       <form name="tokenform" id="tokenform" onSubmit={handleSubmit}>
-        <iframe id="tokenFrame" style={{ width: '100%', height: '175px' }} name="tokenFrame" src={`https://fts-uat.cardconnect.com/itoke/ajax-tokenizer.html?${urlParams}`} frameBorder="0" scrolling="no"></iframe>
+        <iframe id="tokenFrame" style={{ width: '100%', height: '175px' }} name="tokenFrame" src={`${CARD_CONNECT_IFRAME_URL}/itoke/ajax-tokenizer.html?${urlParams}`} frameBorder="0" scrolling="no"></iframe>
 
         {error && (
           <Alert 
