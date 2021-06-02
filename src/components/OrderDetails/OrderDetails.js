@@ -25,6 +25,7 @@ import { CHECKOUT_MODE } from '../../config/constants';
 import { CreditCardPrestepForm } from './CreditCardPrestepForm/CreditCardPrestepForm';
 import { CardConnectIframe } from './CardConnectIframe/CardConnectIframe';
 import { HeartlandForm } from './HeartlandForm';
+import { NabancardForm } from './NabancardForm';
 
 export const OrderDetails = (props) => {
   const {
@@ -87,6 +88,7 @@ export const OrderDetails = (props) => {
     isTsys,
     isHeartland,
     setCheckoutMode,
+    isNabancard,
   } = props;
   const { saslName } = businessData;
 
@@ -159,7 +161,6 @@ export const OrderDetails = (props) => {
     }
     const fs = formState;
     const valid = (fs.valid && fs.name && fs.expiry && fs.cvc) ? true : false;
-    console.log({ fs })
     setIsPayFormValid(valid);
   }, [isIframePayment, formState]);
 
@@ -181,6 +182,7 @@ export const OrderDetails = (props) => {
   }, [isFormValid, isPayFormValid, checkoutMode]);
 
   const showCustomCreditCardForm = isTsys && isResolved && isMobileVerified && portalForm.current && checkoutMode === CHECKOUT_MODE.CARD_PAYMENT;
+  const showNabancardForm = isNabancard && isResolved && isMobileVerified && portalForm.current && checkoutMode === CHECKOUT_MODE.CARD_PAYMENT;
   const isCashPayment = !acceptCreditCards && acceptCash;
   const showCardConnectIframe = isCardConnect && checkoutMode === CHECKOUT_MODE.CARD_PAYMENT;
   const showHeartlandForm = isHeartland && checkoutMode === CHECKOUT_MODE.CARD_PAYMENT;
@@ -278,10 +280,16 @@ export const OrderDetails = (props) => {
         )}
 
         {showHeartlandForm && (
-          <HeartlandForm />
+          <HeartlandForm 
+            submitLabel={submitLabel}
+            orderInProgress={orderInProgress}
+            onSubmit={handleCardSubmit}
+          />
         )}
 
         {showCustomCreditCardForm && createPortal(<CreditcardForm {...ccProps} />, portalForm.current)}
+
+        {showNabancardForm && createPortal(<NabancardForm {...ccProps} />, portalForm.current)}
 
         <div ref={portalForm}></div>
 

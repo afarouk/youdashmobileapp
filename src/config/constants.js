@@ -94,3 +94,8 @@ export const ORDER_STATUS = {
    CARD_PAYMENT: 'CARD_PAYMENT',
  }
  export const CARD_CONNECT_TOKEN_KEY = 'cardConnectToken';
+
+ export const CAYAN_CHECKOUT_KEY = 'CAQIJ8EHM0VHSCC8';
+ export const GLOBAL_PAYMENTS_KEY = 'pkapi_cert_bXkCMqQvfOTdXnjPGE';
+ export const NABANCARD_PUBLIC_KEY = 'eyAidGVybWluYWxQcm9maWxlSWQiOiAxNTIwOSB9';
+ export const GOOGLE_RECAPTCHA_KEY = '6LcCXwwUAAAAAO8617hw-277eL5cMAJ5SBsebhWk';

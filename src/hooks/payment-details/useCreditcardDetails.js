@@ -50,6 +50,7 @@ export default ({
   const focused = useSelector((state) => state.cc.focused);
   const formState = useSelector((state) => state.cc.formState);
   const cardConnectToken = useSelector((state) => state.cardConnectIframe.token);
+  const heartlandToken = useSelector((state) => state.heartland.token);
 
   useEffect(() => {
     if (!paymentProcessor) return;
@@ -77,13 +78,13 @@ export default ({
     let { name, value } = target;
     let action;
 
-    if (name === "number") {
+    if (name === "number" || name === 'PAN') {
       target.value = formatCreditCardNumber(value);
       action = setccNumber(value);
-    } else if (name === "expiry") {
+    } else if (name === "expiry" || name === 'Expire') {
       target.value = formatExpirationDate(value);
       action = setccExpiration(value);
-    } else if (name === "cvc") {
+    } else if (name === "cvc" || name === 'CVV') {
       target.value = formatCVC(value);
       action = setccCVC(value);
     } else if (name === "name") {
@@ -117,36 +118,52 @@ export default ({
   const processCardOrder = async () => {
     let creditCardData;
 
-    console.log('paymentProcessor', paymentProcessor)
+    switch (paymentProcessor) {
+      case PAYMENT_PROCESSOR.TSYS_ECOMMERCE: {
+        try {
+          const data = await dispatch(getPaymentToken());
+          const { token, created, expires } = data.payload
+          
+          if (!token) {
+            throw new Error('PAYMENT_TOKEN_NOT_GENERATED');
+          }
 
-    if (paymentProcessor === PAYMENT_PROCESSOR.TSYS_ECOMMERCE) {
-      try {
-        const data = await dispatch(getPaymentToken());
-        const { token, created, expires } = data.payload
-        
+          creditCardData = {
+            token,
+            created,
+            expires,
+            paymentProcessor
+          };
+        } catch (err) {
+          console.error('TOKEN_ERROR', err);
+        }
+        break;
+      }
+      case PAYMENT_PROCESSOR.CARDCONNECT_ECOMMERCE: {
+        const token = cardConnectToken;
+
         if (!token) {
-          throw new Error('PAYMENT_TOKEN_NOT_GENERATED');
+          return
         }
 
         creditCardData = {
           token,
-          created,
-          expires,
-          paymentProcessor
-        };
-      } catch (err) {
-        console.error('TOKEN_ERROR', err);
+          paymentProcessor,
+        }
+        break;
       }
-    } else if (paymentProcessor === PAYMENT_PROCESSOR.CARDCONNECT_ECOMMERCE) {
-      const token = cardConnectToken;
+      case PAYMENT_PROCESSOR.HEARTLAND_ECOMMERCE: {
+        const token = heartlandToken;
 
-      if (!token) {
-        return
-      }
+        if (!token) {
+          throw new Error('PAYMENT_TOKEN_IS_MISSING');
+        }
 
-      creditCardData = {
-        token,
-        paymentProcessor,
+        creditCardData = {
+          token,
+          paymentProcessor,
+        }
+        break;
       }
     }
 
