@@ -232,6 +232,7 @@ const OrderDetailsPage = ({ businessData, user }) => {
   const isTsys = paymentProcessor === PAYMENT_PROCESSOR.TSYS_ECOMMERCE;
   const isHeartland = paymentProcessor === PAYMENT_PROCESSOR.HEARTLAND_ECOMMERCE;
   const isCardConnect = paymentProcessor === PAYMENT_PROCESSOR.CARDCONNECT_ECOMMERCE;
+  const isNabancard = paymentProcessor === PAYMENT_PROCESSOR.NABANCARD_ECOMMERCE;
   const isCardPrestepRequired = isCardConnect;
 
   return (
@@ -291,6 +292,7 @@ const OrderDetailsPage = ({ businessData, user }) => {
       isTsys={isTsys}
       isCardConnect={isCardConnect}
       isHeartland={isHeartland}
+      isNabancard={isNabancard}
     />
   );
 };

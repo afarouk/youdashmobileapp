@@ -106,6 +106,7 @@ export default (businessData, user) => {
     switch (paymentProcessor) {
       case PAYMENT_PROCESSOR.TSYS_ECOMMERCE:
       case PAYMENT_PROCESSOR.CARDCONNECT_ECOMMERCE:
+        case PAYMENT_PROCESSOR.HEARTLAND_ECOMMERCE:
         orderData = {
           ...orderData,
           paymentProcessor,

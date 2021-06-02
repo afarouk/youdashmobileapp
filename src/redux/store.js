@@ -8,6 +8,7 @@ import { globalErrorReducer } from './slices/globalError';
 import { ccReducer } from './slices/cc';
 import { creditCardPrestepFormReducer } from './slices/creditCardPrestepForm';
 import { cardConnectIframeReducer } from './slices/cardConnectIframe';
+import { heartlandReducer } from './slices/heartland';
 
 const middleware = [
   ...getDefaultMiddleware()
@@ -23,7 +24,8 @@ export const store = configureStore({
     globalError: globalErrorReducer,
     cc: ccReducer,
     creditCardPrestepForm: creditCardPrestepFormReducer,
-    cardConnectIframe: cardConnectIframeReducer
+    cardConnectIframe: cardConnectIframeReducer,
+    heartland: heartlandReducer,
   },
   middleware
 });

@@ -1,3 +1,4 @@
+import { CAYAN_CHECKOUT_KEY } from '../config/constants';
 import { request, demo, multientry } from './request';
 
 export const businessAPI = {
@@ -125,7 +126,7 @@ export const paymentAPI = {
     }),
   getPaymentToken: async (data) => {
     const { CayanCheckout } = window;
-    CayanCheckout.setWebApiKey("CAQIJ8EHM0VHSCC8")
+    CayanCheckout.setWebApiKey(CAYAN_CHECKOUT_KEY)
     return getCayanToken(CayanCheckout)
   }
 };
