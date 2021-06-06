@@ -96,9 +96,14 @@ export const ORDER_STATUS = {
  export const CARD_CONNECT_TOKEN_KEY = 'cardConnectToken';
 
  export const CAYAN_CHECKOUT_KEY = 'CAQIJ8EHM0VHSCC8';
+ export const CAYAN_CHECKOUT_SCRIPT_URL = 'https://ecommerce.merchantware.net/v1/CayanCheckout.js';
  export const GLOBAL_PAYMENTS_KEY = 'pkapi_cert_bXkCMqQvfOTdXnjPGE';
+ export const GLOBAL_PAYMENTS_SCRIPT_URL = 'https://hps.github.io/token/gp-1.0.0/globalpayments.js';
  export const NABANCARD_PUBLIC_KEY = 'eyAidGVybWluYWxQcm9maWxlSWQiOiAxNTIwOSB9';
+ export const NABANCARD_SCRIPT_URL = 'https://api.cert.nabcommerce.com/1.3/post.js'
+
  export const GOOGLE_RECAPTCHA_KEY = '6LcCXwwUAAAAAO8617hw-277eL5cMAJ5SBsebhWk';
+ export const GOOGLE_RECAPTCHA_SCRIPT_URL = 'https://www.google.com/recaptcha/api.js';
 
  export const IS_DEMO = (new URLSearchParams(window.location.search)).get('demo') === 'true';
  
