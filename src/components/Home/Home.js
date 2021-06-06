@@ -9,6 +9,7 @@ import { MyPastOrders } from './MyPastOrders/MyPastOrders';
 import { Cart } from './Cart/Cart';
 import { LastOrderStatus } from './LastOrderStatus/LastOrderStatus';
 import { PriorityCard } from './PriorityCard/PriorityCard';
+import { GreenDiningNotification } from './PriorityCard/GreenDiningNotification'
 
 export const Home = ({
   loyaltyAndOrderHistory,
@@ -32,6 +33,7 @@ export const Home = ({
       <Container>
         <div className="greetings-wrapper">
           <div className="greetings-wrapper-inner">
+            <GreenDiningNotification />
             <PriorityCard
               itemsById={itemsById}
               priorityBox={priorityBox}

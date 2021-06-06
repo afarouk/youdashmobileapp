@@ -1,0 +1,46 @@
+.green-dining-notification__form-wrapper {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 30px;
+  padding: 20px 20% 45px;
+}
+
+.green-dining-notification__counter {
+  position: relative;
+}
+
+.green-dining-notification__arrow-up, .green-dining-notification__arrow-down {
+  position: absolute;
+  left: 0;
+  right: 0;
+  z-index: 1;
+  width: 0;
+  height: 0;
+  border-style: solid;
+  cursor: pointer;
+}
+
+.green-dining-notification__arrow-up {
+  top: -38px;
+  border-width: 0 20px 32px 20px;
+  border-color: transparent transparent var(--primary-color) transparent;
+}
+
+.green-dining-notification__arrow-down {
+  bottom: -38px;
+  border-width: 32px 20px 0 20px;
+  border-color: var(--primary-color) transparent transparent transparent;
+}
+
+.green-dining-notification__counter input {
+  border: 2px solid var(--primary-color);
+  outline: none;
+  width: 40px;
+  height: 40px;
+  text-align: center;
+  font-weight: bold;
+}
+
+.green-dining-notification__buy-button {
+  width: 120px;
+}

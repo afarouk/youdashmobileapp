@@ -26,6 +26,7 @@ import { CreditCardPrestepForm } from './CreditCardPrestepForm/CreditCardPrestep
 import { CardConnectIframe } from './CardConnectIframe/CardConnectIframe';
 import { HeartlandForm } from './HeartlandForm';
 import { NabancardForm } from './NabancardForm';
+import { useSelector } from 'react-redux';
 
 export const OrderDetails = (props) => {
   const {
@@ -89,6 +90,7 @@ export const OrderDetails = (props) => {
     isHeartland,
     setCheckoutMode,
     isNabancard,
+    hasTable,
   } = props;
   const { saslName } = businessData;
 
@@ -96,6 +98,10 @@ export const OrderDetails = (props) => {
   const portalForm = useRef(null);
 
   const validatePickupDate = () => {
+    if (hasTable) {
+      return true;
+    }
+
     if (!orderPickUp.date || !orderPickUp.time) {
       scrollToElement(document.getElementById('pickup-selectors'));
       return false;
@@ -211,17 +217,19 @@ export const OrderDetails = (props) => {
   const isCashPayment = !acceptCreditCards && acceptCash;
   const showCardConnectIframe = isCardConnect && checkoutMode === CHECKOUT_MODE.CARD_PAYMENT;
   const showHeartlandForm = isHeartland && checkoutMode === CHECKOUT_MODE.CARD_PAYMENT;
-
+  
   return (
     <div className="p-default">
       <div className="order-details">
-        <Pickup
-          {...businessData.pickUp}
-          orderPickUp={orderPickUp}
-          saslName={saslName}
-          user={user}
-          businessData={businessData}
-        />
+        {!hasTable && (
+          <Pickup
+            {...businessData.pickUp}
+            orderPickUp={orderPickUp}
+            saslName={saslName}
+            user={user}
+            businessData={businessData}
+          />
+        )}
         <Card>
           <OrderItemsList
             items={shoppingCartItems}

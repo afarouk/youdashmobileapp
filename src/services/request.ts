@@ -17,10 +17,12 @@ const request = axios.create({
 request.interceptors.request.use(
   (config) => {
     // Do something before request is sent
-    config.url =
-      config.url.indexOf('?') !== -1
+    if (config.url) {
+      config.url = config.url.indexOf('?') !== -1
         ? `${config.url}&${throwError}`
         : `${config.url}?${throwError}`;
+    }
+
     return config;
   },
   (error) => {
