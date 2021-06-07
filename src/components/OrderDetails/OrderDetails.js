@@ -20,7 +20,7 @@ import { Comments } from '../Shared/Comments/Comments';
 import { VerificationCode } from './VerificationCode/VerificationCode';
 
 import './OrderDetails.css';
-import { getPaymentTokenFieldsErrors } from '../../utils/helpers';
+import { getPaymentTokenFieldsErrors, scrollToElement } from '../../utils/helpers';
 import { CHECKOUT_MODE } from '../../config/constants';
 import { CreditCardPrestepForm } from './CreditCardPrestepForm/CreditCardPrestepForm';
 import { CardConnectIframe } from './CardConnectIframe/CardConnectIframe';
@@ -95,17 +95,42 @@ export const OrderDetails = (props) => {
   const submitForm = useRef(null);
   const portalForm = useRef(null);
 
+  const validatePickupDate = () => {
+    if (!orderPickUp.date || !orderPickUp.time) {
+      scrollToElement(document.getElementById('pickup-selectors'));
+      return false;
+    }
+
+    return true;
+  }
+
   const onSubmitHandler = (evt = window.event) => {
+    evt.preventDefault();
+
+    if (!validatePickupDate()) {
+      return;
+    }
     onCreateOrder(evt);
   };
 
   const onCardSubmitHandler = async (evt = window.event) => {
+    evt.preventDefault();
+
+    if (!validatePickupDate()) {
+      return;
+    }
     handleCardSubmit(evt);
   };
 
   const clickSubmitBtn = (event) => {
+    event.preventDefault();
+
     if (!isMobileVerified) {
       onCreateOrder(event);
+      return;
+    }
+
+    if (!validatePickupDate()) {
       return;
     }
 
@@ -275,7 +300,7 @@ export const OrderDetails = (props) => {
           <CardConnectIframe 
             submitLabel={submitLabel}
             orderInProgress={orderInProgress}
-            onSubmit={handleCardSubmit}
+            onSubmit={onCardSubmitHandler}
           />
         )}
 
@@ -283,7 +308,7 @@ export const OrderDetails = (props) => {
           <HeartlandForm 
             submitLabel={submitLabel}
             orderInProgress={orderInProgress}
-            onSubmit={handleCardSubmit}
+            onSubmit={onCardSubmitHandler}
           />
         )}
 
