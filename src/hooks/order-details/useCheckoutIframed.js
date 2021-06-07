@@ -4,6 +4,8 @@ import { useParams, useLocation } from 'react-router-dom';
 import { paymentAPI } from '../../services/api';
 import useBusinessData from '../../hooks/core/useBusinessData';
 import { CHECKOUT_MODE } from '../../config/constants';
+// import { useSelector } from 'react-redux';
+// import { scrollToElement } from '../../utils/helpers';
 
 const customVantivStyles = `body {  font-family: 'Poppins', sans-serif !important; } .cvv{  width: 55px; } .selectOption {  height: 28px;  border-radius: 2px; } .inputText {  border-radius: 2px;  height: 20px; } .buttonEmbedded {  background-color: #0097a7 !important;  border: none !important;  border-radius: 3px !important;  padding-top: 10px !important;  padding-bottom: 10px !important;  font-size: 1.2em !important;  display: block !important;  text-align: center;  margin-bottom: 1em;  margin-top: 1em; } .buttonEmbedded:visited {  background-color: #0097a7 !important;  border: none !important;  border-radius: 3px !important;  padding-top: 10px !important;  padding-bottom: 10px !important;  font-size: 1.2em !important;  display: block !important;  text-align: center;  margin-bottom: 1em;  margin-top: 1em; } #tdCardInformation { border:none; color: #0097A7; font-size:14px; } #tdTransactionInformationHeader { border:none; color: #0097A7; font-size:14px; } #tdManualEntry { ; border:none; ; }  #tdTransactionInformationHeader { border:none; }  #tdTransactionInformation { border:none; }  #tdTransactionButtons { border:none; }`;
 
@@ -26,6 +28,7 @@ export function useHooksIframe(config, handleCreateorder) {
   const { businessUrlKey } = useParams();
   const { search } = useLocation();
   const [businessData, loading, error] = useBusinessData();
+  // const orderPickUp = useSelector((state) => state.shoppingCart.orderPickUp);
 
   const { serviceAccommodatorId, serviceLocationId } = businessData;
   const { acceptCreditCards, paymentProcessor } = businessData.onlineOrder;
@@ -102,7 +105,7 @@ export function useHooksIframe(config, handleCreateorder) {
 
     window.addEventListener('message', handler);
     return () => window.removeEventListener('message', handler);
-  }, [transactionSetup, transactionSetupUrl, handleCreateOrder]);
+  }, [transactionSetup, transactionSetupUrl, handleCreateOrder, orderPickUp]);
 
   useEffect(() => {
     async function paymentTransaction() {

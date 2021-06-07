@@ -130,12 +130,12 @@ export const OrderDetails = (props) => {
       return;
     }
 
-    if (!validatePickupDate()) {
+    if (!acceptCreditCards) {
+      onCreateOrder(event);
       return;
     }
 
-    if (!acceptCreditCards) {
-      onCreateOrder(event);
+    if (!validatePickupDate()) {
       return;
     }
 
