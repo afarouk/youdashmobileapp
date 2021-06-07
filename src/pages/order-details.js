@@ -106,7 +106,12 @@ const OrderDetailsPage = ({ businessData, user }) => {
   }, []);
 
   useEffect(() => {
-    if (acceptCreditCards && checkoutMode === CHECKOUT_MODE.USER_DATA && isMobileVerified) {
+    if (
+      acceptCreditCards 
+      && checkoutMode === CHECKOUT_MODE.USER_DATA 
+      && isMobileVerified
+      && paymentProcessor !== PAYMENT_PROCESSOR.VANTIV_ECOMMERCE
+    ) {
       proceedToNextStepForCardPayment();
     }
   }, [acceptCreditCards, checkoutMode, isMobileVerified])
@@ -117,10 +122,6 @@ const OrderDetailsPage = ({ businessData, user }) => {
   const handleDeleteCartItem = (index) => dispatch(deleteCartItem(index));
 
   function handlePlaceOrder(evt = window.event) {
-    if (evt && evt.defaultPrevented) {
-      return;
-    }
-
     if (evt && evt.preventDefault && typeof evt.preventDefault === 'function') {
       evt.preventDefault();
     }
