@@ -89,13 +89,15 @@ export default (businessData, priceSubTotal, shoppingCartItems) => {
     let taxValue = 0;
     if (businessData.extraFees) {
       const { taxRate, extraFeeType, extraFeeValue = 0, extraFeeLabel } = businessData.extraFees;
-      if (taxRate && discountedPriceSubTotal) {
+
+      if (taxRate) {
         taxValue = getPercent(discountedPriceSubTotal + extraFeeValue, taxRate);
         setTaxes({
           value: taxValue,
           percent: taxRate
         });
       }
+
       switch (extraFeeType) {
         case amountTypes.PERCENT:
           if (discountedPriceSubTotal && extraFeeValue) {
@@ -123,7 +125,9 @@ export default (businessData, priceSubTotal, shoppingCartItems) => {
       }
     }
     if (!shoppingCartItems.length) {
-      return setPriceTotal(0);
+      setPriceTotal(0);
+      setTips({ value: 0, percentValue: 0 });
+      return;
     }
     setPriceTotal(floatNum(discountedPriceSubTotal + value + taxValue));
   }, [businessData.extraFees, discountedPriceSubTotal, shoppingCartItems]);
