@@ -36,6 +36,9 @@ export function useHooksIframe(config, handleCreateorder) {
     }
 
     const handler = (event = window.event) => {
+      // if (!orderPickUp.date || !orderPickUp.time) {
+      //   return scrollToElement(document.getElementById('pickup-selectors'));
+      // }
       const { message } = event.data || "";
 
       if (event.origin !== window.location.origin) return;
@@ -99,7 +102,7 @@ export function useHooksIframe(config, handleCreateorder) {
 
     window.addEventListener('message', handler);
     return () => window.removeEventListener('message', handler);
-  }, [transactionSetup, transactionSetupUrl]); // empty array => run only once
+  }, [transactionSetup, transactionSetupUrl, handleCreateOrder]);
 
   useEffect(() => {
     async function paymentTransaction() {

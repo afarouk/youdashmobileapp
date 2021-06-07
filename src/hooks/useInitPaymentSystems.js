@@ -18,8 +18,8 @@ export const useInitPaymentSystems = () => {
 
   useEffect(() => {
     switch (paymentProcessor) {
-      case PAYMENT_PROCESSOR.VANTIV_ECOMMERCE:
-        return initVantivEcommerce();
+      case PAYMENT_PROCESSOR.TSYS_ECOMMERCE:
+        return initTsysEcommerce();
       case PAYMENT_PROCESSOR.NABANCARD_ECOMMERCE:
         return initNabancard();
       case PAYMENT_PROCESSOR.HEARTLAND_ECOMMERCE:
@@ -31,9 +31,9 @@ export const useInitPaymentSystems = () => {
   }, [paymentProcessor])
 }
 
-const initVantivEcommerce = () => {
+const initTsysEcommerce = () => {
   loadScript({
-    id: 'cayan-checkout-script',
+    id: 'tsys-cayan-checkout-script',
     src: CAYAN_CHECKOUT_SCRIPT_URL,
     onLoad: () => {
       setTimeout(() => {
