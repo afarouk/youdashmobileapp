@@ -63,12 +63,13 @@ const OrderDetailsPage = ({ businessData, user }) => {
     paymentTokenError,
   ] = useCreateOrder(businessData, user);
 
-  const [
+  const {
     checkoutMode, 
-    setCheckoutMode,
+    setCheckoutMode, 
     transactionSetupUrl, 
     transactionError,
-  ] = useCheckout(
+    setTransactionSetupUrl,
+  } = useCheckout(
     businessData, 
     shoppingCartItems,
     priceTotal, 
@@ -114,12 +115,20 @@ const OrderDetailsPage = ({ businessData, user }) => {
     ) {
       proceedToNextStepForCardPayment();
     }
-  }, [acceptCreditCards, checkoutMode, isMobileVerified])
+  }, [acceptCreditCards, isMobileVerified])
 
   const handleEditItem = (index) =>
     history.push(`/${businessUrlKey}/shopping-cart/${index}${search}`);
 
-  const handleDeleteCartItem = (index) => dispatch(deleteCartItem(index));
+  const handleDeleteCartItem = (index) => {
+    if (shoppingCartItems.length === 1) {
+      // we want to delete last item
+      setTransactionSetupUrl(null);
+      setCheckoutMode(CHECKOUT_MODE.USER_DATA);
+    }
+
+    dispatch(deleteCartItem(index));
+  };
 
   function handlePlaceOrder(evt = window.event) {
     if (evt && evt.preventDefault && typeof evt.preventDefault === 'function') {

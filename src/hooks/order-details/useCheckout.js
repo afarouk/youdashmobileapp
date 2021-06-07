@@ -49,5 +49,11 @@ export default (
   }
 
 
-  return [checkoutMode, setCheckoutMode, transactionSetupUrl, transactionError];
+  return {
+    checkoutMode, 
+    setCheckoutMode, 
+    transactionSetupUrl, 
+    transactionError,
+    setTransactionSetupUrl,
+  };
 };
