@@ -121,8 +121,6 @@ export default ({
     const { nabancardData } = data;
     let creditCardData;
 
-    console.log('processCardOrder', processCardOrder)
-
     switch (paymentProcessor) {
       case PAYMENT_PROCESSOR.TSYS_ECOMMERCE: {
         try {
