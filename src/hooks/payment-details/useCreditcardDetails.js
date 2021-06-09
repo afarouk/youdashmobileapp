@@ -4,6 +4,8 @@ import { useSelector, useDispatch } from 'react-redux';
 import { PAYMENT_PROCESSOR } from '../../config/constants';
 import { orderAPI } from '../../services/api';
 import { getPaymentToken, getNextOrderId } from '../../redux/slices/shoppingCart';
+import { setToken as setHeartlandToken } from '../../redux/slices/heartland'; 
+import { setToken as setCardConnectoToken } from '../../redux/slices/cardConnectIframe'; 
 
 import {
   formatCreditCardNumber,
@@ -104,19 +106,22 @@ export default ({
     }, {});
   }
 
-  const handleCardSubmit = async (evt) => {
+  const handleCardSubmit = async (evt, data = {}) => {
     if (evt && evt.preventDefault) {
       evt.preventDefault();
     }
 
     resetOrderError();
     setOrderInProgress(true);
-    await processCardOrder();
+    await processCardOrder(data);
     setOrderInProgress(false);
   };
 
-  const processCardOrder = async () => {
+  const processCardOrder = async (data) => {
+    const { nabancardData } = data;
     let creditCardData;
+
+    console.log('processCardOrder', processCardOrder)
 
     switch (paymentProcessor) {
       case PAYMENT_PROCESSOR.TSYS_ECOMMERCE: {
@@ -165,6 +170,17 @@ export default ({
         }
         break;
       }
+      case PAYMENT_PROCESSOR.NABANCARD_ECOMMERCE: {
+        if (!nabancardData) {
+          throw new Error('NABANCARD_DATA_IS_MISSING');
+        }
+
+        creditCardData = {
+          nabancardData,
+          paymentProcessor,
+        }
+        break;
+      }
     }
 
     if (!creditCardData) {
@@ -188,6 +204,8 @@ export default ({
 
     try {
       await onCreateOrder({ creditCardData, nextOrderData })
+      dispatch(setHeartlandToken(''));
+      dispatch(setCardConnectoToken(''));
     } catch (err) {
       console.error('CREATE_ORDER_ERROR', err);
     }

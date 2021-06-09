@@ -113,13 +113,15 @@ export const OrderDetails = (props) => {
     onCreateOrder(evt);
   };
 
-  const onCardSubmitHandler = async (evt = window.event) => {
-    evt.preventDefault();
+  const onCardSubmitHandler = async (evt = window.event, data) => {
+    if (evt && evt.preventDefault) {
+      evt.preventDefault();
+    }
 
     if (!validatePickupDate()) {
       return;
     }
-    handleCardSubmit(evt);
+    handleCardSubmit(evt, data);
   };
 
   const clickSubmitBtn = (event) => {
@@ -191,8 +193,6 @@ export const OrderDetails = (props) => {
 
   const [btnProps, setBtnProps] = useState({disabled: true});
   useEffect(() => {
-    console.log({ isFormValid, isPayFormValid, checkoutMode})
-
     if (checkoutMode === CHECKOUT_MODE.CARD_PAYMENT) {
       // setBtnProps({ disabled : !isFormValid || !isPayFormValid }); // TODO: check if we need it
       setBtnProps({ disabled: !isFormValid })
@@ -314,7 +314,13 @@ export const OrderDetails = (props) => {
 
         {showCustomCreditCardForm && createPortal(<CreditcardForm {...ccProps} />, portalForm.current)}
 
-        {showNabancardForm && createPortal(<NabancardForm {...ccProps} />, portalForm.current)}
+        {showNabancardForm && createPortal(
+          <NabancardForm 
+            {...ccProps} 
+            validatePickupDate={validatePickupDate}
+          />, 
+          portalForm.current
+        )}
 
         <div ref={portalForm}></div>
 

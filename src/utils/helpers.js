@@ -155,6 +155,29 @@ const prepareCreditCardData = (creditCardData) => ({
   processorParam5: null,
 })
 
+const prepareNabancardData = (nabancardData) => ({
+  transactionId1: nabancardData.Status,
+  transactionId2: nabancardData.TransactionId,
+  transactionId3: "Web",
+  transactionId4: "AID",
+  transactionId5: "Cryptogram",
+  transactionId6: nabancardData.ApprovalCode,
+  transactionId7: nabancardData.MaskedPAN,
+  transactionId8: nabancardData.CardType,
+  transactionId9: nabancardData.Amount,
+  transactionId10: "false",
+  transactionId11: "APP Preferred Name",
+  transactionId12: "Tip",
+  transactionId13: "SANDF",
+  transactionId14: "false",
+  transactionId15: null,
+  transactionId16: null,
+  transactionId17: null,
+  transactionId18: null,
+  transactionId19: null,
+  transactionId20: null
+})
+
 export const formatOrderData = ({
   comment,
   loyaltyStatus,
@@ -220,7 +243,9 @@ export const formatOrderData = ({
 
   let creditCardDataFields;
   if (creditCardData) {
-    creditCardDataFields = prepareCreditCardData(creditCardData);
+    creditCardDataFields = creditCardData.paymentProcessor === PAYMENT_PROCESSOR.NABANCARD_ECOMMERCE 
+      ? prepareNabancardData(creditCardData.nabancardData)
+      : prepareCreditCardData(creditCardData);
   }
 
   let nextOrderDataFields;

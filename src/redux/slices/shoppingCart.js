@@ -118,7 +118,7 @@ const shoppingCartSlice = createSlice({
         state.paymentTokenError = null;
       })
       .addCase(getPaymentToken.fulfilled, (state, action) => {
-        state.orderStatus = action.payload;
+        // state.orderStatus = action.payload;
       })
       .addCase(getPaymentToken.rejected, (state, action) => {
         state.loading = false;
@@ -132,7 +132,7 @@ const shoppingCartSlice = createSlice({
         state.paymentTokenError = null;
       })
       .addCase(getNextOrderId.fulfilled, (state, action) => {
-        state.orderStatus = action.payload;
+        // state.orderStatus = action.payload;
       })
       .addCase(getNextOrderId.rejected, (state, action) => {
         state.loading = false;
