@@ -82,7 +82,7 @@ export const NabancardForm  = (props) => {
   } 
 
   return (
-    <form className="form cc"  onSubmit={handleSubmit}>
+    <form className="form cc"  onSubmit={handleSubmit} id="VelocityCheckoutForm">
       <Card>
         <div className="form-row form-title">
           <h4 className="flex font-size-lg primary-text">
