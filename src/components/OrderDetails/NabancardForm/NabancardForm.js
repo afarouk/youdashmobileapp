@@ -1,9 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import { useDispatch } from 'react-redux';
 import {default as CC} from "react-credit-cards";
 
+import { Alert, Button } from 'antd';
 import { Card } from '../../Shared/Card/Card';
 
 import { GOOGLE_RECAPTCHA_KEY, NABANCARD_PUBLIC_KEY } from '../../../config/constants';
+import { setData } from '../../../redux/slices/nabancard';
 
 import '../Creditcard.css';
 import '../CreditcardForm.css';
@@ -19,9 +22,16 @@ export const NabancardForm  = (props) => {
     onCardSubmitHandler,
     priceTotal,
     paymentTokenFieldsErrors,
+    validatePickupDate,
   } = props;
 
   const { ccHolderName, ccNumber, ccExpiration, ccCVC, ccIssuer } = ccData;
+
+  const recaptchaRef = useRef(null);
+  const [recaptchaValue, setRecaptchaValue] = useState('');
+  const [error, setError] = useState(null);
+
+  const dispatch = useDispatch();
 
   let [expMonth, setExpMonth] = useState("");
   let [expYear, setExpYear] = useState("");
@@ -48,36 +58,57 @@ export const NabancardForm  = (props) => {
     }
   }, [ccNumber]);
 
+  const handleCaptchaResponse = (response) => {
+    setRecaptchaValue(response);
+    setError(null);
+  }
+
+  const handleCaptchaExpired = (response) => {
+    setRecaptchaValue('');
+  }
 
   useEffect(() => {
-    const velocitySuccessCallback = (msg) => {
-      console.log('velocitySuccessCallback', msg)
+    if (!recaptchaRef.current.innerHTML) {
+      window.grecaptcha.render(recaptchaRef.current, {
+        'callback' : handleCaptchaResponse,
+        'expired-callback': handleCaptchaExpired,
+      });
+    }
+  }, []);
+
+  const resetCaptcha = () => {
+    window.grecaptcha.reset();
+    setRecaptchaValue('');
+  }
+
+  useEffect(() => {
+    const velocitySuccessCallback = (data) => {
+      resetCaptcha();
+      onCardSubmitHandler(undefined, { nabancardData: JSON.parse(data) });
     }
   
-    const velocityFailureCallback = (msg) => {
-      console.log('velocityFailureCallback', msg);
-    }
-
-    const handleCaptchaResponse = (response) => {
-      // TODO: save captcha to state or to redux state ???
+    const velocityFailureCallback = (error) => {
+      resetCaptcha();
+      setError(JSON.parse(error).StatusMessage);
     }
       
     window.velocitySuccessCallback = velocitySuccessCallback;
     window.velocityFailureCallback = velocityFailureCallback;
   })
 
-  // const errors = (paymentTokenFieldsErrors || []).reduce((acc, err) => {
-  //   acc[err.reason] = err.error_code;
-  //   return acc;
-  // }, {})
-
-
-  // TODO: on card submit do Velocity.sendPost()
-  // TODO in success callback save data to redux store
-  // TODO: after that call onCardSubmitHandler
-
   const handleSubmit = (event) => {
     event.preventDefault();
+    setError('');
+
+    if (!recaptchaValue) {
+      setError('reCAPTCHA is required');
+      return;
+    }
+
+    if (!validatePickupDate()) {
+      return;
+    }
+
     window.Velocity.sendPost()
   } 
 
@@ -100,13 +131,13 @@ export const NabancardForm  = (props) => {
         </div>
 
         <div className="form-field">
-          <label htmlFor="PAN" className="font-size-sm required">
+          <label htmlFor="number" className="font-size-sm required">
             Card Number
           </label>
 
           <input
             type="tel"
-            name="PAN"
+            name="number"
             id="PAN"
             className={`ant-input`}
             placeholder="Card Number"
@@ -135,13 +166,13 @@ export const NabancardForm  = (props) => {
 
         <div className="form-row">
           <div className="form-field">
-            <label htmlFor="Expire" className="font-size-sm required">
+            <label htmlFor="expiry" className="font-size-sm required">
               Valid Thru
             </label>
 
             <input
               type="tel"
-              name="Expire"
+              name="expiry"
               id="Expire"
               className={`ant-input`}
               placeholder="MM/YY"
@@ -179,21 +210,23 @@ export const NabancardForm  = (props) => {
           <input type="hidden" name="FailureCallback" value="velocityFailureCallback" />
           <input type="hidden" name="SuccessCallback" value="velocitySuccessCallback" />
           <input type="hidden" name="PublicKey" value={NABANCARD_PUBLIC_KEY} />
-          <input type="hidden" id="reCaptcha" name="Captcha" value="bypass" />
+          <input type="hidden" id="reCaptcha" name="Captcha" value={recaptchaValue} />
           
           <input type="hidden" name="issuer" value={issuer} />
-          <input type="hidden" name="expirationmonth" data-cayan="expirationmonth" value={expMonth}/>
-          <input type="hidden" name="expirationyear" data-cayan="expirationyear" value={expYear}/>
-          <input type="hidden" name="cardnumber" data-cayan="cardnumber" value={cardNumber}/>
+          <input type="hidden" name="Expire" value={`${expMonth}${expYear}`} />
+          <input type="hidden" name="PAN" data-cayan="cardnumber" value={cardNumber}/>
 
           <button type="submit" className="hidden">Presubmit</button>
         </div>
 
-        <div className="g-recaptcha" 
+        <div 
           id="g-recaptcha" 
-          data-callback="handleCaptchaResponse" 
+          ref={recaptchaRef}
+          className="g-recaptcha" 
           data-sitekey={GOOGLE_RECAPTCHA_KEY}
         />
+
+        {error && <Alert message={error} type="error" showIcon closable onClose={() => setError(null)} />}
       </Card>
     </form>
   );

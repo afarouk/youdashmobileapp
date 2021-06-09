@@ -9,6 +9,7 @@ import { ccReducer } from './slices/cc';
 import { creditCardPrestepFormReducer } from './slices/creditCardPrestepForm';
 import { cardConnectIframeReducer } from './slices/cardConnectIframe';
 import { heartlandReducer } from './slices/heartland';
+import { nabancardReducer } from './slices/nabancard';
 
 const middleware = [
   ...getDefaultMiddleware()
@@ -26,6 +27,7 @@ export const store = configureStore({
     creditCardPrestepForm: creditCardPrestepFormReducer,
     cardConnectIframe: cardConnectIframeReducer,
     heartland: heartlandReducer,
+    nabancard: nabancardReducer,
   },
   middleware
 });
