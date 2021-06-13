@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useParams, useHistory, useLocation } from 'react-router-dom';
 
 import { OrderDetails } from '../components/OrderDetails/OrderDetails';
@@ -99,6 +99,9 @@ const OrderDetailsPage = ({ businessData, user }) => {
   });
 
   const [preventOrdering] = usePreventOrdering(businessData);
+  
+  const tableDetails = useSelector(state => state.shoppingCart.tableDetails);
+  const hasTable = Boolean(tableDetails && tableDetails.tableId);
 
   useEffect(() => {
     if (!shoppingCartItems || !shoppingCartItems.length) {
@@ -172,7 +175,7 @@ const OrderDetailsPage = ({ businessData, user }) => {
   }
 
   async function orderHandler() {
-    if (!orderPickUp.date || !orderPickUp.time) {
+    if (!hasTable && (!orderPickUp.date || !orderPickUp.time)) {
       return scrollToElement(document.getElementById('pickup-selectors'));
     }
 
@@ -303,6 +306,7 @@ const OrderDetailsPage = ({ businessData, user }) => {
       isCardConnect={isCardConnect}
       isHeartland={isHeartland}
       isNabancard={isNabancard}
+      hasTable={hasTable}
     />
   );
 };

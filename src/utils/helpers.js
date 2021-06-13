@@ -45,8 +45,7 @@ export const formatDeliveryDate = (dateLike) => {
 
 export const addLeadingZero = (time) => (time === 0 ? '00' : time);
 
-export const getQueryStringParams = () =>
-  URLSearchParams ? new URLSearchParams(window.location.search) : '';
+export const getQueryStringParams = () => new URLSearchParams(window.location.search);
 export const getMediaImageUrl = (mediaURLs) => (mediaURLs && mediaURLs[0] ? mediaURLs[0] : null);
 
 export const formatAddress = ({ city, country, number, state, street, timeZone, locale, zip }) =>

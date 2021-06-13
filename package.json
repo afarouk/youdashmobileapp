@@ -7,6 +7,10 @@
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
+    "@types/jest": "^26.0.23",
+    "@types/node": "^15.12.1",
+    "@types/react": "^17.0.9",
+    "@types/react-dom": "^17.0.6",
     "antd": "^4.4.3",
     "axios": "^0.19.2",
     "date-fns": "^2.15.0",
@@ -20,10 +24,11 @@
     "react-input-mask": "^2.0.4",
     "react-redux": "^7.2.1",
     "react-router-dom": "^5.2.0",
-    "react-scripts": "4.0.0",
+    "react-scripts": "4.0.3",
     "react-slick": "^0.27.0",
     "slick-carousel": "^1.8.1",
-    "stickybits": "^3.7.7"
+    "stickybits": "^3.7.7",
+    "typescript": "4.2.4"
   },
   "scripts": {
     "dev": "cra-build-watch",
@@ -47,6 +52,7 @@
     ]
   },
   "devDependencies": {
+    "@types/react-router": "^5.1.14",
     "cra-build-watch": "^3.4.0",
     "prettier": "^2.0.5",
     "source-map-explorer": "^2.5.0",
