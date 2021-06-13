@@ -1,15 +1,43 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { CHECKOUT_MODE } from '../../config/constants';
 import { orderAPI, paymentAPI } from '../../services/api';
 import { calculateDiscountedPrice } from '../../utils/helpers';
 
-const initialState = {
+import { CheckoutMode, DeliveryType, OrderStatus, TableDetails } from '../../types/shoppingCartTypes';
+
+// TODO: work on this type
+type ShoppingCartState = {
   orderPickUp: {
-    deliveryType: 'PICK_UP'
+    deliveryType: DeliveryType,
   },
-  tablePath: null,
+  tableDetails: null | TableDetails,
+  items: any[],
+  itemsWithDiscounts: any[] | Record<string, any>,
+  itemsWithGroupDiscounts: null | Record<string, any>,
+  priceSubTotal: number,
+  discounts: {
+    byId: Record<string, any>,
+    allIds: any[]
+  },
+  groupDiscounts: {
+    byId: Record<string, any>,
+    allIds: any[]
+  },
+  orderStatus: OrderStatus,
+  loading: boolean,
+  error: boolean | string,
+  errorMessage: null | string,
+  paymentTokenError: null | string ,
+  checkoutMode: CheckoutMode,
+}
+
+const initialState: ShoppingCartState = {
+  orderPickUp: {
+    deliveryType: DeliveryType.PICK_UP,
+  },
+  tableDetails: null,
   items: [],
   itemsWithDiscounts: [],
+  itemsWithGroupDiscounts: null,
   priceSubTotal: 0,
   discounts: {
     byId: {},
@@ -19,12 +47,12 @@ const initialState = {
     byId: {},
     allIds: []
   },
-  orderStatus: null, //used to get data on order-status page without additional request
+  orderStatus: null,
   loading: false,
   error: false,
   errorMessage: null,
   paymentTokenError: null,
-  checkoutMode: CHECKOUT_MODE.USER_DATA,
+  checkoutMode: CheckoutMode.USER_DATA,
 };
 
 export const createOrder = createAsyncThunk('order/create', async (orderData, { rejectWithValue }) => {
@@ -49,7 +77,7 @@ export const getNextOrderId = createAsyncThunk('order/getNextOrderId', async (da
   return response.data;
 });
 
-const getPriceSubTotal = (items) =>
+const getPriceSubTotal = (items: any[]) =>
   items.reduce(
     (a, b) => a + (b.discountedPrice !== undefined ? b.discountedPrice : b.price) * b.quantity,
     0
@@ -82,8 +110,8 @@ const shoppingCartSlice = createSlice({
       state.groupDiscounts.byId[action.payload.id] = action.payload.discount;
       state.groupDiscounts.allIds.push(action.payload.id);
     },
-    setTablePath: (state, action) => {
-      state.tablePath = action.payload;
+    setTableDetails: (state, action) => {
+      state.tableDetails = action.payload;
     },
     resetOrderError: (state, action) => {
       state.error = false;
@@ -105,7 +133,7 @@ const shoppingCartSlice = createSlice({
       .addCase(createOrder.fulfilled, (state, action) => {
         state.orderStatus = action.payload;
       })
-      .addCase(createOrder.rejected, (state, action) => {
+      .addCase<any>(createOrder.rejected, (state, action) => {
         const errorText = action.payload;
         state.loading = false;
         state.error = errorText || true;
@@ -120,7 +148,7 @@ const shoppingCartSlice = createSlice({
       .addCase(getPaymentToken.fulfilled, (state, action) => {
         // state.orderStatus = action.payload;
       })
-      .addCase(getPaymentToken.rejected, (state, action) => {
+      .addCase<any>(getPaymentToken.rejected, (state, action) => {
         state.loading = false;
         state.error = true;
         state.paymentTokenError = action.payload;
@@ -142,9 +170,9 @@ const shoppingCartSlice = createSlice({
         (action) => action.type.endsWith('CartItem'),
         (state, action) => {
           const updateDiscounts = (
-            item,
-            itemDiscount,
-            itemsWithDiscounts,
+            item: any,
+            itemDiscount: any,
+            itemsWithDiscounts: any,
             isGroupDiscount = false
           ) => {
             if (itemDiscount) {
@@ -245,7 +273,7 @@ export const {
   setOrderPickUp,
   addDiscount,
   addGroupDiscount,
-  setTablePath,
+  setTableDetails,
   resetOrderError,
   setCheckoutMode,
 } = shoppingCartSlice.actions;

@@ -12,6 +12,7 @@ import usePreventOrdering from '../../../hooks/core/usePreventOrdering';
 import './PickUp.css';
 import {LocationOnIcon} from "../../Shared/Icons/Icons";
 import {AccessTimeIcon} from "../../Shared/Icons/Icons";
+import { useSelector } from '../../../redux/store';
 
 
 const getDay = () => ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'][new Date().getDay()];
@@ -47,6 +48,9 @@ export const PickUp = memo(({ businessData, user }) => {
   const [today, setToday] = useState(null);
 
   const [preventOrdering] = usePreventOrdering(businessData);
+  const tableDetails = useSelector(state => state.shoppingCart.tableDetails);
+
+  const hasTable = Boolean(tableDetails && tableDetails.tableId);
 
   useEffect(() => {
     if (openingHours) {
@@ -75,19 +79,25 @@ export const PickUp = memo(({ businessData, user }) => {
 
   return (
     <Card className={'pickup'}>
-      <Radio.Group
-        onChange={handleDeliveryTypeChange}
-        value={deliveryType}
-        className={'pickup-line delivery-type'}
-      >
-        <Radio value={1}>PickUp</Radio>
-        <Radio value={2} disabled>
-          Delivery
-        </Radio>
-      </Radio.Group>
-      <div className="pickup-line selectors">
-        <PickUpSelectors user={user} businessData={businessData} />
-      </div>
+      {!hasTable && (
+        <>
+          <Radio.Group
+            onChange={handleDeliveryTypeChange}
+            value={deliveryType}
+            className={'pickup-line delivery-type'}
+          >
+            <Radio value={1}>PickUp</Radio>
+            <Radio value={2} disabled>
+              Delivery
+            </Radio>
+          </Radio.Group>
+          <div className="pickup-line selectors">
+            <PickUpSelectors user={user} businessData={businessData} />
+          </div>
+        </>
+      )}
+      
+      
       <div className="pickup-line address">
         <span className="primary-text">
           <LocationOnIcon />

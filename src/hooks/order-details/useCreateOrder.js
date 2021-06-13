@@ -6,6 +6,7 @@ import { formatOrderData, isToday, pad, toIsoString } from '../../utils/helpers'
 import { clearCart, createOrder, resetOrderError, setCheckoutMode } from '../../redux/slices/shoppingCart';
 import { CHECKOUT_MODE, PAYMENT_PROCESSOR } from '../../config/constants';
 import { getLoyaltyAndOrderHistory } from '../../redux/slices/loyaltyAndOrderHistory';
+import { selectTablePath } from '../../redux/selectors/shoppingCartSelectors';
 
 export default (businessData, user) => {
   const dispatch = useDispatch();
@@ -25,7 +26,7 @@ export default (businessData, user) => {
     (state) => state.shoppingCart.itemsWithGroupDiscounts
   );
   const orderPickUp = useSelector((state) => state.shoppingCart.orderPickUp);
-  const tablePath = useSelector((state) => state.shoppingCart.tablePath);
+  const tablePath = useSelector(selectTablePath);
   const billingAddress = useSelector(state => state.creditCardPrestepForm.formState);
   const [comment, setComment] = useState('');
   const handleCommentChange = (e) => setComment(e.target.value);

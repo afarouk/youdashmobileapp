@@ -1,20 +1,28 @@
-import { CAYAN_CHECKOUT_KEY } from '../config/constants';
 import { request, demo, multientry } from './request';
 
+import { 
+  BlockGreenDiningOrderParams,
+  BlockGreenDiningOrderResponse, 
+  CancelGreenDiningBlockParams, 
+  CancelGreenDiningBlockResponse, 
+  GetGreenDiningDetailsParams, 
+  GetGreenDiningDetailsResponse,
+} from '../types/api';
+
 export const businessAPI = {
-  getBusinessData: (urlKey) =>
+  getBusinessData: (urlKey: string) =>
     request.get(`/apptsvc/rest/sasl/getCatalogAndSiteletteDataModelByURLkey`, {
       params: {
         urlKey
       }
     }),
-  getOpeningHours: (params) =>
+  getOpeningHours: (params: any) =>
     request.get(`/apptsvc/rest/sasl/getOpeningHours`, {
       params
     })
 };
 export const authAPI = {
-  login: (credentials) =>
+  login: (credentials: any) =>
     request({
       method: 'post',
       headers: {
@@ -24,15 +32,15 @@ export const authAPI = {
       url: `/apptsvc/rest/authentication/login`,
       data: credentials
     }),
-  getRegistrationStatus: (params) =>
+  getRegistrationStatus: (params: any) =>
     request.get(`/apptsvc/rest/authentication/getRegistrationStatus`, {
       params
     }),
-  getCommunityExpressUserSASLSummary: (params) =>
+  getCommunityExpressUserSASLSummary: (params: any) =>
     request.get(`/apptsvc/rest/usersasl/getCommunityExpressUserSASLSummary`, {
       params
     }),
-  registerNewMember: (credentials) =>
+  registerNewMember: (credentials: any) =>
     request({
       method: 'post',
       headers: {
@@ -42,7 +50,7 @@ export const authAPI = {
       url: `/apptsvc/rest/authentication/registerNewMemberWithMobile`,
       data: credentials
     }),
-  updateEmailMobileNamesForUser: ({ credentials, user }) =>
+  updateEmailMobileNamesForUser: ({ credentials, user }: any) =>
     request({
       method: 'put',
       headers: {
@@ -52,13 +60,13 @@ export const authAPI = {
       url: `/apptsvc/rest/authentication/updateEmailMobileNamesForUser?UID=${user.uid}`,
       data: credentials
     }),
-  sendVerificationCode: (credentials) =>
+  sendVerificationCode: (credentials: any) =>
     request({
       method: 'put',
       withCredentials: true,
       url: `/apptsvc/rest/authentication/verifyMobile?UID=${credentials.UID}&smsCode=${credentials.smsCode}`
     }),
-  resendVerificationCode: (UID) =>
+  resendVerificationCode: (UID: string) =>
     request({
       method: 'get',
       withCredentials: true,
@@ -67,14 +75,14 @@ export const authAPI = {
 };
 
 export const userAPI = {
-  getLoyaltyAndOrderHistory: (params) =>
+  getLoyaltyAndOrderHistory: (params: any) =>
     request.get(`apptsvc/rest/usersasl/getUserSASLLoyaltyOrderHistoryData`, {
       params
     })
 };
 
 export const orderAPI = {
-  createOrder: (data) =>
+  createOrder: (data: any) =>
     request({
       method: 'post',
       headers: {
@@ -84,26 +92,39 @@ export const orderAPI = {
       url: `/apptsvc/rest/retail/createAdhocOrderWeb?UID=${data.uid}`,
       data: data
     }),
-  getOrderStatus: (params) =>
+  getOrderStatus: (params: any) =>
     request.get(`/apptsvc/rest/retail/retrieveOrderStatusData`, {
       params
     }),
-  getNextOrderId: ({ serviceAccommodatorId, serviceLocationId  }) => {
+  getNextOrderId: ({ serviceAccommodatorId, serviceLocationId  }: any) => {
     return request.get('apptsvc/rest/retail/getNextOrderId', {
       params: {
         serviceAccommodatorId,
         serviceLocationId,
       }
     })
-  }
+  },
 };
 
-const gwApis = {
-  vantiv: {},
-
+export const greenDiningAPI = {
+  getGreenDiningDetails: (params: GetGreenDiningDetailsParams) => {
+    return request.get<GetGreenDiningDetailsResponse>('/apptsvc/rest/promotions/retrieveGreenDiningDetails', {
+      params
+    })
+  },
+  blockGreenDiningOrder: (params: BlockGreenDiningOrderParams) => {
+    return request.put<BlockGreenDiningOrderResponse>('/apptsvc/rest/promotions/blockGreenDiningOrder', { 
+      params,
+    })
+  },
+  cancelGreenDiningBlock: (params: CancelGreenDiningBlockParams) => {
+    return request.put<CancelGreenDiningBlockResponse>('/apptsvc/rest/promotions/cancelGreenDiningBlock', {
+      params,
+    })
+  },
 }
 
-const getCayanToken = (CayanCheckout) => {
+const getCayanToken = (CayanCheckout: any) => {
   return new Promise((resolve, reject) => {
     CayanCheckout.createPaymentToken({
       success: resolve,
@@ -113,26 +134,24 @@ const getCayanToken = (CayanCheckout) => {
 }
 
 export const paymentAPI = {
-  getTransactionSetupID: (data) =>
+  getTransactionSetupID: (data: any) =>
     request({
       method: 'post',
-      crossDomain: true,
       url: `/apptsvc/rest/ext/vantivTransactionSetup2`,
       data: { ...data, demo: demo && demo === 'true' }
     }),
-  getOrderStatus: (params) =>
+  getOrderStatus: (params: any) =>
     request.get(`/apptsvc/rest/retail/retrieveOrderStatusData`, {
       params
     }),
-  getPaymentToken: async (data) => {
-    const { CayanCheckout } = window;
-    CayanCheckout.setWebApiKey(CAYAN_CHECKOUT_KEY)
+  getPaymentToken: async () => {
+    const { CayanCheckout } = (window as any);
     return getCayanToken(CayanCheckout)
   }
 };
 
 export const pollAPI = {
-  submitPoll: (data) => {
+  submitPoll: (data: any) => {
     const { choice, UID, uuid } = data;
     return request({
       method: 'post',

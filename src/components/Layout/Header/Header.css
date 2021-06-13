@@ -42,3 +42,12 @@
 .page-header .action-icon svg {
   font-size: 1.6rem;
 }
+
+.page-header__table-info {
+  padding: 0 8px;
+  line-height: 32px;
+  vertical-align: middle;
+  background-color: var(--color-primary-bg);
+  color: var(--primary-color);
+  margin-left: 10px;
+}
