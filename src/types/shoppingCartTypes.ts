@@ -1,7 +1,3 @@
-export enum DeliveryType {
-  PICK_UP = 'PICK_UP',
-};
-
 export type OrderStatus = any
 
 export type TableDetails = {
