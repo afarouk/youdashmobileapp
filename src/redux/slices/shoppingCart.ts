@@ -2,7 +2,8 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { orderAPI, paymentAPI } from '../../services/api';
 import { calculateDiscountedPrice } from '../../utils/helpers';
 
-import { CheckoutMode, DeliveryType, OrderStatus, TableDetails } from '../../types/shoppingCartTypes';
+import { CheckoutMode, OrderStatus, TableDetails } from '../../types/shoppingCartTypes';
+import { DeliveryType } from '../../config/constants';
 
 // TODO: work on this type
 type ShoppingCartState = {
@@ -89,6 +90,9 @@ const shoppingCartSlice = createSlice({
     setOrderPickUp: (state, action) => {
       state.orderPickUp = action.payload;
     },
+    setDeliveryType: (state, action) => {
+      state.orderPickUp.deliveryType = action.payload;
+    },
     addCartItem: (state, action) => {
       state.items.push(action.payload);
     },
@@ -112,6 +116,7 @@ const shoppingCartSlice = createSlice({
     },
     setTableDetails: (state, action) => {
       state.tableDetails = action.payload;
+      state.orderPickUp.deliveryType = DeliveryType.DINE_IN;
     },
     resetOrderError: (state, action) => {
       state.error = false;
@@ -271,6 +276,7 @@ export const {
   deleteCartItem,
   clearCart,
   setOrderPickUp,
+  setDeliveryType,
   addDiscount,
   addGroupDiscount,
   setTableDetails,
