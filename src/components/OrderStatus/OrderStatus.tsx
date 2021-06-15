@@ -1,20 +1,20 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Container } from '../Shared/Container/Container';
-import { Button } from 'antd';
 import { PickUp } from './PickUp';
 import { Directions } from './Directions';
 import { OrderTimeLine } from './OrderTimeLine';
 import { OrderBarcode } from './OrderBarcode';
 import './OrderStatus.css';
-export const OrderStatus = ({
+
+export const OrderStatus: React.FC<any> = ({
   user,
   order,
   mobileOrderStatuses,
   mapCoordinates,
   address,
   isDemo,
-  saslName
+  saslName,
 }) => {
   const { orderId, orderStatus } = order || {};
   const { latitude, longitude } = mapCoordinates;
@@ -31,9 +31,6 @@ export const OrderStatus = ({
       />
       <OrderBarcode value={`ocg_${orderId ? orderId : ''}`} />
       <OrderTimeLine orderStatus={orderStatus} />
-     {/* <Button block size="large">
-        <span className="font-size-md">Add to Home Screen</span>
-      </Button>*/}
     </Container>
   );
 };

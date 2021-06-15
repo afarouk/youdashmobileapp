@@ -1,14 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { OrderStatus } from '../components/OrderStatus/OrderStatus';
+import { selectTableId } from '../redux/selectors/shoppingCartSelectors';
+import { useSelector } from '../redux/store';
 import { orderAPI } from '../services/api';
 import { formatGMapAddress } from '../utils/helpers';
-import { useSelector } from 'react-redux';
 
-const OrderStatusPage = ({ user, businessData }) => {
-  const { orderUUID } = useParams();
+const OrderStatusPage: React.FC<any> = ({ user, businessData }) => {
+  const { orderUUID } = useParams<{orderUUID: string}>();
   const [order, setOrder] = useState(null);
   const orderStatus = useSelector((state) => state.shoppingCart.orderStatus);
+
   useEffect(() => {
     if (orderStatus && !order && orderStatus.orderUUID === orderUUID) {
       setOrder(orderStatus);
