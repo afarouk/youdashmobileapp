@@ -53,6 +53,7 @@
   },
   "devDependencies": {
     "@types/react-router": "^5.1.14",
+    "@types/react-router-dom": "^5.1.7",
     "cra-build-watch": "^3.4.0",
     "prettier": "^2.0.5",
     "source-map-explorer": "^2.5.0",

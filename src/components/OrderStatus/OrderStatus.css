@@ -30,3 +30,27 @@
 .order-status__barcode svg {
   width: 100%;
 }
+
+.order-status__pickup-delivery-type {
+  font-size: 1.2rem;
+  line-height: 0;
+  color: rgba(0, 0, 0, 0.99);
+  top: 3px;
+  position: relative;
+}
+
+.order-status__pickup-table {
+  line-height: 0;
+  font-size: 1.2rem;
+  top: 2px;
+  position: relative;
+}
+
+.order-status__pickup-table-number {
+  font-size: 1.8rem;
+  line-height: 0;
+  font-weight: 700;
+  color: var(--secondary-color);
+  position: relative;
+  top: 7px;
+}
