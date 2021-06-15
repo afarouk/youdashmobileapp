@@ -7,10 +7,10 @@ type PickUpProps = {
 }
 
 export const PickUp: React.FC<PickUpProps> = ({ order, userName }) => {
-  const { orderId, pricePaid, message, cyclicOrderIdInt, deliveryType, tablePath = '' } = order || {};
+  const { orderId, pricePaid, message, cyclicOrderIdInt, deliveryType, tablePath  } = order || {};
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [_, __, tableId] = tablePath.split('#');
+  const [_, __, tableId] = (tablePath || '').split('#');
 
   return (
     <Card className="order-status__pickup">
