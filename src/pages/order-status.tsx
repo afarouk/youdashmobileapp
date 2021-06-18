@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { OrderStatus } from '../components/OrderStatus/OrderStatus';
-import { selectTableId } from '../redux/selectors/shoppingCartSelectors';
 import { useSelector } from '../redux/store';
 import { orderAPI } from '../services/api';
 import { formatGMapAddress } from '../utils/helpers';
