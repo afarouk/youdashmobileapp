@@ -182,7 +182,7 @@ export const OrderDetails = (props) => {
     const dataProvided = Boolean(credentials.firstName && credentials.email && credentials.mobile);
     const valid = orderingEnabled
       && hasCartItems
-      && dataProvided;
+      && dataProvided
     setIsFormValid(valid);
   }, [preventOrdering, shoppingCartItems, credentials])
 
@@ -199,25 +199,30 @@ export const OrderDetails = (props) => {
 
   const [btnProps, setBtnProps] = useState({disabled: true});
   useEffect(() => {
+    if (priceTotal === 0) {
+      setBtnProps({ disabled: true });
+      setCheckoutMode(CHECKOUT_MODE.USER_DATA);
+      return;
+    }
+
     if (checkoutMode === CHECKOUT_MODE.CARD_PAYMENT) {
-      // setBtnProps({ disabled : !isFormValid || !isPayFormValid }); // TODO: check if we need it
       setBtnProps({ disabled: !isFormValid })
     } else if (checkoutMode === CHECKOUT_MODE.USER_DATA) {
       setBtnProps({ disabled: !isFormValid })
     } else if (checkoutMode === CHECKOUT_MODE.CARD_PAYMENT_PRESTEP) {
-      // TODO: implement validation 
       // setBtnProps({ disabled: !isFormValid })
     } else {
       throw new Error('CHECKOUT MODE IS NOT KNOWN', checkoutMode)
     }
-  }, [isFormValid, isPayFormValid, checkoutMode]);
+  }, [isFormValid, isPayFormValid, checkoutMode, priceTotal]);
+
 
   const showCustomCreditCardForm = isTsys && isResolved && isMobileVerified && portalForm.current && checkoutMode === CHECKOUT_MODE.CARD_PAYMENT;
   const showNabancardForm = isNabancard && isResolved && isMobileVerified && portalForm.current && checkoutMode === CHECKOUT_MODE.CARD_PAYMENT;
   const isCashPayment = !acceptCreditCards && acceptCash;
   const showCardConnectIframe = isCardConnect && checkoutMode === CHECKOUT_MODE.CARD_PAYMENT;
   const showHeartlandForm = isHeartland && checkoutMode === CHECKOUT_MODE.CARD_PAYMENT;
-  
+
   return (
     <div className="p-default">
       <div className="order-details">
