@@ -53,10 +53,9 @@ export default (businessData, priceSubTotal, shoppingCartItems) => {
             type,
             title,
             minimumPurchase,
-            applicableItemUUID, // TODO: handle this case
-            applicableGroup, // TODO: handle this case
+            applicableItemUUID,
+            applicableGroup,
             expirationDate, // TODO: handle this case
-            activationDate, // TODO: do we need to handle this case
           } = discountItem;
           if (!applicableItemUUID && !applicableGroup) {
             setOrderDiscount({

@@ -4,18 +4,19 @@ import { useDispatch, useSelector } from 'react-redux';
 import { addCartItem, addDiscount, addGroupDiscount } from '../../redux/slices/shoppingCart';
 import { message } from 'antd';
 import { transformLoyaltyToDiscount, transformPromotionToDiscount } from '../../utils/helpers';
-import { discountTypes } from '../../config/constants';
+import { discountTypes, DISCOUNT_QUERY_PARAMETER_NAME, DISCOUNT_QUERY_PARAMETER_VALUE, DISCOUNT_UUID_QUERY_PARAMETER_NAME } from '../../config/constants';
 
 export default (businessData) => {
   const { search } = useLocation();
   const dispatch = useDispatch();
   const allDiscounts = useSelector((state) => state.shoppingCart.discounts.byId);
   const loyaltyAndOrderHistory = useSelector((state) => state.loyaltyAndOrderHistory.data);
+  
   const handleDiscount = (uuid, discountItem, discountType, addItemToCart = true) => {
     const { applicableItemUUID, applicableGroup } = discountItem;
     const { itemsById } = businessData;
 
-    if (discountItem && applicableItemUUID) {
+    if (discountItem && !applicableGroup && discountType === discountTypes.DISCOUNT) {
       dispatch(
         addDiscount({
           id: uuid,
@@ -62,11 +63,11 @@ export default (businessData) => {
   useEffect(() => {
     if (businessData) {
       const urlParams = new URLSearchParams(search);
-      const type = urlParams.get('t');
+      const type = urlParams.get(DISCOUNT_QUERY_PARAMETER_NAME);
       const { discounts, promotions } = businessData;
       if (type) {
-        if (type === 'd') {
-          const uuid = urlParams.get('u');
+        if (type === DISCOUNT_QUERY_PARAMETER_VALUE) {
+          const uuid = urlParams.get(DISCOUNT_UUID_QUERY_PARAMETER_NAME);
           if (uuid && discounts && discounts.length > 0 && !allDiscounts[uuid]) {
             const discountItem = discounts.filter(({ discountUUID }) => discountUUID === uuid);
 
@@ -76,7 +77,7 @@ export default (businessData) => {
           }
         }
         if (type === 'p') {
-          const uuid = urlParams.get('u');
+          const uuid = urlParams.get(DISCOUNT_QUERY_PARAMETER_VALUE);
           if (uuid && promotions && promotions.length > 0 && !allDiscounts[uuid]) {
             const promotionItem = promotions.filter((promotion) => promotion.uuid === uuid);
 
