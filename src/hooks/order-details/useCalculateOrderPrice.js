@@ -46,6 +46,7 @@ export default (businessData, priceSubTotal, shoppingCartItems) => {
 
       if (type && uuid) {
         const discountItem = discounts.filter(({ discountUUID }) => discountUUID === uuid)[0];
+        
         if (discountItem) {
           const {
             discount,
