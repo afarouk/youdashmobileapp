@@ -177,6 +177,44 @@ const prepareNabancardData = (nabancardData) => ({
   transactionId20: null
 })
 
+const getDiscounts = ({
+  discountsById,
+  itemsWithDiscounts,
+  itemsWithGroupDiscounts,
+}) => {
+  const discounts = [];
+
+  // handle items discounts
+  if (itemsWithDiscounts) {
+    Object.values(itemsWithDiscounts).forEach((customDiscountItem) => {
+      const { discountType, priceItem, ...discountItem } = customDiscountItem;
+      discounts.push(discountItem);
+    });
+  }
+
+  // handle group discounts
+  if (itemsWithGroupDiscounts) {
+    Object.values(itemsWithGroupDiscounts).forEach((customDiscountItem) => {
+      if (customDiscountItem.discountType === discountTypes.GROUP_DISCOUNT) {
+        const { discountType, ...discountItem } = customDiscountItem;
+        discounts.push(discountItem);
+      }
+    });
+  }
+
+  // handle other discounts
+  if (discountsById) {
+    Object.values(discountsById).forEach(customDiscountItem => {
+      const { discountType, ...discountItem } = customDiscountItem;
+      if (!discountItem.applicableItemUUID && !discountItem.applicableGroup) {
+        discounts.push(discountItem);
+      }
+    })
+  }
+
+  return discounts.length ? discounts : null;
+}
+
 export const formatOrderData = ({
   comment,
   loyaltyStatus,
@@ -204,39 +242,21 @@ export const formatOrderData = ({
   billingAddress,
   acceptCash,
   acceptCreditCards,
+  discountsById,
 }) => {
   let authorizationsAndDiscounts = {
     authorizations: null,
-    discounts: null,
+    discounts: getDiscounts({
+      discountsById,
+      itemsWithDiscounts,
+      itemsWithGroupDiscounts,
+    }),
     loyaltyStatus: null,
     promotions: null,
     // promotions: promotions,
     // loyaltyStatus: loyaltyStatus,
   };
-  if (itemsWithDiscounts && Object.keys(itemsWithDiscounts).length > 0) {
-    Object.keys(itemsWithDiscounts).map((key) => {
-      const { discountType, priceItem, ...discountItem } = itemsWithDiscounts[key];
-      if (!authorizationsAndDiscounts.discounts) {
-        authorizationsAndDiscounts.discounts = [];
-      }
-      authorizationsAndDiscounts.discounts.push(discountItem);
-    });
-  }
-
-  if (itemsWithGroupDiscounts && Object.keys(itemsWithGroupDiscounts).length > 0) {
-    Object.keys(itemsWithGroupDiscounts).map((key) => {
-      switch (itemsWithGroupDiscounts[key].discountType) {
-        case discountTypes.GROUP_DISCOUNT: {
-          const { discountType, ...discountItem } = itemsWithGroupDiscounts[key];
-          if (!authorizationsAndDiscounts.discounts) {
-            authorizationsAndDiscounts.discounts = [];
-          }
-          authorizationsAndDiscounts.discounts.push(discountItem);
-          break;
-        }
-      }
-    });
-  }
+  
   let transactionDataFields = {};
   if (transactionData) {
     transactionDataFields = mapTransactionData(transactionData);

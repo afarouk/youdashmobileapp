@@ -22,6 +22,7 @@ export default (businessData, user) => {
   const paymentTokenError = useSelector((state) => state.shoppingCart.paymentTokenError);
   const priceSubTotal = useSelector((state) => state.shoppingCart.priceSubTotal);
   const itemsWithDiscounts = useSelector((state) => state.shoppingCart.itemsWithDiscounts);
+  const discountsById = useSelector((state) => state.shoppingCart.discounts.byId);
   const itemsWithGroupDiscounts = useSelector(
     (state) => state.shoppingCart.itemsWithGroupDiscounts
   );
@@ -107,6 +108,7 @@ export default (businessData, user) => {
       paymentProcessor,
       acceptCash,
       acceptCreditCards,
+      discountsById,
     });
     
     switch (paymentProcessor) {
