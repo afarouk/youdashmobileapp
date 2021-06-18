@@ -48,6 +48,9 @@ export default (
     useHooksIframe(fwdConfig);
   }
 
+  useEffect(() => {
+    return () => setCheckoutMode(CHECKOUT_MODE.USER_DATA);
+  }, [])
 
   return {
     checkoutMode, 

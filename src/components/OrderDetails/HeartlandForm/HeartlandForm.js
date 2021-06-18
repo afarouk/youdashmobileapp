@@ -138,6 +138,7 @@ export const HeartlandForm = (props) => {
       }
     });
 
+    // TODO: add loggers here
     cardForm.current.on("error", (resp) => {
       console.log('error', resp)
     });

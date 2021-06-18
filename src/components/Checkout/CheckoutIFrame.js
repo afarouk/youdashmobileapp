@@ -46,6 +46,7 @@ export const CheckoutIFrame = ({ transactionSetupUrl }) => {
       console.log("URL changed:", newURL);
     });*/
   }, []);
+
   return (
     <div>
       {transactionSetupUrl && (
