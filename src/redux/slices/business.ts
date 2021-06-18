@@ -1,9 +1,15 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { businessAPI } from '../../services/api';
-import { getDayNameByIndex } from '../../utils/helpers';
+import { getDayNameByIndex, pad } from '../../utils/helpers';
 import { isDemo } from '../../services/request';
+import { BusinessData } from '../../types/businessData';
 
-const initialState = {
+type BusinessState = {
+  data: BusinessData,
+  [key: string]: any,
+}
+
+const initialState: BusinessState = {
   data: {
     isDemo: false,
     catalogId: null,
@@ -24,17 +30,14 @@ const initialState = {
       highLightedItem: null
     },
     pickUp: {
-      futureDays: [],
-      pickUpTimes: [],
+      dayPickUpTimes: [],
       isOpen: null,
       isOpenWarningMessage: null,
       address: {
-        telephoneNumber: null,
         city: null,
         country: null,
         state: null,
         street: null,
-        street2: '',
         timeZone: null,
         locale: null,
         zip: null
@@ -69,9 +72,9 @@ const initialState = {
   error: false
 };
 
-const getCatalog = (catalogs) => {
+const getCatalog = (catalogs: any): any => {
   const validOneDayOnlyFalse = catalogs.filter(
-    ({ isValidOneDayOnly }) => isValidOneDayOnly === false
+    ({ isValidOneDayOnly }: any) => isValidOneDayOnly === false
   );
   if (validOneDayOnlyFalse && validOneDayOnlyFalse.length > 0) {
     return {
@@ -79,10 +82,10 @@ const getCatalog = (catalogs) => {
       catalog: validOneDayOnlyFalse[0]
     };
   }
-  const validOneDayOnly = catalogs.filter(({ isValidOneDayOnly }) => isValidOneDayOnly === true);
+  const validOneDayOnly = catalogs.filter(({ isValidOneDayOnly }: any) => isValidOneDayOnly === true);
   if (validOneDayOnly && validOneDayOnly.length > 0) {
     const days = validOneDayOnly.filter(
-      ({ validDay }) => validDay.toLowerCase() === getDayNameByIndex(new Date().getDay())
+      ({ validDay }: any) => validDay.toLowerCase() === getDayNameByIndex(new Date().getDay())
     );
     if (days && days.length > 0) {
       return {
@@ -93,9 +96,9 @@ const getCatalog = (catalogs) => {
   }
 };
 
-const mapUnSubgroupedItems = (items, groupId) => {
-  let itemsObject = {}; //needed for itemsById dictionary
-  const itemsArray = items.map((item) => {
+const mapUnSubgroupedItems = (items: any, groupId: any) => {
+  let itemsObject: any = {}; //needed for itemsById dictionary
+  const itemsArray = items.map((item: any) => {
     const { thumbnailBase64, ...rest } = item;
     if (rest.canSplitLeftRight && rest.itemOptions && rest.itemOptions.subItems) {
       rest.itemOptions = {
@@ -113,7 +116,7 @@ const mapUnSubgroupedItems = (items, groupId) => {
      * as a separate item to make possible of quick check itemsById[itemUUID]
      */
     if (item.hasVersions && item.itemVersions.length) {
-      item.itemVersions.map((itemVersion) => {
+      item.itemVersions.map((itemVersion: any) => {
         const { thumbnailBase64, ...restItem } = itemVersion;
         itemsObject[itemVersion.uuid] = {
           ...rest,
@@ -139,14 +142,14 @@ const mapUnSubgroupedItems = (items, groupId) => {
   };
 };
 
-const mapGroups = (groupsSrc) => {
-  let groups = [];
-  let itemsById = {};
-  let groupsById = {};
+const mapGroups = (groupsSrc: any) => {
+  let groups: any[] = [];
+  let itemsById: any = {};
+  let groupsById: any = {};
   if (groupsSrc !== undefined && groupsSrc && groupsSrc.length) {
     groups = groupsSrc
-      .filter((g) => g.groupType.enumText !== 'DISCOUNT_ONLY' && g.groupType.enumText !== 'ADHOC')
-      .map((g, i) => {
+      .filter((g: any) => g.groupType.enumText !== 'DISCOUNT_ONLY' && g.groupType.enumText !== 'ADHOC')
+      .map((g: any, i: any) => {
         groupsById[g.groupId] = g;
         const { indexInCatalog, groupDisplayText, unSubgroupedItems, groupId } = g;
         const { itemsArray, itemsObject } = mapUnSubgroupedItems(unSubgroupedItems, groupId);
@@ -168,25 +171,25 @@ const mapGroups = (groupsSrc) => {
   };
 };
 
-const mapMobileOrderStatuses = (mobileOrderStatuses) => {
-  const statuses = {};
+const mapMobileOrderStatuses = (mobileOrderStatuses: any) => {
+  const statuses: any = {};
   if (mobileOrderStatuses && mobileOrderStatuses.length) {
-    mobileOrderStatuses.map((status) => {
+    mobileOrderStatuses.map((status :any) => {
       statuses[status.enumText] = status.mobileDisplayText;
     });
   }
   return statuses;
 };
 
-const mapPollsById = (polls) => {
-  let pollsById = {};
+const mapPollsById = (polls: any) => {
+  let pollsById: any = {};
   if (polls.length > 0) {
-    polls.map((p) => (pollsById[p.contestUUID] = p));
+    polls.map((p: any) => (pollsById[p.contestUUID] = p));
   }
   return pollsById;
 };
 
-const mapBusinessData = (urlKey, data) => {
+const mapBusinessData = (urlKey: any, data: any): BusinessState['data'] => {
   const {
     serviceAccommodatorId,
     serviceLocationId,
@@ -213,8 +216,7 @@ const mapBusinessData = (urlKey, data) => {
     serviceStatus,
     saBannerImageURL,
     defaultImageURL,
-    futureDays,
-    pickUpTimes,
+    dayPickUpTimes,
     extraFees,
     loyaltyProgram,
     loyaltyProgramData,
@@ -230,24 +232,6 @@ const mapBusinessData = (urlKey, data) => {
   const groupsSrc = catalog.groups;
   const { isOpen, isOpenWarningMessage, catalogId } = catalog;
 
-  const {
-    tips,
-    showTips,
-    acceptCreditCards,
-    paymentProcessor,
-    allowItemComments,
-    allowOrderComments
-  } = services.onlineOrder;
-
-  // let onlineOrder = {
-  //   tips,
-  //   showTips,
-  //   acceptCreditCards,
-  //   paymentProcessor,
-  //   allowItemComments,
-  //   allowOrderComments
-  // };
-
   let onlineOrder = services.onlineOrder;
 
   let mapCoordinates = {
@@ -256,8 +240,16 @@ const mapBusinessData = (urlKey, data) => {
   };
 
   let pickUp = {
-    futureDays,
-    pickUpTimes,
+    dayPickUpTimes: dayPickUpTimes.map((dayPickUpConfig: any) => {
+      const { day, month, year } = dayPickUpConfig.day;
+      return {
+        ...dayPickUpConfig,
+        day: {
+          ...dayPickUpConfig.day,
+          date: `${year}.${pad(month)}.${pad(day)}`,
+        },
+      }
+    }),
     isOpen,
     isOpenWarningMessage,
     address: {
@@ -313,7 +305,7 @@ const mapBusinessData = (urlKey, data) => {
   };
 };
 
-export const getBusinessData = createAsyncThunk('business/getBusinessData', async (urlKey) => {
+export const getBusinessData = createAsyncThunk('business/getBusinessData', async (urlKey: string) => {
   const response = await businessAPI.getBusinessData(urlKey);
   return mapBusinessData(urlKey, response.data);
 });
@@ -335,15 +327,15 @@ const businessSlice = createSlice({
   },
   extraReducers: {
     // Add reducers for additional action types here, and handle loading state as needed
-    [getBusinessData.pending]: (state, action) => {
+    [getBusinessData.pending.toString()]: (state, action) => {
       state.loading = true;
       state.error = false;
     },
-    [getBusinessData.fulfilled]: (state, action) => {
+    [getBusinessData.fulfilled.toString()]: (state, action) => {
       state.data = action.payload;
       state.loading = false;
     },
-    [getBusinessData.rejected]: (state, action) => {
+    [getBusinessData.rejected.toString()]: (state, action) => {
       //TODO: Need to handle this in a UI
       state.error = action.error.message;
       state.loading = false;

@@ -5,13 +5,67 @@ import { calculateDiscountedPrice } from '../../utils/helpers';
 import { CheckoutMode, OrderStatus, TableDetails } from '../../types/shoppingCartTypes';
 import { DeliveryType } from '../../config/constants';
 
+enum CURRENCY {
+  USD = 'USD',
+}
+
+type ShoppingCartItem = {
+  itemId: number,
+  itemVersion: number,
+  priceId: number,
+  uuid: string,
+  itemIndex: number,
+  versionIndex: number,
+  vendorCode: string,
+  shortDescription: string,
+  longDescription: string,
+  currency: CURRENCY,
+  price: number,
+  itemTag: string,
+  itemName: string,
+  comments: string,
+  itemStatus: string, // TODO: enum
+  hasVersions: boolean,
+  version1Label: string,
+  version1DisplayText: string,
+  version1Value: string,
+  version2Label: string,
+  version2DisplayText: string,
+  version2Value: string,
+  version3Label: string,
+  version3DisplayText: string,
+  version3Value: string,
+  hasSubItems: boolean,
+  mustCustomize: boolean,
+  attributes: any,
+  taxationType: string, // TODO: enum
+  ageRestrictionType: string, // TODO: enum
+  typeInGroup: string, // TODO: enum
+  inOrderAssociationTag: any,
+  itemType: string, // TODO: enum
+  quantity: number,
+  weightPrice: number,
+  weightType: string, // TODO: enum
+  variablePriingAllowed: boolean,
+  canSplitLeftRight: boolean,
+  catalogId: string,
+  groupId: string,
+  versionSelected: any,
+  okToAdd: boolean,
+  itemOptionsString: string,
+  itemOptions: Record<string, any>,  
+
+
+}
+
 // TODO: work on this type
 type ShoppingCartState = {
   orderPickUp: {
     deliveryType: DeliveryType,
+    date?: any,
   },
   tableDetails: null | TableDetails,
-  items: any[],
+  items: ShoppingCartItem[],
   itemsWithDiscounts: any[] | Record<string, any>,
   itemsWithGroupDiscounts: null | Record<string, any>,
   priceSubTotal: number,
