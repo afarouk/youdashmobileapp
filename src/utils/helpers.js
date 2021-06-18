@@ -202,6 +202,8 @@ export const formatOrderData = ({
   calculatedExtraFeeValue,
   promotions,
   billingAddress,
+  acceptCash,
+  acceptCreditCards,
 }) => {
   let authorizationsAndDiscounts = {
     authorizations: null,
@@ -366,8 +368,8 @@ export const formatOrderData = ({
     saveCreditCardForFutureReference: null, //TODO: later bool
     fundSourceId: null,
     invoiceStatus: 'UNDEFINED',
-    cashSelected: true,
-    creditCardSelected: false,
+    cashSelected: acceptCash,
+    creditCardSelected: acceptCreditCards,
     creditCard: null,
     billingAddress: prepareBillingAddress(billingAddress),
     paymentProcessor: 'UNDEFINED',

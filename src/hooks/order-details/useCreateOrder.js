@@ -61,7 +61,9 @@ export default (businessData, user) => {
         provisioningParam2,
         provisioningParam3,
         provisioningParam4,
-        provisioningParam5
+        provisioningParam5,
+        acceptCash,
+        acceptCreditCards,
       }
     } = businessData;
 
@@ -102,6 +104,9 @@ export default (businessData, user) => {
       extraFees,
       promotions,
       billingAddress,
+      paymentProcessor,
+      acceptCash,
+      acceptCreditCards,
     });
     
     switch (paymentProcessor) {
