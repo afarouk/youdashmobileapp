@@ -17,7 +17,6 @@ export const CardConnectIframe = React.memo((props) => {
   const handleSubmit = (event) => {
     event.preventDefault();
     setError(null);
-    console.log('handlesubmit')
 
     if (!token) {
       setError('Something is wrong, please check card details and try again');
@@ -33,7 +32,6 @@ export const CardConnectIframe = React.memo((props) => {
 
     try {
       const data = JSON.parse(event.data);
-      console.log('data', data)
       if (CARD_CONNECT_TOKEN_KEY in data) {
         dispatch(setToken(data[CARD_CONNECT_TOKEN_KEY]));
       }

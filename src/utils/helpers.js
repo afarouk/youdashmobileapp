@@ -88,7 +88,7 @@ export const calculateDiscountedPrice = (type, discount, price) => {
       const result = price - getPercent(price, discount);
       return result > 0 ? result : 0;
     case amountTypes.AMOUNT:
-      return price > discount && price - discount > 0 ? price - discount : 0;
+      return price > discount ? price - discount : 0;
     case amountTypes.EXACT:
       return discount;
   }

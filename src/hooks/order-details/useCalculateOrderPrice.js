@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { amountTypes } from '../../config/constants';
+import { amountTypes, DISCOUNT_QUERY_PARAMETER_NAME, DISCOUNT_UUID_QUERY_PARAMETER_NAME } from '../../config/constants';
 import { useLocation } from 'react-router-dom';
 import { calculateDiscountedPrice, getPercent, floatNum } from '../../utils/helpers';
 
@@ -40,8 +40,8 @@ export default (businessData, priceSubTotal, shoppingCartItems) => {
   useEffect(() => {
     if (businessData) {
       const urlParams = new URLSearchParams(search);
-      const type = urlParams.get('t');
-      const uuid = urlParams.get('u');
+      const type = urlParams.get(DISCOUNT_QUERY_PARAMETER_NAME);
+      const uuid = urlParams.get(DISCOUNT_UUID_QUERY_PARAMETER_NAME);
       const { discounts } = businessData;
 
       if (type && uuid) {
@@ -52,8 +52,10 @@ export default (businessData, priceSubTotal, shoppingCartItems) => {
             type,
             title,
             minimumPurchase,
-            applicableItemUUID,
-            applicableGroup
+            applicableItemUUID, // TODO: handle this case
+            applicableGroup, // TODO: handle this case
+            expirationDate, // TODO: handle this case
+            activationDate, // TODO: do we need to handle this case
           } = discountItem;
           if (!applicableItemUUID && !applicableGroup) {
             setOrderDiscount({

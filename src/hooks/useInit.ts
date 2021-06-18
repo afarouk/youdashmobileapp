@@ -21,7 +21,6 @@ const useGreenDining = () => {
   const serviceAccommodatorId: any = useSelector(state => state.business.data.serviceAccommodatorId);
   const serviceLocationId: any = useSelector(state => state.business.data.serviceLocationId);
 
-  console.log('here', serviceAccommodatorId, serviceLocationId)
   useEffect(() => {
     if (!serviceAccommodatorId || !serviceLocationId) {
       return;
@@ -30,8 +29,6 @@ const useGreenDining = () => {
     const params = new URLSearchParams(window.location.search);
     const simpleOrderUUID = params.get(SIMPLE_ORDER_UUID_QUERY_PARAMETER_NAME);
     const discountUUID = params.get(DISCOUNT_UUID_QUERY_PARAMETER_NAME);
-
-    console.log('here1', {simpleOrderUUID, discountUUID})
 
     if (simpleOrderUUID && discountUUID) {
       dispatch(setSouuid(simpleOrderUUID));
