@@ -17,12 +17,9 @@ export const GreenDiningNotification: React.FC = () => {
     handleBuyClick,
     handleMore,
     handleLess,
-    error,
     errorMessage,
     resetError,
   } = useGreenDining();
-
-  console.log('error', {error})
 
 
   if (!greenDiningInfo) {

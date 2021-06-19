@@ -9,6 +9,7 @@ import { getLoyaltyAndOrderHistory } from '../../redux/slices/loyaltyAndOrderHis
 import { selectTablePath } from '../../redux/selectors/shoppingCartSelectors';
 import { useSelector } from '../../redux/store';
 import { selectIsGreenDiningOrder } from '../../redux/selectors/greenDiningSelectors';
+import { useGreenDiningSuccess } from '../green-dining/useGreenDiningSuccess';
 
 export default (businessData, user) => {
   const dispatch = useDispatch();
@@ -45,6 +46,7 @@ export default (businessData, user) => {
   ] = useCalculateOrderPrice(businessData, priceSubTotal, shoppingCartItems);
 
   const handleResetOrderError = () => dispatch(resetOrderError());
+  const { greenDiningSuccess } = useGreenDiningSuccess()
 
   const handleCreateOrder = async({
     newUser = null,
@@ -146,6 +148,7 @@ export default (businessData, user) => {
       .then(({ payload, error }) => {
         if (payload && payload.orderUUID && !error) {
           dispatch(clearCart());
+          greenDiningSuccess();
           history.push(`/${businessUrlKey}/order-status/${payload.orderUUID}${search}`);
           if (user) {
             dispatch(getLoyaltyAndOrderHistory({

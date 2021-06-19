@@ -129,6 +129,12 @@ const greenDiningSlice = createSlice({
         orderingState: ORDERING_STATE.CANCELLED,
       };
     },
+    successGreenDiningOrder: (state) => {
+      return { 
+        ...initialState,
+        orderingState: ORDERING_STATE.SUCCESS,
+      };
+    },
     setSelectedCount: (state, action) => {
       state.selectedCount = action.payload;
     },
@@ -186,6 +192,7 @@ export const {
   cancelGreenDiningOrder,
   setSelectedCount,
   resetBlocOrderkError,
+  successGreenDiningOrder,
 } = greenDiningSlice.actions;
 
 export const greenDiningReducer = greenDiningSlice.reducer;
