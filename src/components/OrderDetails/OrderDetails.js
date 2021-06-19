@@ -91,6 +91,7 @@ export const OrderDetails = (props) => {
     setCheckoutMode,
     isNabancard,
     hasTable,
+    greenDiningOrdering,
   } = props;
   const { saslName } = businessData;
 
@@ -238,8 +239,9 @@ export const OrderDetails = (props) => {
         <Card>
           <OrderItemsList
             items={shoppingCartItems}
-            onDeleteItem={onDeleteItem}
-            onEditItem={onEditItem}/>
+            onDeleteItem={greenDiningOrdering ? undefined : onDeleteItem}
+            onEditItem={onEditItem}
+          />
 
           <SubTotal
             orderDiscount={orderDiscount}

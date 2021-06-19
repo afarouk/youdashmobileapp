@@ -113,13 +113,13 @@ export const greenDiningAPI = {
     })
   },
   blockGreenDiningOrder: (params: BlockGreenDiningOrderParams) => {
-    return request.put<BlockGreenDiningOrderResponse>('/apptsvc/rest/promotions/blockGreenDiningOrder', { 
-      params,
+    return request.put<BlockGreenDiningOrderResponse>('/apptsvc/rest/promotions/blockGreenDiningOrder', undefined, {
+      params
     })
   },
   cancelGreenDiningBlock: (params: CancelGreenDiningBlockParams) => {
-    return request.put<CancelGreenDiningBlockResponse>('/apptsvc/rest/promotions/cancelGreenDiningBlock', {
-      params,
+    return request.put<CancelGreenDiningBlockResponse>('/apptsvc/rest/promotions/cancelGreenDiningBlock', undefined, {
+      params
     })
   },
 }

@@ -18,7 +18,11 @@ export type GreenDiningDetails = {
     isGreenDiningDeal: boolean,
     imageURL: string,
   },
-  sampleOrder: Record<string, any>,
+  // TODO: work on this type -> it's general order history type ???
+  sampleOrder: {
+    items: any[],
+    [key: string]: any,
+  },
   lastAvailableCount: number,
 }
 

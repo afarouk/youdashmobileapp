@@ -156,7 +156,7 @@ const shoppingCartSlice = createSlice({
     deleteCartItem: (state, action) => {
       state.items.splice(action.payload, 1);
     },
-    clearCart: (state, action) => {
+    clearCart: (state) => {
       state.items = [];
       state.priceSubTotal = 0;
     },
@@ -235,7 +235,7 @@ const shoppingCartSlice = createSlice({
             isGroupDiscount = false
           ) => {
             if (itemDiscount) {
-              const { type, discount, title, discountUUID } = itemDiscount;
+              const { title, discountUUID } = itemDiscount;
               //removing previous discount if itemVersion doesn't match
               //for example if discount was applied for a small pizza, then user changed it's size to large
               //in this case we need to update item and remove discount
@@ -273,7 +273,7 @@ const shoppingCartSlice = createSlice({
                 return {
                   ...item,
                   price: item.price,
-                  discountedPrice: calculateDiscountedPrice(type, discount, item.price),
+                  discountedPrice: calculateDiscountedPrice({ discountItem: itemDiscount, price: item.price }),
                   discountUUID,
                   promoCodeTitle: title
                 };

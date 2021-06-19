@@ -13,6 +13,7 @@ export type BusinessData = {
       zip: string | null,
     }
   },
+  discounts: any[],
   [key: string]: any,
 }
 

@@ -14,6 +14,7 @@ import useCheckout from '../hooks/order-details/useCheckout';
 import usePreventOrdering from '../hooks/core/usePreventOrdering';
 import useMobileVerification from '../hooks/user/useMobileVerification';
 import useCreditcardDetails from '../hooks/payment-details/useCreditcardDetails';
+import { selectGreenDiningOrderingActivated } from '../redux/selectors/greenDiningSelectors';
 
 const OrderDetailsPage = ({ businessData, user }) => {
   const dispatch = useDispatch();
@@ -100,6 +101,7 @@ const OrderDetailsPage = ({ businessData, user }) => {
 
   const [preventOrdering] = usePreventOrdering(businessData);
   
+  const greenDiningOrdering = useSelector(selectGreenDiningOrderingActivated);
   const tableDetails = useSelector(state => state.shoppingCart.tableDetails);
   const hasTable = Boolean(tableDetails && tableDetails.tableId);
 
@@ -307,6 +309,7 @@ const OrderDetailsPage = ({ businessData, user }) => {
       isHeartland={isHeartland}
       isNabancard={isNabancard}
       hasTable={hasTable}
+      greenDiningOrdering={greenDiningOrdering}
     />
   );
 };

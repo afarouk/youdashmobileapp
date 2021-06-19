@@ -323,7 +323,13 @@ const businessSlice = createSlice({
     hydrateBusinessData: (state, action) => {
       state.data = mapBusinessData(action.payload.businessUrlKey, action.payload.businessData);
       state.loading = false;
-    }
+    },
+    addDiscount: (state, action) => {
+      state.data.discounts.push(action.payload);
+    },
+    removeDiscount: (state, action) => {
+      state.data.discounts = state.data.discounts.filter(discount => discount.discountUUID !== action.payload);
+    },
   },
   extraReducers: {
     // Add reducers for additional action types here, and handle loading state as needed
@@ -343,5 +349,11 @@ const businessSlice = createSlice({
   }
 });
 
-export const { updateGroups, hydrateBusinessData } = businessSlice.actions;
+export const { 
+  updateGroups, 
+  hydrateBusinessData,
+  addDiscount,
+  removeDiscount,
+} = businessSlice.actions;
+
 export const businessReducer = businessSlice.reducer;

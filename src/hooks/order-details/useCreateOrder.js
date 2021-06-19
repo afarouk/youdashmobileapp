@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { useHistory, useLocation, useParams } from 'react-router-dom';
 import useCalculateOrderPrice from './useCalculateOrderPrice';
 import { formatOrderData, isToday, pad, toIsoString } from '../../utils/helpers';
@@ -7,6 +7,8 @@ import { clearCart, createOrder, resetOrderError, setCheckoutMode } from '../../
 import { CHECKOUT_MODE, PAYMENT_PROCESSOR } from '../../config/constants';
 import { getLoyaltyAndOrderHistory } from '../../redux/slices/loyaltyAndOrderHistory';
 import { selectTablePath } from '../../redux/selectors/shoppingCartSelectors';
+import { useSelector } from '../../redux/store';
+import { selectIsGreenDiningOrder } from '../../redux/selectors/greenDiningSelectors';
 
 export default (businessData, user) => {
   const dispatch = useDispatch();
@@ -20,6 +22,7 @@ export default (businessData, user) => {
   const orderRequestError = useSelector((state) => state.shoppingCart.error);
   const orderRequestErrorMessage = useSelector((state) => state.shoppingCart.errorMessage);
   const paymentTokenError = useSelector((state) => state.shoppingCart.paymentTokenError);
+  const isGreenDiningOrder = useSelector(selectIsGreenDiningOrder);
   const priceSubTotal = useSelector((state) => state.shoppingCart.priceSubTotal);
   const itemsWithDiscounts = useSelector((state) => state.shoppingCart.itemsWithDiscounts);
   const discountsById = useSelector((state) => state.shoppingCart.discounts.byId);
@@ -109,6 +112,7 @@ export default (businessData, user) => {
       acceptCash,
       acceptCreditCards,
       discountsById,
+      isGreenDiningOrder,
     });
     
     switch (paymentProcessor) {

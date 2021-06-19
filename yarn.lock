@@ -2263,6 +2263,11 @@
   resolved "https://registry.npmjs.org/@types/json5/-/json5-0.0.29.tgz"
   integrity sha1-7ihweulOEdK4J7y+UnC86n8+ce4=
 
+"@types/lodash@^4.14.170":
+  version "4.14.170"
+  resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.14.170.tgz#0d67711d4bf7f4ca5147e9091b847479b87925d6"
+  integrity sha512-bpcvu/MKHHeYX+qeEN8GE7DIravODWdACVA1ctevD8CN24RhPZIKMn9ntfAsrvLfSX3cR5RrBKAbYm9bGs0A+Q==
+
 "@types/minimatch@*":
   version "3.0.4"
   resolved "https://registry.npmjs.org/@types/minimatch/-/minimatch-3.0.4.tgz"
@@ -10692,6 +10697,11 @@ react-slick@^0.27.0:
     json2mq "^0.2.0"
     lodash.debounce "^4.0.8"
     resize-observer-polyfill "^1.5.0"
+
+react-timer-hook@^3.0.4:
+  version "3.0.4"
+  resolved "https://registry.yarnpkg.com/react-timer-hook/-/react-timer-hook-3.0.4.tgz#13089b62cc81c6dd0d2bd904cd54add668089c4b"
+  integrity sha512-3Ifg00REsB7871rkpiLZEVTsagaOVvcBKF33Qu9eqJ3tWjYxej3hr2Fo8tep9KP0eXBfE5k60C/M+Tv4/I/ZzA==
 
 react@^16.13.1:
   version "16.14.0"

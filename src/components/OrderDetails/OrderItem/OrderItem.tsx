@@ -1,17 +1,29 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import { Title } from './Title';
 
 import { Qty } from './Qty';
 import { Price } from './Price';
+import { Title } from './Title';
 
-import {CloseIcon} from "../../Shared/Icons/Icons";
+import { CloseIcon } from "../../Shared/Icons/Icons";
 
-export const OrderItem = ({
+type Props = {
+  itemName: string
+  itemOptions: object
+  onDeleteItem?: (index: number) => void,
+  onEditItem: (index: number) => void,
+  index: number,
+  quantity: number,
+  price: number,
+  discountedPrice: number,
+  promoCodeTitle: string,
+  hasVersions: boolean,
+  itemVersion: any,
+  itemVersions: any,
+}
+
+export const OrderItem: React.FC<Props> = ({
   itemName,
   itemOptions,
-  businessUrlKey,
-  search,
   index,
   quantity,
   price,
@@ -24,14 +36,23 @@ export const OrderItem = ({
   onEditItem
 }) => {
   const hasDiscountedPrice = discountedPrice !== undefined; //can't just check if(discountedPrice) below, because it can contain 0 value
-  const handleEditItem = () => onEditItem(index);
-  const handleDeleteItem = () => onDeleteItem(index);
+
+  const handleEditItem = onEditItem 
+    ? () => onEditItem(index)
+    : undefined;
+
+  const handleDeleteItem = onDeleteItem 
+    ? () => onDeleteItem(index)
+    : undefined;
+
   return (
     <>
       <tr className={hasDiscountedPrice ? 'discounted-price-row-original' : 'default-row'}>
-        <td className="order-items-list__item-delete" onClick={handleDeleteItem}>
-          <CloseIcon />
-        </td>
+        {onDeleteItem && (
+          <td className="order-items-list__item-delete" onClick={handleDeleteItem}>
+            <CloseIcon />
+          </td>
+        )}
         <td className="order-items-list__item" onClick={handleEditItem}>
           <Title
             itemOptions={itemOptions}
@@ -40,21 +61,13 @@ export const OrderItem = ({
             itemVersion={itemVersion}
             itemVersions={itemVersions}
           />
-          {/*{!hasDiscountedPrice && (
-            <Actions
-              index={index}
-              businessUrlKey={businessUrlKey}
-              onDeleteItem={onDeleteItem}
-              search={search}
-            />
-          )}*/}
         </td>
         <Qty quantity={quantity} />
         <Price price={+price * +quantity} />
       </tr>
       {hasDiscountedPrice ? (
         <tr className={'discounted-text'}>
-          <td className="order-items-list__item-delete" onClick={handleDeleteItem} />
+          {onDeleteItem && <td className="order-items-list__item-delete" />}
           <td className="order-items-list__item" onClick={handleEditItem}>
             <Title
               itemOptions={itemOptions}
@@ -64,29 +77,11 @@ export const OrderItem = ({
               itemVersion={itemVersion}
               itemVersions={itemVersions}
             />
-            {/*<Actions
-              index={index}
-              businessUrlKey={businessUrlKey}
-              onDeleteItem={onDeleteItem}
-              search={search}
-            />*/}
           </td>
-          {/*<PromoCode code={promoCodeTitle} />*/}
           <Qty quantity={quantity} />
           <Price price={hasDiscountedPrice ? discountedPrice : +price * +quantity} />
         </tr>
       ) : null}
     </>
   );
-};
-
-OrderItem.propTypes = {
-  //myProp: PropTypes.string.isRequired,
-  itemName: PropTypes.string.isRequired,
-  itemOptions: PropTypes.object,
-  businessUrlKey: PropTypes.string.isRequired,
-  onDeleteItem: PropTypes.func.isRequired,
-  index: PropTypes.number.isRequired,
-  quantity: PropTypes.number.isRequired,
-  price: PropTypes.number.isRequired
 };

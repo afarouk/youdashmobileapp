@@ -120,7 +120,7 @@ export const DISCOUNT_UUID_QUERY_PARAMETER_NAME = 'u';
 export const DISCOUNT_QUERY_PARAMETER_NAME = 't';
 export const DISCOUNT_QUERY_PARAMETER_VALUE = 'd';
 
-export const GREEN_DINING_BLOCK_DURATION_SEC = 120;
+export const GREEN_DINING_BLOCK_DURATION_SEC = 180;
 
 export enum DeliveryType {
   UNDEFINED = 'UNDEFINED',
@@ -130,3 +130,5 @@ export enum DeliveryType {
   TAKEOUT = 'TAKEOUT',
   DINE_IN = 'DINE_IN',
 };
+
+export const GENERIC_ERROR_MESSAGE = 'Error... Please try again';
