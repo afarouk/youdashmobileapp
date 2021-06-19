@@ -1,11 +1,19 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import { useLocation, useParams } from 'react-router-dom';
+
 import { OrderItem } from '../OrderItem/OrderItem';
 import '../OrderItem/OrderItem.css';
-export const OrderItemsList = ({ items, onDeleteItem, onEditItem }) => {
-  const { businessUrlKey } = useParams();
-  const { search } = useLocation();
+
+type Props = {
+  items: any[],
+  onDeleteItem?: (index: number) => void,
+  onEditItem: (index: number) => void,
+}
+
+export const OrderItemsList: React.FC<Props> = ({ 
+  items, 
+  onDeleteItem, 
+  onEditItem 
+}) => {
 
   return (
     <div className="bg-secondary order-items-list">
@@ -18,8 +26,6 @@ export const OrderItemsList = ({ items, onDeleteItem, onEditItem }) => {
                 {...item}
                 index={i}
                 key={`orderProductItem${i}`}
-                businessUrlKey={businessUrlKey}
-                search={search}
                 onDeleteItem={onDeleteItem}
                 onEditItem={onEditItem}
               />
@@ -30,9 +36,4 @@ export const OrderItemsList = ({ items, onDeleteItem, onEditItem }) => {
       {!items.length && <h5>Shopping cart is empty</h5>}
     </div>
   );
-};
-
-OrderItemsList.propTypes = {
-  items: PropTypes.array.isRequired,
-  onDeleteItem: PropTypes.func.isRequired
 };

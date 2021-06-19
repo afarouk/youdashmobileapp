@@ -82,13 +82,18 @@ export const floatNum = (num) => parseFloat(num.toFixed(2));
 
 export const getPercent = (total, value) => floatNum((total * value) / 100);
 
-export const calculateDiscountedPrice = (type, discount, price) => {
+export const calculateDiscountedPrice = ({ discountItem, price, greenDiningCount = 0 }) => {
+  const { type, discount, isGreenDiningDeal } = discountItem
   switch (type) {
     case amountTypes.PERCENT:
       const result = price - getPercent(price, discount);
       return result > 0 ? result : 0;
     case amountTypes.AMOUNT:
-      return price > discount ? price - discount : 0;
+      const totalDiscount = isGreenDiningDeal
+        ? greenDiningCount * discount
+        : discount;
+
+      return price > totalDiscount ? price - totalDiscount : 0;
     case amountTypes.EXACT:
       return discount;
   }
@@ -243,6 +248,7 @@ export const formatOrderData = ({
   acceptCash,
   acceptCreditCards,
   discountsById,
+  isGreenDiningOrder,
 }) => {
   let authorizationsAndDiscounts = {
     authorizations: null,
@@ -399,6 +405,7 @@ export const formatOrderData = ({
     idAdhocOrderInvoiceParent: null,
     userSASLid: null,
     uid: user ? user.uid : null,
+    isGreenDiningOrder,
     calculatedExtraFeeValue,
     ...transactionDataFields,
     ...creditCardDataFields,

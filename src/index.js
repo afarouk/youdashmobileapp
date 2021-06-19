@@ -16,6 +16,7 @@ import 'antd/lib/switch/style/css';
 import 'antd/lib/timeline/style/css';
 import 'antd/lib/message/style/css';
 import 'antd/lib/alert/style/css';
+import 'antd/lib/modal/style/css';
 import './index.css';
 import './styles/theme/default.css';
 import App from './App';

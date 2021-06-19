@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { amountTypes, DISCOUNT_QUERY_PARAMETER_NAME, DISCOUNT_UUID_QUERY_PARAMETER_NAME } from '../../config/constants';
 import { useLocation } from 'react-router-dom';
 import { calculateDiscountedPrice, getPercent, floatNum } from '../../utils/helpers';
+import { useSelector } from '../../redux/store';
 
 export default (businessData, priceSubTotal, shoppingCartItems) => {
   const { search } = useLocation();
@@ -27,6 +28,9 @@ export default (businessData, priceSubTotal, shoppingCartItems) => {
     title: '',
     minimumPurchase: 0
   });
+
+  const greenDiningCount = useSelector(state => state.greenDining.selectedCount)
+
   const handleTipsChange = (value) => {
     const totalBeforeTaxes = discountedPriceSubTotal + +(+extraFee.value);
     setTips({
@@ -56,9 +60,11 @@ export default (businessData, priceSubTotal, shoppingCartItems) => {
             applicableItemUUID,
             applicableGroup,
             expirationDate, // TODO: handle this case
+            isGreenDiningDeal,
           } = discountItem;
           if (!applicableItemUUID && !applicableGroup) {
             setOrderDiscount({
+              isGreenDiningDeal,
               discount,
               type,
               title,
@@ -74,7 +80,11 @@ export default (businessData, priceSubTotal, shoppingCartItems) => {
     const { discount, type, title, minimumPurchase } = orderDiscount;
 
     if (discount && priceSubTotal >= minimumPurchase && type) {
-      setDiscountedPriceSubTotal(calculateDiscountedPrice(type, discount, priceSubTotal));
+      setDiscountedPriceSubTotal(calculateDiscountedPrice({ 
+        discountItem: orderDiscount, 
+        price: priceSubTotal,
+        greenDiningCount,
+      }));
     } else {
       setDiscountedPriceSubTotal(priceSubTotal);
     }

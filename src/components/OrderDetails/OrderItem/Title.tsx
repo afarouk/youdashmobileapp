@@ -1,8 +1,17 @@
 import React from 'react';
-import PropTypes from 'prop-types';
+
 import {getSubItemsString} from "../../../utils/helpers";
 
-export const Title = ({
+type Props = {
+  itemName: string,
+  hasVersions: boolean,
+  itemVersions: any,
+  itemVersion: any,
+  itemOptions: any,
+  isPromoCode?: boolean,
+}
+
+export const Title: React.FC<Props> = ({
   itemName,
   hasVersions,
   itemVersions,
@@ -21,8 +30,3 @@ export const Title = ({
   </span>
 );
 
-Title.propTypes = {
-  itemName: PropTypes.string,
-  hasVersions: PropTypes.bool,
-  itemOptions: PropTypes.object
-};

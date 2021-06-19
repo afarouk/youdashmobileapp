@@ -1,3 +1,8 @@
+@font-face {
+  font-family: DsDigital;
+  src: url('../../assets/fonts/ds_digital/DS-DIGI.TTF');
+}
+
 * {
   font-family: 'Poppins', sans-serif !important;
 }
