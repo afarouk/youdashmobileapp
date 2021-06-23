@@ -43,16 +43,6 @@ export const useInitGreenDining = () => {
     params.set(GREEN_DINING_DISABLED_QUERY_PARAMETER_NAME, '1');
     window.history.replaceState({}, '', `${window.location.pathname}?${params}`)
 
-    // params.set(GREEN_DINING_DISABLED_QUERY_PARAMETER_NAME, '1');
-
-    // const greenDiningLocalStorage = new GreenDiningLocalStorage();
-
-    // if (greenDiningLocalStorage.isDealAlreadyUsed(simpleOrderUUID, discountUUID) && false) { // TODO: remove false after testing
-    //   return;
-    // }
-
-    // greenDiningLocalStorage.addUsedDeal(simpleOrderUUID, discountUUID); // save deal in local storage to not show again later
-
     dispatch(setSouuid(simpleOrderUUID));
     dispatch(setDiscountUUID(discountUUID));
     

@@ -40,7 +40,6 @@ export const useRouting = () => {
       urlParams.set(param.name, param.value);
     });
 
-    console.log(urlParams, history);
 
     // history.replace(`?${urlParams}`)
   }
