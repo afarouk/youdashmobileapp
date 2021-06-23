@@ -47,6 +47,8 @@ export const useGreenDiningCancel = () => {
 
     if (orderingState === ORDERING_STATE.NOT_STARTED) {
       dispatch(cancelGreenDiningOrder());
+      dispatch(removeBusinessDataDiscount(discountUUID));
+      dispatch(removeShoppingCartDiscount(discountUUID));
     }
 
     goTo({ routeName: ROUTE_NAME.LANDING });

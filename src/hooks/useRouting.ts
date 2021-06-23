@@ -23,7 +23,6 @@ type GoToArgs = {
 }
 
 export const useRouting = () => {
-  const { search } = useLocation();
   const history = useHistory();
   const { businessUrlKey } = useParams<any>();
 
@@ -31,8 +30,20 @@ export const useRouting = () => {
   const goTo = ({ routeName }: GoToArgs) => {
     const route = routes[routeName];
 
-    history.push(`/${businessUrlKey}${route.url}${search}`);
+    history.push(`/${businessUrlKey}${route.url}${history.location.search}`);
   }
 
-  return { goTo };
+  const addQueryParams = ({ params, replace = false }: any) => {
+    // TODO: implement it
+    const urlParams = new URLSearchParams(history.location.search);
+    params.forEach((param: any) => {
+      urlParams.set(param.name, param.value);
+    });
+
+    console.log(urlParams, history);
+
+    // history.replace(`?${urlParams}`)
+  }
+
+  return { goTo, addQueryParams };
 }

@@ -1,16 +1,17 @@
 
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
+import { useHistory } from 'react-router';
 
 import { 
   SIMPLE_ORDER_UUID_QUERY_PARAMETER_NAME,
   DISCOUNT_UUID_QUERY_PARAMETER_NAME,
   EXPIRATION_DATE_QUERY_PARAMETER_NAME,
+  GREEN_DINING_DISABLED_QUERY_PARAMETER_NAME,
 } from '../../config/constants';
 import { getGreenDiningDetails, setDiscountUUID, setSouuid } from '../../redux/slices/greenDiningSlice';
 
 import { useSelector } from '../../redux/store';
-import { GreenDiningLocalStorage } from '../../utils/greenDining/GreenDiningLocalStorage';
 
 export const useInitGreenDining = () => {
   const dispatch = useDispatch();
@@ -35,13 +36,22 @@ export const useInitGreenDining = () => {
       return;
     }
 
-    const greenDiningLocalStorage = new GreenDiningLocalStorage();
-
-    if (greenDiningLocalStorage.isDealAlreadyUsed(simpleOrderUUID, discountUUID) && false) { // TODO: remove false after testing
+    if (params.get(GREEN_DINING_DISABLED_QUERY_PARAMETER_NAME)) {
       return;
     }
 
-    greenDiningLocalStorage.addUsedDeal(simpleOrderUUID, discountUUID); // save deal in local storage to not show again later
+    params.set(GREEN_DINING_DISABLED_QUERY_PARAMETER_NAME, '1');
+    window.history.replaceState({}, '', `${window.location.pathname}?${params}`)
+
+    // params.set(GREEN_DINING_DISABLED_QUERY_PARAMETER_NAME, '1');
+
+    // const greenDiningLocalStorage = new GreenDiningLocalStorage();
+
+    // if (greenDiningLocalStorage.isDealAlreadyUsed(simpleOrderUUID, discountUUID) && false) { // TODO: remove false after testing
+    //   return;
+    // }
+
+    // greenDiningLocalStorage.addUsedDeal(simpleOrderUUID, discountUUID); // save deal in local storage to not show again later
 
     dispatch(setSouuid(simpleOrderUUID));
     dispatch(setDiscountUUID(discountUUID));

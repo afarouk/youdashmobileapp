@@ -122,6 +122,7 @@ export const DISCOUNT_QUERY_PARAMETER_NAME = 't';
 export const DISCOUNT_QUERY_PARAMETER_VALUE = 'd';
 
 export const GREEN_DINING_BLOCK_DURATION_SEC = 10;
+export const GREEN_DINING_DISABLED_QUERY_PARAMETER_NAME = 'gddqpn';
 export const GREEN_DINING_LOCAL_STORAGE_KEY = 'GREEN_DINING';
 export const GREEN_DINING_USED_DEALS_MAX_COUNT = 30; // how many green dining deals are saved in history (we don't want to show green dining deal if it's in the history)
 
