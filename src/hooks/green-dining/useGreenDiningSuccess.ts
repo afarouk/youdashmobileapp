@@ -1,5 +1,6 @@
 import { useDispatch } from "react-redux";
-import { removeDiscount } from "../../redux/slices/business";
+import { removeDiscount as removeShoppingCartDiscount } from "../../redux/slices/shoppingCart";
+import { removeDiscount as removeBusinessDataDiscount } from "../../redux/slices/business";
 import { successGreenDiningOrder } from "../../redux/slices/greenDiningSlice";
 import { clearCart } from "../../redux/slices/shoppingCart";
 import { useSelector } from "../../redux/store"
@@ -15,7 +16,8 @@ export const useGreenDiningSuccess = () => {
   const greenDiningSuccess = () => {
     if (orderingState === ORDERING_STATE.STARTED && blockUUID) {
       dispatch(clearCart());
-      dispatch(removeDiscount(discountUUID));
+      dispatch(removeBusinessDataDiscount(discountUUID));
+      dispatch(removeShoppingCartDiscount(discountUUID));
       dispatch(successGreenDiningOrder());
     }
   }

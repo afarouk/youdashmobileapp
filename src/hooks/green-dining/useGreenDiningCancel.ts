@@ -1,5 +1,6 @@
 import { useDispatch } from "react-redux";
-import { removeDiscount } from "../../redux/slices/business";
+import { removeDiscount as removeShoppingCartDiscount } from "../../redux/slices/shoppingCart";
+import { removeDiscount as removeBusinessDataDiscount } from "../../redux/slices/business";
 import { cancelGreenDiningBlock, cancelGreenDiningOrder } from "../../redux/slices/greenDiningSlice";
 import { clearCart } from "../../redux/slices/shoppingCart";
 import { useSelector } from "../../redux/store"
@@ -22,17 +23,34 @@ export const useGreenDiningCancel = () => {
       }))
     }
   }
-  
-  const cancelGreenDining = () => {
+
+  // TODO: do we want to use it?
+  const restartGreenDining = () => {
     if (orderingState === ORDERING_STATE.STARTED) {
       dispatch(clearCart());
-      dispatch(removeDiscount(discountUUID));
-      dispatch(cancelGreenDiningOrder());
+      dispatch(removeBusinessDataDiscount(discountUUID));
+      dispatch(removeShoppingCartDiscount(discountUUID));
       sendBackendCancellation();
     }
 
     goTo({ routeName: ROUTE_NAME.LANDING });
   }
+  
+  const cancelGreenDining = () => {
+    if (orderingState === ORDERING_STATE.STARTED) {
+      dispatch(clearCart());
+      dispatch(removeBusinessDataDiscount(discountUUID));
+      dispatch(removeShoppingCartDiscount(discountUUID));
+      dispatch(cancelGreenDiningOrder());
+      sendBackendCancellation();
+    }
 
-  return { cancelGreenDining, sendBackendCancellation };
+    if (orderingState === ORDERING_STATE.NOT_STARTED) {
+      dispatch(cancelGreenDiningOrder());
+    }
+
+    goTo({ routeName: ROUTE_NAME.LANDING });
+  }
+
+  return { cancelGreenDining, sendBackendCancellation, restartGreenDining };
 }

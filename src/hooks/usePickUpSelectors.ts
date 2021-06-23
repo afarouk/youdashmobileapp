@@ -115,5 +115,5 @@ export default (businessData: BusinessData) => {
     }
   }, [])
 
-  return [orderPickUp, dayOptions, timeOptions, handleTimeChange, handleDayChange];
+  return {orderPickUp, dayOptions, timeOptions, handleTimeChange, handleDayChange, timeZone};
 };

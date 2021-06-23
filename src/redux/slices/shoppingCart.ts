@@ -63,6 +63,7 @@ type ShoppingCartState = {
   orderPickUp: {
     deliveryType: DeliveryType,
     date?: any,
+    time?: string,
   },
   tableDetails: null | TableDetails,
   items: ShoppingCartItem[],
@@ -163,6 +164,10 @@ const shoppingCartSlice = createSlice({
     addDiscount: (state, action) => {
       state.discounts.byId[action.payload.id] = action.payload.discount;
       state.discounts.allIds.push(action.payload.id);
+    },
+    removeDiscount: (state, action) => {
+      delete state.discounts.byId[action.payload];
+      state.discounts.allIds = state.discounts.allIds.filter(id => id !== action.payload);
     },
     addGroupDiscount: (state, action) => {
       state.groupDiscounts.byId[action.payload.id] = action.payload.discount;
@@ -336,5 +341,6 @@ export const {
   setTableDetails,
   resetOrderError,
   setCheckoutMode,
+  removeDiscount,
 } = shoppingCartSlice.actions;
 export const shoppingCartReducer = shoppingCartSlice.reducer;
