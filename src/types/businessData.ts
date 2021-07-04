@@ -2,7 +2,7 @@ export type BusinessData = {
   pickUp: {
     dayPickUpTimes: DayPickUpTimes
     isOpen: any,
-    isOpenWarningMessage: any,
+    siteMessage?: string | null,
     address: {
       city: string | null,
       country: string  | null,

@@ -42,7 +42,7 @@ export const PickUp = memo(({ businessData, user }) => {
   const [openStatus, setOpenStatus] = useState('Open');
   const handleDeliveryTypeChange = (e) => setDeliveryType(e.target.value);
   const { openingHours } = businessData;
-  const { isOpenWarningMessage, isOpen, address } = businessData.pickUp;
+  const { siteMessage, isOpen, address } = businessData.pickUp;
 
   let timeZone = businessData?.pickUp?.address?.timeZone;
   const [today, setToday] = useState(null);
@@ -116,9 +116,9 @@ export const PickUp = memo(({ businessData, user }) => {
         </span>
         <span className="pickup-status primary-text">{openStatus}</span>
       </div>
-      {isOpenWarningMessage && (
+      {siteMessage && (
         <div className="pickup-line address">
-          <span>{isOpenWarningMessage}</span>
+          <span>{siteMessage}</span>
         </div>
       )}
     </Card>
