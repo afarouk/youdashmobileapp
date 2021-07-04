@@ -65,11 +65,11 @@ export const Routes = ({ user }) => {
             component={SignUpPage}
             pageTitle={routes.signUp.title}
           />
-          <PublicRoute
+          {/* <PublicRoute
             path="/:businessUrlKey/login"
             component={LoginPage}
             pageTitle={routes.login.title}
-          />
+          /> */}
           <PublicRoute
             path="/:businessUrlKey/shopping-cart/:itemIndex"
             component={ShoppingCartItemPage}
