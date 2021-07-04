@@ -30,7 +30,7 @@ export const useRouting = () => {
   const goTo = ({ routeName }: GoToArgs) => {
     const route = routes[routeName];
 
-    history.push(`/${businessUrlKey}${route.url}${history.location.search}`);
+    history.push(`/${businessUrlKey}${route.url}${window.location.search}`);
   }
 
   const addQueryParams = ({ params, replace = false }: any) => {
