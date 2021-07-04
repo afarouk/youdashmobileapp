@@ -15,6 +15,12 @@ export const SubTotal = ({
   return (
     <div className="subtotal">
       {/*<h4 className="font-size-lg primary-text">Gross total</h4>*/}
+      {extraFee.value ? (
+        <h5 className="flex">
+          <span>{extraFee.label ? extraFee.label : 'Extra Fee'}</span>
+          <span>${extraFee.value.toFixed(2)}</span>
+        </h5>
+      ) : null}
       <h5 className="flex">
         <span>Sub-total</span>
         <span className={`subtotal-price ${hasDiscount ? 'subtotal-price-with-discount' : ''}`}>
@@ -27,12 +33,6 @@ export const SubTotal = ({
           <span>${discountedPriceSubTotal.toFixed(2)}</span>
         </h5>
       )}
-      {extraFee.value ? (
-        <h5 className="flex">
-          <span>{extraFee.label ? extraFee.label : 'Extra Fee'}</span>
-          <span>${extraFee.value.toFixed(2)}</span>
-        </h5>
-      ) : null}
       {taxes.value && taxes.percent ? (
         <h5 className="flex">
           <span>Taxes {taxes.percent}%</span>
