@@ -5,6 +5,18 @@
   width: 100%;
 }
 
+.footer-fixed-cart-icon-container {
+  display: inline-flex !important;
+  position: relative;
+}
+
+.footer-fixed-cart-icon-badge {
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+
 .footer-fixed-cart-icon {
   font-size: 1.75rem;
+  margin-right: 0 !important;
 }
