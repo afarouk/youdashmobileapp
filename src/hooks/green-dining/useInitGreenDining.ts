@@ -1,7 +1,6 @@
 
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { useHistory } from 'react-router';
 
 import { 
   SIMPLE_ORDER_UUID_QUERY_PARAMETER_NAME,

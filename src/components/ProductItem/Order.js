@@ -1,8 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Alert, Button } from 'antd';
-import { PlusIcon } from '../Shared/Icons/Icons';
-import { MinusIcon } from '../Shared/Icons/Icons';
 import { ShareIcon } from '../Shared/Icons/Icons';
 import useNativeShare from "../../hooks/useNativeShare";
 
@@ -28,12 +26,12 @@ export const Order = ({
         </Button>
         <div className="product-order-counter">
           <span className="product-order-counter-label font-size-sm">Quantity</span>
-          <Button type="primary" shape="circle" onClick={onQtyMinus}>
-            <MinusIcon />
+          <Button type="primary" shape="round" onClick={onQtyMinus} >
+            -
           </Button>
           <span className="primary-text product-order-counter-quantity">{quantity}</span>
-          <Button type="primary" shape="circle" onClick={onQtyPlus}>
-            <PlusIcon />
+          <Button type="primary" shape="round" onClick={onQtyPlus}>
+            +
           </Button>
         </div>
       </div>

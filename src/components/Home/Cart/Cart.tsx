@@ -2,7 +2,7 @@ import React from 'react';
 
 import { ROUTE_NAME, useRouting } from '../../../hooks/useRouting';
 
-import { Button, Badge } from 'antd';
+import { Button } from 'antd';
 import { ShoppingCartIcon } from '../../Shared/Icons/Icons'
 
 import './Cart.css';
