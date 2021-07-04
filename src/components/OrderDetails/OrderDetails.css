@@ -40,6 +40,7 @@
 
 .order-details .tips {
   padding-bottom: 10px;
+  padding-top: 5px;
   width: 70%;
 }
 .order-details .tips h5 {
@@ -51,6 +52,21 @@
 .order-details .tips .other-amount span {
   font-size: 0.8rem;
 }
+.order-details .tips .ant-slider-handle {
+  background-color: var(--primary-color);
+  min-width: 40px;
+  max-width: 70px;
+  width: auto;
+  height: 25px;
+  padding: 0 8px;
+  border-radius: 4px;
+  z-index: 5;
+  opacity: 1;
+  margin-top: -15px;
+  color: #fff;
+  text-align: center;
+}
+
 /*.subtotal {
   margin-bottom: 0;
 }*/
