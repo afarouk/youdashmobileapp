@@ -32,7 +32,7 @@ const initialState: BusinessState = {
     pickUp: {
       dayPickUpTimes: [],
       isOpen: null,
-      isOpenWarningMessage: null,
+      siteMessage: null,
       address: {
         city: null,
         country: null,
@@ -225,12 +225,13 @@ const mapBusinessData = (urlKey: any, data: any): BusinessState['data'] => {
     highLightedItem,
     notification,
     priority,
-    polls
+    polls,
+    siteMessage,
   } = data.siteletteDataModel;
 
   const { catalog, hasGroupsBasedOnDay } = getCatalog(data.catalogs);
   const groupsSrc = catalog.groups;
-  const { isOpen, isOpenWarningMessage, catalogId } = catalog;
+  const { isOpen, catalogId } = catalog;
 
   let onlineOrder = services.onlineOrder;
 
@@ -251,7 +252,7 @@ const mapBusinessData = (urlKey: any, data: any): BusinessState['data'] => {
       }
     }),
     isOpen,
-    isOpenWarningMessage,
+    siteMessage,
     address: {
       city,
       country,
