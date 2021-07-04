@@ -22,6 +22,8 @@ export type BlockGreenDiningOrderResponse = {
   blockUUID: string,
   blockCount: number,
   secondsToPay: number,
+  showMessage: boolean,
+  message: string,
 }
 
 export type CancelGreenDiningBlockParams = {
