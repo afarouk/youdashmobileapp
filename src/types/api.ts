@@ -1,29 +1,10 @@
+import { GreenDiningDetails } from "./greenDining";
+
 export type GetGreenDiningDetailsParams = {
   serviceAccommodatorId: string,
   serviceLocationId: string,
   souuid: string,
   discountUUID: string,
-}
-
-
-export type GreenDiningDetails = {
-  discountMetaData: Record<string, any> & {
-    maxUseCount: number,
-    discountUUID: string,
-    type: string, // TODO: ENUM here
-    discount: number,
-    title: string,
-    description: string, 
-    applicableOrderUUID: string,
-    isGreenDiningDeal: boolean,
-    imageURL: string,
-  },
-  // TODO: work on this type -> it's general order history type ???
-  sampleOrder: {
-    items: any[],
-    [key: string]: any,
-  },
-  lastAvailableCount: number,
 }
 
 export type  GetGreenDiningDetailsResponse = GreenDiningDetails;

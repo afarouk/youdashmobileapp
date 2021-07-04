@@ -7,10 +7,10 @@
   height: 35px;
   width: 90px;
   color: #3ef800;
-  font-size: 1.5rem;
+  font-size: 1.1rem;
   margin-left: 0.75rem;
   font-variant-numeric: tabular-nums;
-  font-family: DsDigital, sans-serif !important;
+  font-family: DSEG7Modern, sans-serif !important;
 }
 
 .timer-root--expired {

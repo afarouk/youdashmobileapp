@@ -9,14 +9,14 @@ import {
   CancelGreenDiningBlockParams, 
   CancelGreenDiningBlockResponse, 
   GetGreenDiningDetailsParams, 
-  GreenDiningDetails,
 } from '../../types/api'
-import { ORDERING_STATE } from '../../types/greenDining';
+import { GreenDiningDetails, ORDERING_STATE } from '../../types/greenDining';
 
 type GreenDiningState = {
   data: GreenDiningDetails | null,
   loading: boolean,
   error: boolean,
+  errorMessage: string | null,
   orderingState: ORDERING_STATE,
 
   souuid: string,
@@ -37,6 +37,7 @@ const initialState: GreenDiningState = {
   data: null,
   loading: false,
   error: false,
+  errorMessage: null,
   orderingState: ORDERING_STATE.NOT_STARTED,
 
   souuid: '',
@@ -58,9 +59,15 @@ export const getGreenDiningDetails = createAsyncThunk<GreenDiningDetails, GetGre
   async (params, { rejectWithValue }) => {
     try {
       const response = await greenDiningAPI.getGreenDiningDetails(params)
+
+      // TODO: validae pickup time here !!!
+      if (false) {
+        throw new Error('Green dining pick up time unavailable')
+      }
+
       return response.data;
     } catch (error) {
-      return rejectWithValue(error);
+      return rejectWithValue(error.message || error);
     }
   }
 )
@@ -95,6 +102,11 @@ export const cancelGreenDiningBlock = createAsyncThunk<CancelGreenDiningBlockRes
     const state: any = getState();
     const serviceAccommodatorId = state.business.data.serviceAccommodatorId;
     const serviceLocationId = state.business.data.serviceLocationId;
+    const blockUUID = state.greenDining.blockUUID;
+
+    if (!blockUUID) {
+      return;
+    }
 
     try {
       const response = await greenDiningAPI.cancelGreenDiningBlock({
@@ -155,6 +167,7 @@ const greenDiningSlice = createSlice({
     .addCase(getGreenDiningDetails.rejected, (state, action) => {
       state.loading = false;
       state.error = true;
+      state.errorMessage = (action.payload as string) || GENERIC_ERROR_MESSAGE;
     })
 
     .addCase(blockGreenDiningOrder.pending, (state, action) => {

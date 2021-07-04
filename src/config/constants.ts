@@ -115,12 +115,16 @@ export const CARD_CONNECT_IFRAME_URL = IS_DEMO
 
 
 export const TABLE_PATH_QUERY_PARAMETER_NAME = 'tablepath';
+export const EXPIRATION_DATE_QUERY_PARAMETER_NAME = 'expdt';
 export const SIMPLE_ORDER_UUID_QUERY_PARAMETER_NAME = 'souuid';
 export const DISCOUNT_UUID_QUERY_PARAMETER_NAME = 'u';
 export const DISCOUNT_QUERY_PARAMETER_NAME = 't';
 export const DISCOUNT_QUERY_PARAMETER_VALUE = 'd';
 
-export const GREEN_DINING_BLOCK_DURATION_SEC = 180;
+export const GREEN_DINING_BLOCK_DURATION_SEC = 300;
+export const GREEN_DINING_DISABLED_QUERY_PARAMETER_NAME = 'gddqpn';
+export const GREEN_DINING_LOCAL_STORAGE_KEY = 'GREEN_DINING';
+export const GREEN_DINING_USED_DEALS_MAX_COUNT = 30; // how many green dining deals are saved in history (we don't want to show green dining deal if it's in the history)
 
 export enum DeliveryType {
   UNDEFINED = 'UNDEFINED',

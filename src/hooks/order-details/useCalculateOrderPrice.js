@@ -30,6 +30,7 @@ export default (businessData, priceSubTotal, shoppingCartItems) => {
   });
 
   const greenDiningCount = useSelector(state => state.greenDining.selectedCount)
+  const discounts = useSelector(state => state.shoppingCart.discounts.byId)
 
   const handleTipsChange = (value) => {
     const totalBeforeTaxes = discountedPriceSubTotal + +(+extraFee.value);
@@ -42,14 +43,13 @@ export default (businessData, priceSubTotal, shoppingCartItems) => {
   };
 
   useEffect(() => {
-    if (businessData) {
+    if (discounts) {
       const urlParams = new URLSearchParams(search);
       const type = urlParams.get(DISCOUNT_QUERY_PARAMETER_NAME);
       const uuid = urlParams.get(DISCOUNT_UUID_QUERY_PARAMETER_NAME);
-      const { discounts } = businessData;
 
       if (type && uuid) {
-        const discountItem = discounts.filter(({ discountUUID }) => discountUUID === uuid)[0];
+        const discountItem = discounts[uuid];
         
         if (discountItem) {
           const {
@@ -74,7 +74,7 @@ export default (businessData, priceSubTotal, shoppingCartItems) => {
         }
       }
     }
-  }, [businessData]);
+  }, [discounts]);
 
   useEffect(() => {
     const { discount, type, title, minimumPurchase } = orderDiscount;
