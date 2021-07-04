@@ -18,7 +18,7 @@ export const Loyalty = memo(({ loyaltyAndOrderHistory }) => {
   } = loyaltyForUser.loyaltyStatus;
   return (
     <Card className="bg-primary loyalty">
-      <h4 className="font-size-lg primary-text">My Rewards</h4>
+      <h4 className="font-size-lg primary-text">Loyalty</h4>
       <p className="primary-text font-size-lg">"{programName}"</p>
       <div className="loyalty__progress">
         <div className="loyalty__progress-bar">
