@@ -102,7 +102,7 @@ export const orderAPI = {
         'Content-Type': 'application/json'
       },
       withCredentials: true,
-      url: `/apptsvc/rest/retail/createAdhocOrderWeb?${additionalData}`,
+      url: `/apptsvc/rest/retail/createAdhocOrderWeb?${searchParams}`,
       data: data,
     });
   },
