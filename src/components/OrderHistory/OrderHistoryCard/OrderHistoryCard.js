@@ -31,8 +31,10 @@ export const OrderHistoryCard = ({
   let { businessUrlKey } = useParams();
   const [onShare] = useNativeShare({});
 
-  const handleOrderStatus = () =>
+  const handleOrderStatus = () => {
     history.push(`/${businessUrlKey}/order-status/${orderUUID}${search}`);
+  }
+    
   const handleShare = () => onShare();
   const handleReOrder = () => onReOrder(items);
 
@@ -50,9 +52,9 @@ export const OrderHistoryCard = ({
             </li>
           ))}
         </ul>
-        <Button icon={<InfoCircleIcon />} onClick={handleOrderStatus} type="primary">
+        {/* <Button icon={<InfoCircleIcon />} onClick={handleOrderStatus} type="primary">
           Status
-        </Button>
+        </Button> */}
         {/* {orderStatus && (
           <div className={`flex status status-${status}`}>
             <span className="status-title">{orderStatus.title}</span>
