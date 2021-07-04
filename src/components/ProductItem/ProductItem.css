@@ -103,6 +103,17 @@
   margin-left: 0.8em;
 }
 
+.product-order .product-order-counter .ant-btn {
+  padding-left: 0.75rem;
+  padding-right: 0.75rem;
+}
+
+.product-order .product-order-counter .ant-btn span {
+  font-weight: 500;
+  font-size: 1.75rem;
+  line-height: 1.3rem;
+}
+
 .product-order-counter-qty {
   min-width: 20px;
   text-align: center;
@@ -128,6 +139,23 @@
 .product-card__item-versions .ant-select-selection-item {
   color: #0097a7 !important;
 }
+
+.product-card__item-versions .choice, .product-row .choice {
+  margin-bottom: 10px;
+}
+
+.product-card__item-versions .ant-radio-inner, .product-row .ant-radio-inner {
+  border-color: #bbb;
+  width: 18px;
+  height: 18px;
+}
+
+.product-card__item-versions .ant-radio-inner:after, 
+  .product-row .ant-radio-inner:after {
+    width: 10px;
+    height: 10px;
+  }
+
 .options-circle {
   display: inline-block;
   width: 50px;
