@@ -6,13 +6,13 @@ import { addCartItem } from '../redux/slices/shoppingCart';
 import { useDispatch } from 'react-redux';
 import usePreventOrdering from '../hooks/core/usePreventOrdering';
 import useGetProductItem from '../hooks/product-item/useGetProductItem';
+import { ROUTE_NAME, useRouting } from '../hooks/useRouting';
 
 const ProductItemPage = ({ businessData }) => {
   const [preventOrdering] = usePreventOrdering(businessData);
   const [item] = useGetProductItem(businessData);
   const { allowItemComments } = businessData.onlineOrder;
-  const { search } = useLocation();
-  const { businessUrlKey } = useParams();
+  const { goTo } = useRouting();
   const history = useHistory();
   const dispatch = useDispatch();
 
@@ -27,7 +27,7 @@ const ProductItemPage = ({ businessData }) => {
 
   const handleAddToCart = () => {
     dispatch(addCartItem(productItem));
-    history.push(`/${businessUrlKey}/order-details${search}`);
+    goTo({ routeName: ROUTE_NAME.LANDING });
   };
 
   return productItem ? (
