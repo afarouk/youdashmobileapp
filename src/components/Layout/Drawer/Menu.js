@@ -66,8 +66,8 @@ export const MainMenu = ({ user, onClose, onLogout }) => {
   const { businessUrlKey } = useParams();
 
   return (
-    <Menu mode="inline">
-      {menuItems.map(({ title, path, icon, subItems, authRequired, onClickAction }, index) => {
+    <Menu mode="inline" selectable={false}>
+      {menuItems.map(({ title, path, url, icon, subItems, authRequired, onClickAction, target }, index) => {
         if (authRequired && !user) return null;
         const props = {};
         if (onClickAction) {
@@ -75,6 +75,11 @@ export const MainMenu = ({ user, onClose, onLogout }) => {
         } else {
           props.onClick = onClose;
         }
+
+        if (target === '_blank') {
+          props.onClick = undefined;
+        }
+
         return subItems ? (
           <SubMenu
             key={index}
@@ -93,7 +98,10 @@ export const MainMenu = ({ user, onClose, onLogout }) => {
           </SubMenu>
         ) : (
           <Menu.Item key={index} icon={icon} {...props}>
-            {path ? <Link to={`/${businessUrlKey}${path}${search}`}>{title}</Link> : title}
+            {target === '_blank'
+              ? <a href={url} target={target}>{title}</a>
+              : path ? <Link to={`/${businessUrlKey}${path}${search}`} target={target}>{title}</Link> : title
+            }
           </Menu.Item>
         );
       })}
