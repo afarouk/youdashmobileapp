@@ -1,5 +1,6 @@
 import { MouseEventHandler, useEffect } from "react";
 import { useDispatch } from "react-redux";
+import { Modal } from 'antd';
 import times from 'lodash/times';
 
 import { GREEN_DINING_BLOCK_DURATION_SEC } from "../../config/constants";
@@ -12,14 +13,18 @@ import { ROUTE_NAME, useRouting } from "../useRouting";
 import { clearCart } from "../../redux/slices/shoppingCart";
 import { ORDERING_STATE } from "../../types/greenDining";
 import { getReadableTime } from "../../utils/helpers";
+import { useGreenDiningCancel } from "./useGreenDiningCancel";
 
 export const useGreenDining = () => {
   const dispatch = useDispatch();
   const { reorderItems } = useReorder();
   const { goTo } = useRouting();
+  const { cancelGreenDining } = useGreenDiningCancel();
 
   const greenDiningInfo = useSelector(state => state.greenDining.data);
   const blockUUID = useSelector(state => state.greenDining.blockUUID);
+  const blockShowMessage = useSelector(state => state.greenDining.blockShowMessage);
+  const blockMessage = useSelector(state => state.greenDining.blockMessage);
   const orderingState = useSelector(state => state.greenDining.orderingState);
   const selectedCount = useSelector(state => state.greenDining.selectedCount);
   const loading = useSelector(state => state.greenDining.blockOrderLoading);
@@ -37,6 +42,11 @@ export const useGreenDining = () => {
   })
 
   useEffect(() => {
+    if (blockShowMessage) {
+      return;
+    }
+
+    // start green dining order
     if (blockUUID && greenDiningInfo && orderingState === ORDERING_STATE.NOT_STARTED) {
       dispatch(startGreenDiningOrdering());
       dispatch(clearCart());
@@ -50,7 +60,17 @@ export const useGreenDining = () => {
       reorderItems(items);
       goTo({ routeName: ROUTE_NAME.CART });
     }
-  }, [blockUUID, orderingState])
+  }, [blockUUID, orderingState, blockShowMessage])
+
+  useEffect(() => {
+    if (blockShowMessage) {
+      Modal.info({
+        title: blockMessage,
+        onOk: cancelGreenDining,
+        centered: true,
+      })
+    }
+  }, [blockShowMessage, blockMessage])
 
   const maxCount = greenDiningInfo?.lastAvailableCount || 0
 

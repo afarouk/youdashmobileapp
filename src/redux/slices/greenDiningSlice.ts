@@ -24,6 +24,8 @@ type GreenDiningState = {
 
   selectedCount: number,
   blockUUID: string | null,
+  blockShowMessage: boolean,
+  blockMessage: string,
   blockOrderLoading: boolean,
   blockOrderError: boolean,
   blockOrderErrorMessage: string | null,
@@ -45,6 +47,8 @@ const initialState: GreenDiningState = {
 
   selectedCount: 1,
   blockUUID: null,
+  blockShowMessage: false,
+  blockMessage: '',
   blockOrderLoading: false,
   blockOrderError: false,
   blockOrderErrorMessage: null,
@@ -87,7 +91,7 @@ export const blockGreenDiningOrder = createAsyncThunk<BlockGreenDiningOrderRespo
         serviceAccommodatorId,
         serviceLocationId,
       });
-      return response.data
+      return response.data;
     } catch (error) {
       return rejectWithValue(error);
     }
@@ -177,6 +181,8 @@ const greenDiningSlice = createSlice({
     .addCase(blockGreenDiningOrder.fulfilled, (state, action) => {
       state.blockOrderLoading = false;
       state.blockUUID = action.payload.blockUUID;
+      state.blockShowMessage = action.payload.showMessage;
+      state.blockMessage = action.payload.message;
     })
     .addCase(blockGreenDiningOrder.rejected, (state, action) => {
       state.blockOrderLoading = false;
