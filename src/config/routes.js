@@ -42,13 +42,14 @@ export const routes = {
     title: 'Payment'
   },
   terms: {
-    path: '/terms-and-conditions',
+    target: '_blank',
+    url: 'https://chalkboardstoday.com/termsandconditions',
     title: 'Terms & Conditions'
   },
-  help: {
-    path: '/help',
-    title: 'Help'
-  },
+  // help: {
+  //   path: '/help',
+  //   title: 'Help'
+  // },
   login: {
     title: 'Login',
     path: '/login'
