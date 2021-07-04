@@ -1,3 +1,25 @@
 .order-timeline__item--active .ant-timeline-item-head {
-  background-color: var(--primary-color);
+  /* background-color: var(--primary-color); */
+}
+
+.order-status__timeline .ant-timeline-item-tail {
+  display: none;
+}
+
+.order-timeline__item-icon {
+  width: 30px;
+  max-width: none;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.order-timeline__item .ant-timeline-item-content {
+  min-height: 40px;
+  padding-left: 10px;
+}
+
+.order-timeline__item--future {
+  color: grey;
 }

@@ -14,11 +14,6 @@ export const Order = ({
   isShoppingCart,
   preventOrdering
 }) => {
-  const shareData = {
-    title: 'YouDash French Bakery',
-    text: 'YouDash French Bakery - the best bakery in the world!',
-    url: 'https://youdash.co/french-bakery'
-  };
   const [onShare] = useNativeShare();
 
   return (
@@ -26,7 +21,7 @@ export const Order = ({
       <div className="flex product-order__row">
         <Button
           shape="circle"
-          onClick={onShare}
+          onClick={() => onShare()}
           className="product-order__share-btn font-size-md"
         >
           <ShareIcon />

@@ -19,6 +19,7 @@ const initialState: BusinessState = {
     saslName: '',
     bannerImageURL: null,
     saslIcon: null,
+    storeFrontImageURL: '',
     themeColors: null,
     serviceStatus: null,
     ogTags: null,
@@ -227,6 +228,7 @@ const mapBusinessData = (urlKey: any, data: any): BusinessState['data'] => {
     priority,
     polls,
     siteMessage,
+    storeFrontImageURL,
   } = data.siteletteDataModel;
 
   const { catalog, hasGroupsBasedOnDay } = getCatalog(data.catalogs);
@@ -302,7 +304,8 @@ const mapBusinessData = (urlKey: any, data: any): BusinessState['data'] => {
     groupsById,
     itemsById,
     hasGroupsBasedOnDay,
-    catalogs: data.catalogs
+    catalogs: data.catalogs,
+    storeFrontImageURL,
   };
 };
 

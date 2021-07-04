@@ -54,3 +54,8 @@
   position: relative;
   top: 7px;
 }
+
+.order-status__directions-image {
+  width: 100%;
+  height: auto;
+}

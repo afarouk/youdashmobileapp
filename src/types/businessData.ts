@@ -14,6 +14,7 @@ export type BusinessData = {
     }
   },
   discounts: any[],
+  storeFrontImageURL: string,
   [key: string]: any,
 }
 

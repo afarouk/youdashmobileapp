@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { Container } from '../Shared/Container/Container';
 import { PickUp } from './PickUp';
 import { Directions } from './Directions';
@@ -7,14 +6,27 @@ import { OrderTimeLine } from './OrderTimeLine';
 import { OrderBarcode } from './OrderBarcode';
 import './OrderStatus.css';
 
-export const OrderStatus: React.FC<any> = ({
+type Props = {
+  user: any,
+  order: any,
+  mapCoordinates: {
+    latitude: number,
+    longitude: number,
+  },
+  address: string,
+  isDemo: boolean,
+  saslName: string,
+  storeFrontImageURL: string,
+}
+
+export const OrderStatus: React.FC<Props> = ({
   user,
   order,
-  mobileOrderStatuses,
   mapCoordinates,
   address,
   isDemo,
   saslName,
+  storeFrontImageURL,
 }) => {
   const { orderId, orderStatus } = order || {};
   const { latitude, longitude } = mapCoordinates;
@@ -28,15 +40,11 @@ export const OrderStatus: React.FC<any> = ({
         address={address}
         saslName={saslName}
         isDemo={isDemo}
+        storeFrontImageURL={storeFrontImageURL}
       />
       <OrderBarcode value={`ocg_${orderId ? orderId : ''}`} />
       <OrderTimeLine orderStatus={orderStatus} />
     </Container>
   );
 };
-OrderStatus.propTypes = {
-  user: PropTypes.object,
-  order: PropTypes.object,
-  mobileOrderStatuses: PropTypes.object,
-  mapCoordinates: PropTypes.object
-};
+
