@@ -111,9 +111,22 @@ const initialState: ShoppingCartState = {
   checkoutMode: CheckoutMode.USER_DATA,
 };
 
-export const createOrder = createAsyncThunk('order/create', async (orderData, { rejectWithValue }) => {
+export const createOrder = createAsyncThunk('order/create', async (orderData, { rejectWithValue, getState }) => {
   try {
-    const response = await orderAPI.createOrder(orderData);
+    const state: any = getState();
+
+    const blockUUID = state.greenDining.blockUUID;
+    const blockCount = state.greenDining.selectedCount;
+
+    let additionalData;
+    if (blockUUID && blockCount) {
+      additionalData = {
+        blockUUID,
+        blockCount,
+      }
+    }
+
+    const response = await orderAPI.createOrder(orderData, additionalData);
     return response.data;
   } catch (err) {
     return rejectWithValue(err);
