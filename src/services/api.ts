@@ -81,17 +81,31 @@ export const userAPI = {
     })
 };
 
+type CreateOrderAdditionalData = {
+  blockUUID: string,
+  blockCount: number,
+}
+
 export const orderAPI = {
-  createOrder: (data: any) =>
-    request({
+  createOrder: (data: any, additionalData?: CreateOrderAdditionalData) => {
+    const searchParams = new URLSearchParams();
+    searchParams.set('UID', data.uid);
+
+    if (additionalData) {
+      searchParams.set('blockUUID', additionalData.blockUUID);
+      searchParams.set('blockCount', additionalData.blockCount.toString());
+    }
+
+    return request({
       method: 'post',
       headers: {
         'Content-Type': 'application/json'
       },
       withCredentials: true,
-      url: `/apptsvc/rest/retail/createAdhocOrderWeb?UID=${data.uid}`,
-      data: data
-    }),
+      url: `/apptsvc/rest/retail/createAdhocOrderWeb?${additionalData}`,
+      data: data,
+    });
+  },
   getOrderStatus: (params: any) =>
     request.get(`/apptsvc/rest/retail/retrieveOrderStatusData`, {
       params
