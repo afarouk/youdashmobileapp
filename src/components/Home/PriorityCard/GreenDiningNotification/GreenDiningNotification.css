@@ -1,12 +1,45 @@
+.green-dining-notification-modal .ant-modal-content {
+  background: transparent;
+  user-select: none;
+}
+
+.green-dining-notification-modal .anticon-close svg {
+  font-size: 1.5rem;
+  margin-right: -0.75rem;
+}
+
+.green-dining-notification {
+  padding-top: 40px;
+}
+
+
+.green-dining-notification img {
+  width: 100%;
+  height: auto;
+}
+
+.green-dining-notification__pickup {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.green-dining-notification__pickup strong {
+  color: #ff4d4f;
+}
+
 .green-dining-notification__form-wrapper {
   display: flex;
   justify-content: space-between;
   margin-top: 30px;
-  padding: 20px 20% 45px;
+  padding: 20px 0 45px;
 }
 
 .green-dining-notification__counter {
   position: relative;
+  margin-left: auto;
+  margin-right: 1.5rem;
+  display: flex;
+  align-items: center;
 }
 
 .green-dining-notification__arrow-up, .green-dining-notification__arrow-down {
@@ -21,24 +54,26 @@
 }
 
 .green-dining-notification__arrow-up {
-  top: -38px;
-  border-width: 0 20px 32px 20px;
+  top: -25px;
+  border-width: 0 15px 25px 15px;
   border-color: transparent transparent var(--primary-color) transparent;
 }
 
 .green-dining-notification__arrow-down {
-  bottom: -38px;
-  border-width: 32px 20px 0 20px;
+  bottom: -25px;
+  border-width: 25px 15px 0 15px;
   border-color: var(--primary-color) transparent transparent transparent;
 }
 
 .green-dining-notification__counter input {
   border: 2px solid var(--primary-color);
   outline: none;
-  width: 40px;
-  height: 40px;
+  width: 30px;
+  height: 30px;
   text-align: center;
   font-weight: bold;
+  user-select: none;
+  pointer-events: none;
 }
 
 .green-dining-notification__buy-button {

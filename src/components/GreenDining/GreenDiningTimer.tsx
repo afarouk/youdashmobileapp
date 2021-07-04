@@ -17,7 +17,6 @@ export const GreenDiningTimer = () => {
 
   useEffect(() => {
     const handlePopState = () => {
-      console.log('handlePopState')
       cancelGreenDining();
     }
     
@@ -26,7 +25,8 @@ export const GreenDiningTimer = () => {
   }, [])
 
   const handleGreenDiningExpire = () => {
-    // TODO: move it to hook
+    sendBackendCancellation();
+
     Modal.info({
       title: 'Session Expired',
       onOk: cancelGreenDining,

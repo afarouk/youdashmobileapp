@@ -24,6 +24,7 @@ export default (businessData, user) => {
   const orderRequestErrorMessage = useSelector((state) => state.shoppingCart.errorMessage);
   const paymentTokenError = useSelector((state) => state.shoppingCart.paymentTokenError);
   const isGreenDiningOrder = useSelector(selectIsGreenDiningOrder);
+  const greenDiningInfo = useSelector(state => state.greenDining.data);
   const priceSubTotal = useSelector((state) => state.shoppingCart.priceSubTotal);
   const itemsWithDiscounts = useSelector((state) => state.shoppingCart.itemsWithDiscounts);
   const discountsById = useSelector((state) => state.shoppingCart.discounts.byId);
@@ -75,7 +76,14 @@ export default (businessData, user) => {
 
     let requestedDeliveryDate = '';
 
-    if (orderPickUp && orderPickUp.date && orderPickUp.time) {
+    if (isGreenDiningOrder) {
+      const { year, month, day } = greenDiningInfo.pickupDayTime.day;
+      const orderPickUpDate = new Date(year, month, day);
+      const { hour, minute } = greenDiningInfo.pickupDayTime.times[0];
+      orderPickUpDate.setHours(hour, minute);
+      
+      requestedDeliveryDate = toIsoString(orderPickUpDate);
+    } else if (orderPickUp && orderPickUp.date && orderPickUp.time) {
       const orderPickUpDate = new Date(orderPickUp.date);
       const [hours, minutes] = orderPickUp.time.split(':');
       orderPickUpDate.setHours(hours, minutes);

@@ -11,6 +11,7 @@ import { useReorder } from "../order-details/useReorder";
 import { ROUTE_NAME, useRouting } from "../useRouting";
 import { clearCart } from "../../redux/slices/shoppingCart";
 import { ORDERING_STATE } from "../../types/greenDining";
+import { getReadableTime } from "../../utils/helpers";
 
 export const useGreenDining = () => {
   const dispatch = useDispatch();
@@ -27,6 +28,13 @@ export const useGreenDining = () => {
 
   const souuid = useSelector(state => state.greenDining.souuid);
   const discountUUID = useSelector(state => state.greenDining.discountUUID);
+
+  let timeZone = useSelector(state => state.business.data.pickUp.address.timeZone);
+  const pickUpTime = greenDiningInfo && getReadableTime({
+    hours: greenDiningInfo.pickupDayTime.times[0].hour,
+    minutes: greenDiningInfo.pickupDayTime.times[0].minute,
+    timeZone,
+  })
 
   useEffect(() => {
     if (blockUUID && greenDiningInfo && orderingState === ORDERING_STATE.NOT_STARTED) {
@@ -84,5 +92,6 @@ export const useGreenDining = () => {
     errorMessage,
     handleBuyClick,
     resetError,
+    pickUpTime,
   }
 }

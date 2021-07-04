@@ -548,3 +548,17 @@ export const getPaymentTokenFieldsErrors = (paymentTokenError) => {
   
   return errors;
 }
+
+export const getReadableTime = ({ hours, minutes, timeZone }) => {
+  let date = changeTimezone(new Date(), timeZone);
+  date.setHours(+hours);
+  date.setMinutes(+minutes);
+
+  let options = {
+    hour: 'numeric',
+    minute: 'numeric',
+    hour12: true
+  };
+
+  return date.toLocaleString('en-US', options);
+}
