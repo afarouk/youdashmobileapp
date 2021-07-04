@@ -211,6 +211,8 @@ a {
 /*Categories tabs*/
 .groups-tabs .ant-tabs-tab {
   color: #a4a9aa;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
 }
 .groups-tabs .ant-tabs-nav-list {
   flex-grow: 1;
@@ -223,7 +225,7 @@ a {
   color: var(--primary-color);
 }
 .groups-tabs .ant-tabs-tab-btn {
-  font-size: 1rem;
+  font-size: 1.25rem;
 }
 .groups-tabs .ant-tabs-ink-bar {
   background: var(--primary-color);
