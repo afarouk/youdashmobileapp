@@ -1,3 +1,14 @@
+
+import inTransitionIconPast from '../assets/images/in-transit.png';
+import inTransitionIconCurrent from '../assets/images/in-transit_teal.png';
+import inTransitionIconFuture from '../assets/images/in-transit_gray.png';
+import inKitchenIconPast from '../assets/images/inKitchen.png';
+import inKitchenIconCurrent from '../assets/images/inKitchen_teal.png';
+import inKitchenIconFuture from '../assets/images/inKitchen_gray.png';
+import readyForPickupIconPast from '../assets/images/readyForPickup.png';
+import readyForPickupIconCurrent from '../assets/images/readyForPickup_teal.png';
+import readyForPickupIconFuture from '../assets/images/readyForPickup_gray.png';
+
 export const USER_COOKIE = 'cmx_UID';
 
 export const discountTypes = {
@@ -69,14 +80,31 @@ export const ORDER_STATUS = {
   ARCHIVED: 'ARCHIVED'
 }
 
-export const ORDER_STATUS_LABELS = {
-  [ORDER_STATUS.UNDEFINED]: 'Something went wrong...',
-  [ORDER_STATUS.INITIALIZED]: 'In transition',
-  [ORDER_STATUS.PROPOSED]: 'Sent to kitchen',
-  [ORDER_STATUS.IN_PROCESS]: 'In process',
-  [ORDER_STATUS.FULFILLED]: 'Fullfilled',
-  [ORDER_STATUS.REJECTED]: 'Rejected',
-  [ORDER_STATUS.ARCHIVED]: 'Archived',
+export const ORDER_STATUS_CONFIG = {
+  [ORDER_STATUS.INITIALIZED]: {
+    label: 'In transition',
+    icons: {
+      past: inTransitionIconPast,
+      current: inTransitionIconCurrent,
+      future: inTransitionIconFuture,
+    },
+  },
+  [ORDER_STATUS.PROPOSED]: {
+    label: 'Sent to kitchen',
+    icons: {
+      past: inKitchenIconPast,
+      current: inKitchenIconCurrent,
+      future: inKitchenIconFuture,
+    },
+  },
+  [ORDER_STATUS.FULFILLED]: {
+    label: 'Fullfilled',
+    icons: {
+      past: readyForPickupIconPast,
+      current: readyForPickupIconCurrent,
+      future: readyForPickupIconFuture,
+    },
+  },
 }
 
 export const PAYMENT_TOKEN_ERROR = {

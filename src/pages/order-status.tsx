@@ -9,6 +9,7 @@ const OrderStatusPage: React.FC<any> = ({ user, businessData }) => {
   const { orderUUID } = useParams<{orderUUID: string}>();
   const [order, setOrder] = useState(null);
   const orderStatus = useSelector((state) => state.shoppingCart.orderStatus);
+  const storeFrontImageURL = useSelector((state) => state.business.data.storeFrontImageURL);
 
   useEffect(() => {
     if (orderStatus && !order && orderStatus.orderUUID === orderUUID) {
@@ -45,6 +46,7 @@ const OrderStatusPage: React.FC<any> = ({ user, businessData }) => {
       address={address}
       saslName={businessData.saslName}
       isDemo={businessData.isDemo}
+      storeFrontImageURL={storeFrontImageURL}
     />
   );
 };

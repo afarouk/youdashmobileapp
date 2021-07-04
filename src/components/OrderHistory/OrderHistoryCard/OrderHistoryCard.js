@@ -29,7 +29,7 @@ export const OrderHistoryCard = ({
   let history = useHistory();
   const { search } = useLocation();
   let { businessUrlKey } = useParams();
-  const [onShare] = useNativeShare({});
+  const [onShare] = useNativeShare();
 
   const handleOrderStatus = () => {
     history.push(`/${businessUrlKey}/order-status/${orderUUID}${search}`);
