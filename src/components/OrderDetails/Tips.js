@@ -18,10 +18,21 @@ export const Tips = ({ tips, onChange }) => {
       });
     }
   }, [tipsSource]);
-  if (!tipsSource) return null;
+
+
   const handleOther = (value) => {
     onChange(value ? value : 0);
   };
+
+  const insertTooltipValue = (value) => {
+    // TODO: think about better way to handle it
+    const sliderHandle = document.querySelector('.tips .ant-slider-handle');
+
+    if (sliderHandle) {
+      sliderHandle.innerHTML = value === max ? 'Other' : `${value}%`
+    }
+  }
+
   const handleSlider = (value) => {
     if (value === max) {
       if (!otherMode) {
@@ -34,7 +45,17 @@ export const Tips = ({ tips, onChange }) => {
       }
       onChange(value);
     }
+
+    insertTooltipValue(value);    
   };
+
+  useEffect(() => {
+    insertTooltipValue(0);
+  }, [tipsSource])
+
+  if (!tipsSource) return null;
+
+
   return (
     <div className="tips">
       <Slider
