@@ -43,19 +43,19 @@ export const MainMenu = ({ user, onClose, onLogout }) => {
       icon: <InfoCircleIcon />,
       ...routes.terms
     },
-    {
-      icon: <LiveHelpIcon />,
-      ...routes.help
-    },
-    {
-      icon: <LogoutBoxLineIcon />,
-      title: 'Logout',
-      authRequired: true,
-      onClickAction: () => {
-        onClose();
-        onLogout();
-      }
-    },
+    // {
+    //   icon: <LiveHelpIcon />,
+    //   ...routes.help
+    // },
+    // {
+    //   icon: <LogoutBoxLineIcon />,
+    //   title: 'Logout',
+    //   authRequired: true,
+    //   onClickAction: () => {
+    //     onClose();
+    //     onLogout();
+    //   }
+    // },
     /*user
       ? {}
       : {
