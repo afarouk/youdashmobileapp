@@ -6,6 +6,7 @@ import { USER_COOKIE } from '../config/constants';
 
 export const ProtectedRoute = ({ component: Component, user, ...rest }) => {
   const [cookies] = useReactCookie();
+
   return (
     <Route
       {...rest}
@@ -17,10 +18,12 @@ export const ProtectedRoute = ({ component: Component, user, ...rest }) => {
         ) : (
           <Redirect
             to={{
-              pathname: `/${props.match.params.businessUrlKey}/login`,
-              state: {
-                from: props.location
-              }
+              // TODO replace it when login page will be enabled
+              // pathname: `/${props.match.params.businessUrlKey}/login`,
+              // state: {
+              //   from: props.location
+              // }
+              pathname: `/${props.match.params.businessUrlKey}/${window.location.search}`,
             }}
           />
         );
