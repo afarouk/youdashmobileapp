@@ -18,7 +18,7 @@ const OrderStatusPage: React.FC<any> = ({ user, businessData }) => {
   }, [orderStatus]);
 
   useEffect(() => {
-    if (orderUUID && user && user.uid && !order && orderStatus?.orderUUID !== orderUUID) {
+    if (orderUUID && user && user.uid && !order) {
       orderAPI
         .getOrderStatus({
           orderUUID,
