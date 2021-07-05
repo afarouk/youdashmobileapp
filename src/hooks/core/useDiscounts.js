@@ -16,7 +16,11 @@ export default (businessData) => {
     const { applicableItemUUID, applicableGroup } = discountItem;
     const { itemsById } = businessData;
 
-    if (discountItem && !applicableGroup && discountType === discountTypes.DISCOUNT) {
+    if (
+      discountItem && 
+      !applicableGroup && 
+      [discountTypes.DISCOUNT, discountTypes.LOYALTY_STATUS].includes(discountType) 
+    ) {
       dispatch(
         addDiscount({
           id: uuid,
