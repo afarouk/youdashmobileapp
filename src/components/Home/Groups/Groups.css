@@ -34,3 +34,30 @@
   justify-content: center;
   margin-right: 0;
 }
+
+.groups-tabs .ant-tabs-extra-content:before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background-color: var(--primary-color);
+}
+
+.groups-tabs .ant-tabs-extra-content .react-icon {
+  position: relative;
+  top: 4px;
+}
+
+.groups-tabs .ant-tabs-extra-content .react-icon {
+  color: var(--primary-color);
+}
+
+.groups-tabs .ant-tabs-extra-content .disabled {
+  color: rgba(0, 0, 0, 0.25);
+}
+
+/* .groups-tabs .ant-tabs-nav-operations {
+  display: none;
+} */
