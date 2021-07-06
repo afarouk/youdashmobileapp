@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 
+import { OrderDetails } from '../components/OrderDetails/OrderDetails';
 import usePoll from '../hooks/poll/usePoll';
 import { Poll } from '../components/Poll/Poll';
 import useNativeShare from '../hooks/useNativeShare';
 import useMemberData from '../hooks/user/useMemberData';
 import useMobileVerification from '../hooks/user/useMobileVerification';
-import { OrderDetails } from '../components/OrderDetails/OrderDetails';
 
 const PollPage = ({ businessData, user }) => {
   const [updateMode, setUpdateMode] = useState(false);

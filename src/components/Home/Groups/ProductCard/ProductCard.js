@@ -1,9 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import './ProductCard.css';
 import { Link, useParams, useLocation } from 'react-router-dom';
 import { getMediaImageUrl } from '../../../../utils/helpers';
 // import { ImagePlaceholder } from '../../../Shared/ImagePlaceholder/ImagePlaceholder';
+
+import './ProductCard.css';
 
 export const ProductCard = ({ product, isCard = true }) => {
   const { itemId, uuid, itemName, mediaURLs, shortDescription, longDescription, price } = product;

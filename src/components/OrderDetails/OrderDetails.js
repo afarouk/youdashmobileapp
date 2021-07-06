@@ -19,7 +19,6 @@ import { CheckoutIFrame } from '../Checkout/CheckoutIFrame';
 import { Comments } from '../Shared/Comments/Comments';
 import { VerificationCode } from './VerificationCode/VerificationCode';
 
-import './OrderDetails.css';
 import { getPaymentTokenFieldsErrors, scrollToElement } from '../../utils/helpers';
 import { CHECKOUT_MODE } from '../../config/constants';
 import { CreditCardPrestepForm } from './CreditCardPrestepForm/CreditCardPrestepForm';
@@ -27,6 +26,8 @@ import { CardConnectIframe } from './CardConnectIframe/CardConnectIframe';
 import { HeartlandForm } from './HeartlandForm';
 import { NabancardForm } from './NabancardForm';
 import { useSelector } from 'react-redux';
+
+import './OrderDetails.css';
 
 export const OrderDetails = (props) => {
   const {
