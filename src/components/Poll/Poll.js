@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import './Poll.css';
 
 import { ImagePlaceholder } from '../Shared/ImagePlaceholder/ImagePlaceholder';
 import { Alert, Button } from 'antd';
@@ -8,11 +7,13 @@ import { Alert, Button } from 'antd';
 import { Choice } from './Choice';
 
 import { Prize } from './Prize';
+import { VerificationCode } from '../OrderDetails/VerificationCode/VerificationCode';
 import { PollResult } from './PollResult';
 import { Card } from '../Shared/Card/Card';
 import { UserDataForm } from '../Shared/UserDataForm/UserDataForm';
 import { UserDetails } from '../Shared/UserDataForm/UserDetails';
-import { VerificationCode } from '../OrderDetails/VerificationCode/VerificationCode';
+
+import './Poll.css';
 
 export const Poll = ({
   poll,

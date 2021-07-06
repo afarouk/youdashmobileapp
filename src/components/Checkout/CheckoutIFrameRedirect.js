@@ -3,10 +3,13 @@ import PropTypes from 'prop-types';
 
 import { useLocation } from 'react-router-dom';
 
-import './CheckoutIFrameRedirect.css';
 import { Card } from '../Shared/Card/Card';
 import { CheckoutSuccess } from './CheckoutSuccess';
 import { CheckoutLoading } from './CheckoutLoading';
+
+import './CheckoutIFrameRedirect.css';
+
+
 function inIframe() {
   try {
     return window.self !== window.top;
