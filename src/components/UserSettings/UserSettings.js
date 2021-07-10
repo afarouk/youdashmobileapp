@@ -9,7 +9,12 @@ import { Card } from '../Shared/Card/Card';
 export const UserSettings = ({ credentials, user, onChange, onSubmit }) => (
   <Container>
     <Card className={'user-settings'}>
-      <UserDataForm user={user} onChange={onChange} onSubmit={onSubmit} credentials={credentials} />
+      <UserDataForm 
+        user={user} 
+        onChange={onChange} 
+        onSubmit={onSubmit} 
+        credentials={credentials} 
+      />
     </Card>
   </Container>
 );
