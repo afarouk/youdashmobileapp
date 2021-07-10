@@ -71,6 +71,10 @@ export const isToday = (date) => {
   return date === formatDeliveryDate(today);
 };
 
+export const splitDateString = (date) => {
+  return date.split('.').map((strNum) => parseInt(strNum));
+}
+
 export const changeTimezone = (date, timeZone) =>
   new Date(
     date.toLocaleString('en-US', {
