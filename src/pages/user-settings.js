@@ -26,6 +26,7 @@ const UserSettingsPage = ({ businessData, user }) => {
           shouldChangeUpdateMode={false}
           onChange={onCredentialsChange}
           credentials={credentials}
+          disabledFields={['mobile', 'kUID']}
         />
         <Button size="large" type="primary" htmlType="submit" block loading={loading}>
           Update data

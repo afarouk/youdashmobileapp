@@ -11,8 +11,9 @@ export const UserDataForm = ({
   onChange,
   updateMode,
   user,
+  disabledFields = [],
   toggleUpdateMode,
-  shouldChangeUpdateMode = false
+  shouldChangeUpdateMode = false,
 }) => (
   <>
     {user && updateMode && (
@@ -43,7 +44,12 @@ export const UserDataForm = ({
         <label htmlFor="userName" className="font-size-sm required-field">
           Mobile phone number
         </label>
-        <InputMask mask="(999) 999-9999" value={credentials.mobile} onChange={onChange}>
+        <InputMask 
+          mask="(999) 999-9999" 
+          value={credentials.mobile} 
+          onChange={onChange}
+          disabled={disabledFields.includes('mobile')}
+        >
           {(inputProps) => (
             <Input
               {...inputProps}
@@ -52,6 +58,7 @@ export const UserDataForm = ({
               name="mobile"
               required
               type="tel"
+              disabled={disabledFields.includes('mobile')}
             />
           )}
         </InputMask>
@@ -79,8 +86,9 @@ export const UserDataForm = ({
             autoComplete="off"
             placeholder="ID"
             name="kUID"
-            value={credentials.kUID}
+            value={credentials.kUID || (user && user.kuid)}
             onChange={onChange}
+            disabled={disabledFields.includes('kUID')}
           />
           <div className='key-tag-container__img-wrapper'><img src={keyTagImage} alt="" /></div>
         </div>
