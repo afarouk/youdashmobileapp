@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useHistory, useLocation, useParams } from 'react-router-dom';
 import useCalculateOrderPrice from './useCalculateOrderPrice';
-import { formatOrderData, isToday, pad, toIsoString } from '../../utils/helpers';
+import { formatOrderData, isToday, pad, splitDateString, toIsoString } from '../../utils/helpers';
 import { clearCart, createOrder, resetOrderError, setCheckoutMode } from '../../redux/slices/shoppingCart';
 import { CHECKOUT_MODE, PAYMENT_PROCESSOR } from '../../config/constants';
 import { getLoyaltyAndOrderHistory } from '../../redux/slices/loyaltyAndOrderHistory';
@@ -84,7 +84,8 @@ export default (businessData, user) => {
       
       requestedDeliveryDate = toIsoString(orderPickUpDate);
     } else if (orderPickUp && orderPickUp.date && orderPickUp.time) {
-      const orderPickUpDate = new Date(orderPickUp.date);
+      const [year, month, day] = splitDateString(orderPickUp.date);
+      const orderPickUpDate = new Date(year, month, day);
       const [hours, minutes] = orderPickUp.time.split(':');
       orderPickUpDate.setHours(hours, minutes);
       

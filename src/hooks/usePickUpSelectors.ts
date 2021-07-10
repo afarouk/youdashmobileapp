@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import differenceInMinutes from 'date-fns/differenceInMinutes';
 import { setOrderPickUp } from '../redux/slices/shoppingCart';
 import { useDispatch } from 'react-redux';
-import {addLeadingZero, changeTimezone, formatDeliveryDate, isToday, getDayNameByIndex } from '../utils/helpers';
+import {addLeadingZero, changeTimezone, formatDeliveryDate, isToday, getDayNameByIndex, splitDateString } from '../utils/helpers';
 import { BusinessData, PICK_UP_DAY_STATUS } from '../types/businessData';
 import { useSelector } from '../redux/store';
 
@@ -49,7 +49,8 @@ export default (businessData: BusinessData) => {
   };
 
   const handleDayChange = (dateString: string) => { // Date in format YYYY.MM.DD 2021.01.01
-    const selectedDate = new Date(dateString);
+    const [year, month, day] = splitDateString(dateString);
+    const selectedDate = new Date(year, month, day); // TODO: create helper which will create date from date string
     const dayName = getDayNameByIndex(selectedDate.getDay());
     let opts: any = getTimeOptions(dateString);
     setTimeOptions(opts);
