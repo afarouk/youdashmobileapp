@@ -9,35 +9,41 @@ import {
   InfoCircleIcon,
   LiveHelpIcon,
   LogoutBoxLineIcon,
-  ShopIcon
+  ShopIcon,
+  LocationOnIcon,
 } from "../../Shared/Icons/Icons";
+import { useSelector } from '../../../redux/store';
 const { SubMenu } = Menu;
 
 export const MainMenu = ({ user, onClose, onLogout }) => {
   const { search } = useLocation();
-  const menuItems = [
-    /*{
+
+  const menuItems = []
+  const loyaltyAndOrderHistory = useSelector(state => state.loyaltyAndOrderHistory.data);
+
+
+  let order = null;
+  if (loyaltyAndOrderHistory && loyaltyAndOrderHistory.orderHistory && loyaltyAndOrderHistory.orderHistory.length) {
+    order = loyaltyAndOrderHistory.orderHistory[0];
+  }
+  
+  if (order && order.orderStatus !== 'FULFILLED') {
+    menuItems.push({
       ...routes.trackOrder,
-      icon: <MdLocationOn />
-    },*/
+      path: routes.trackOrder.path.replace(':orderId', order.orderUUID),
+      title: 'Track Order',
+      icon: <LocationOnIcon />
+    })
+  }
+
+  menuItems.push(
     {
-      title: 'My Dash',
-      icon: <ShopIcon />,
-      subItems: [
-        {
-          ...routes.orderHistory,
-          icon: <HistoryIcon />
-        },
-        {
-          ...routes.userSettings,
-          icon: <EditIcon />
-        },
-       /* {
-          ...routes.payment,
-          icon: <AiOutlineCreditCard />
-        }*/
-      ],
-      authRequired: true
+      ...routes.orderHistory,
+      icon: <HistoryIcon />
+    },
+    {
+      ...routes.userSettings,
+      icon: <EditIcon />
     },
     {
       icon: <InfoCircleIcon />,
@@ -62,7 +68,7 @@ export const MainMenu = ({ user, onClose, onLogout }) => {
           icon: <RiLoginBoxLine />,
           ...routes.login
         }*/
-  ];
+  );
   const { businessUrlKey } = useParams();
 
   return (

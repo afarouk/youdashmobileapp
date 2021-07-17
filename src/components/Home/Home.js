@@ -46,10 +46,10 @@ export const Home = ({
         {user && loyaltyAndOrderHistory && (
           <Loyalty loyaltyAndOrderHistory={loyaltyAndOrderHistory} />
         )}
-        {user && loyaltyAndOrderHistory && (
+        {/* {user && loyaltyAndOrderHistory && (
           <LastOrderStatus loyaltyAndOrderHistory={loyaltyAndOrderHistory} />
-        )}
-        {user && <MyPastOrders urlKey={urlKey} />}
+        )} */}
+        {/* {user && <MyPastOrders urlKey={urlKey} />} */}
         <Groups groups={groups} />
         {shoppingCartItemsCount ? (
           <Cart itemsCount={shoppingCartItemsCount} price={shoppingCartPrice} />
