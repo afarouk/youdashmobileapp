@@ -175,7 +175,7 @@ export default (businessData, user) => {
         }
       });
 
-      setOrderInProgress(false)
+    setOrderInProgress(false)
   };
   return [
     orderInProgress,
