@@ -181,6 +181,14 @@ const shoppingCartSlice = createSlice({
     removeDiscount: (state, action) => {
       delete state.discounts.byId[action.payload];
       state.discounts.allIds = state.discounts.allIds.filter(id => id !== action.payload);
+
+      if (!Array.isArray(state.itemsWithDiscounts)) {
+        Object.entries(state.itemsWithDiscounts).map(([itemId, discount]) => {
+          if (discount.discountUUID === action.payload) {
+            delete (state.itemsWithDiscounts as any)[itemId];
+          }
+        })
+      }
     },
     addGroupDiscount: (state, action) => {
       state.groupDiscounts.byId[action.payload.id] = action.payload.discount;

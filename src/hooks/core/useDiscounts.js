@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { addCartItem, addDiscount, addGroupDiscount } from '../../redux/slices/shoppingCart';
+import { addCartItem, addDiscount, addGroupDiscount, removeDiscount } from '../../redux/slices/shoppingCart';
 import { message } from 'antd';
 import { transformLoyaltyToDiscount, transformPromotionToDiscount } from '../../utils/helpers';
 import { discountTypes, DISCOUNT_QUERY_PARAMETER_NAME, DISCOUNT_QUERY_PARAMETER_VALUE, DISCOUNT_UUID_QUERY_PARAMETER_NAME } from '../../config/constants';
@@ -104,6 +104,11 @@ export default (businessData) => {
       if (loyaltyStatus) {
         const { applyDiscount, priceItem, loyaltyUUID, promoPrice } = loyaltyStatus;
 
+        if (!applyDiscount) {
+          // remove loyalty from discounts
+          dispatch(removeDiscount(loyaltyStatus.loyaltyUUID));
+        }
+
         if (
           !allDiscounts[loyaltyUUID] &&
           loyaltyUUID &&
@@ -111,6 +116,7 @@ export default (businessData) => {
           promoPrice !== undefined &&
           applyDiscount
         ) {
+          // add loyalty to discounts
           const transformedLoyalty = transformLoyaltyToDiscount({
             ...loyaltyStatus,
             serviceAccommodatorId,

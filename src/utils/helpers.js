@@ -254,18 +254,14 @@ export const formatOrderData = ({
   discountsById,
   isGreenDiningOrder,
 }) => {
-  let authorizationsAndDiscounts = {
-    authorizations: null,
-    discounts: getDiscounts({
-      discountsById,
-      itemsWithDiscounts,
-      itemsWithGroupDiscounts,
-    }),
-    loyaltyStatus: null,
-    promotions: null,
-    // promotions: promotions,
-    // loyaltyStatus: loyaltyStatus,
-  };
+  let authorizationsAndDiscounts = getAuthorizationsAndDsicounts({
+    discountsById,
+    itemsWithDiscounts,
+    itemsWithGroupDiscounts,
+    loyaltyStatus,
+  })
+  
+  
   
   let transactionDataFields = {};
   if (transactionData) {
@@ -418,6 +414,38 @@ export const formatOrderData = ({
   };
   return orderShape;
 };
+
+const getAuthorizationsAndDsicounts = ({
+  discountsById,
+  itemsWithDiscounts,
+  itemsWithGroupDiscounts,
+  loyaltyStatus,
+}) => {
+  let discounts = getDiscounts({
+    discountsById,
+    itemsWithDiscounts,
+    itemsWithGroupDiscounts,
+  })
+
+  let loyaltyActive = false;
+  if (loyaltyStatus && discounts) {
+    const loaltyDiscount = discounts.find(discount => discount.discountUUID === loyaltyStatus.loyaltyUUID)
+
+    if (loaltyDiscount) {
+      discounts = discounts.filter(discount => discount.discountUUID !== loyaltyStatus.loyaltyUUID)
+      loyaltyActive = true;
+    }
+  }
+
+  return {
+    authorizations: null,
+    discounts: discounts && discounts.length > 0 ? discounts : null,
+    loyaltyStatus: loyaltyActive ? loyaltyStatus : null,
+    promotions: null,
+    // promotions: promotions,
+    // loyaltyStatus: loyaltyStatus,
+  };
+}
 
 const prepareExtraFeeFields = ({
   addExtraFeeToTotalAmount,
