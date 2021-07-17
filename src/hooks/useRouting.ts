@@ -7,6 +7,7 @@ type RouteConfig = {
 export enum ROUTE_NAME {
   CART = 'CART',
   LANDING = 'LANDING',
+  ORDER_STATUS = 'ORDER_STATUS',
 }
 
 const routes: Record<ROUTE_NAME, RouteConfig> = {
@@ -15,6 +16,9 @@ const routes: Record<ROUTE_NAME, RouteConfig> = {
   },
   [ROUTE_NAME.LANDING]: {
     url: '/',
+  },
+  [ROUTE_NAME.ORDER_STATUS]: {
+    url: '/order-status/:orderId',
   },
 }
 

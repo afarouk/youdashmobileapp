@@ -11,7 +11,7 @@ export const routes = {
     path: '/:productId'
   },
   trackOrder: {
-    path: '/order-status/123',
+    path: '/order-status/:orderId',
     title: 'Order Status',
     authRequired: true
   },
