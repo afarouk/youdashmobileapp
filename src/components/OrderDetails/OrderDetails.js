@@ -243,7 +243,7 @@ export const OrderDetails = (props) => {
             onDeleteItem={greenDiningOrdering ? undefined : onDeleteItem}
             onEditItem={onEditItem}
           />
-
+          
           <SubTotal
             orderDiscount={orderDiscount}
             priceSubTotal={priceSubTotal}

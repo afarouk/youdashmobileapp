@@ -62,6 +62,7 @@ const OrderDetailsPage = ({ businessData, user }) => {
     comment,
     onCommentChange,
     paymentTokenError,
+    priceSubtotalWithExtraFee,
   ] = useCreateOrder(businessData, user);
 
   const {
@@ -272,7 +273,7 @@ const OrderDetailsPage = ({ businessData, user }) => {
       extraFee={extraFee}
       tips={tips}
       priceTotal={priceTotal}
-      priceSubTotal={priceSubTotal}
+      priceSubTotal={priceSubtotalWithExtraFee}
       orderDiscount={orderDiscount}
       discountedPriceSubTotal={discountedPriceSubTotal}
       orderInProgress={orderInProgress}

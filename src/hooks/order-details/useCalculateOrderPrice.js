@@ -29,6 +29,8 @@ export default (businessData, priceSubTotal, shoppingCartItems) => {
     minimumPurchase: 0
   });
 
+  const priceSubtotalWithExtraFee = priceSubTotal + extraFee.value;
+
   const greenDiningCount = useSelector(state => state.greenDining.selectedCount)
   const discounts = useSelector(state => state.shoppingCart.discounts.byId)
 
@@ -80,19 +82,20 @@ export default (businessData, priceSubTotal, shoppingCartItems) => {
     const { discount, type, title, minimumPurchase } = orderDiscount;
 
     if (discount && priceSubTotal >= minimumPurchase && type) {
-      setDiscountedPriceSubTotal(calculateDiscountedPrice({ 
+      const discountedPrice = calculateDiscountedPrice({ 
         discountItem: orderDiscount, 
         price: priceSubTotal,
         greenDiningCount,
-      }));
+      });
+      setDiscountedPriceSubTotal(discountedPrice + +extraFee.value);
     } else {
-      setDiscountedPriceSubTotal(priceSubTotal);
+      setDiscountedPriceSubTotal(priceSubTotal + +extraFee.value);
     }
   }, [priceSubTotal, orderDiscount]);
 
   useEffect(() => {
     setPriceTotal(
-      floatNum(discountedPriceSubTotal + tips.percentValue + +extraFee.value + +taxes.value)
+      floatNum(discountedPriceSubTotal + tips.percentValue + +taxes.value)
     );
   }, [tips]);
 
@@ -103,7 +106,7 @@ export default (businessData, priceSubTotal, shoppingCartItems) => {
       const { taxRate, extraFeeType, extraFeeValue = 0, extraFeeLabel } = businessData.extraFees;
 
       if (taxRate) {
-        taxValue = getPercent(discountedPriceSubTotal + extraFeeValue, taxRate);
+        taxValue = getPercent(discountedPriceSubTotal, taxRate);
         setTaxes({
           value: taxValue,
           percent: taxRate
@@ -141,8 +144,10 @@ export default (businessData, priceSubTotal, shoppingCartItems) => {
       setTips({ value: 0, percentValue: 0 });
       return;
     }
-    setPriceTotal(floatNum(discountedPriceSubTotal + value + taxValue));
+    setPriceTotal(floatNum(discountedPriceSubTotal + taxValue));
   }, [businessData.extraFees, discountedPriceSubTotal, shoppingCartItems]);
+
+  console.log('priceSubtotalWithExtraFee', priceSubtotalWithExtraFee)
 
   return [
     priceTotal,
@@ -151,6 +156,7 @@ export default (businessData, priceSubTotal, shoppingCartItems) => {
     tips,
     taxes,
     extraFee,
-    handleTipsChange
+    handleTipsChange,
+    priceSubtotalWithExtraFee,
   ];
 };

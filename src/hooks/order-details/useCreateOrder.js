@@ -43,7 +43,8 @@ export default (businessData, user) => {
     tips,
     taxes,
     extraFee,
-    onTipsChange
+    onTipsChange,
+    priceSubtotalWithExtraFee,
   ] = useCalculateOrderPrice(businessData, priceSubTotal, shoppingCartItems);
 
   const handleResetOrderError = () => dispatch(resetOrderError());
@@ -102,12 +103,11 @@ export default (businessData, user) => {
       serviceAccommodatorId,
       serviceLocationId,
       catalogId,
-      priceSubTotal,
       deliveryType: orderPickUp.deliveryType,
       requestedDeliveryDate,
       futureOrRegular: isToday(orderPickUp.day) ? 'REGULAR' : 'FUTURE',
       //prices
-      subTotal: priceSubTotal,
+      subTotal: priceSubtotalWithExtraFee,
       tipAmount: tips,
       taxAmount: taxes.value,
       totalAmount: priceTotal,
@@ -196,5 +196,6 @@ export default (businessData, user) => {
     comment,
     handleCommentChange,
     paymentTokenError,
+    priceSubtotalWithExtraFee,
   ];
 };

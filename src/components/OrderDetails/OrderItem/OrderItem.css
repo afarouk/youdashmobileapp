@@ -60,7 +60,6 @@
 }
 
 .order-details .order-items-list {
-  margin-bottom: 3em;
   position: relative;
 }
 .order-details .order-items-list .order-items-list__item {
@@ -93,16 +92,6 @@
 }
 .order-details .order-items-list {
   position: relative;
-}
-.order-details .order-items-list:after {
-  display: block;
-  content: '';
-  width: 26%;
-  height: 3px;
-  right: 0;
-  bottom: -1em;
-  background-color: #0097a7;
-  position: absolute;
 }
 .order-details .order-items-list h4 {
   margin-bottom: 0.5em;

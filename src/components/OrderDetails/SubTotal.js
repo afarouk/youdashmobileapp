@@ -21,6 +21,8 @@ export const SubTotal = ({
           <span>${extraFee.value.toFixed(2)}</span>
         </h5>
       ) : null}
+      <div className="order-details__divider"></div>
+
       <h5 className="flex">
         <span>Sub-total</span>
         <span className={`subtotal-price ${hasDiscount ? 'subtotal-price-with-discount' : ''}`}>
@@ -41,8 +43,8 @@ export const SubTotal = ({
       ) : null}
       {!isCashPayment && (
         <h5 className="flex">
-          <span>Optional Tip {tips.value}%</span>
-          <span>${tips.percentValue.toFixed(2)}</span>
+          <span className="bold">Tip {tips.value}%</span>
+          <span className="bold">${tips.percentValue.toFixed(2)}</span>
         </h5>
       )}
     </div>
