@@ -99,3 +99,12 @@
   width: 100%;
   display: block;
 }
+
+.order-details__divider {
+    display: block;
+    width: 26%;
+    height: 3px;
+    right: 0;
+    background-color: #0097a7;
+    margin: 1.5em 0 1.5em auto;
+}
