@@ -147,8 +147,6 @@ export default (businessData, priceSubTotal, shoppingCartItems) => {
     setPriceTotal(floatNum(discountedPriceSubTotal + taxValue));
   }, [businessData.extraFees, discountedPriceSubTotal, shoppingCartItems]);
 
-  console.log('priceSubtotalWithExtraFee', priceSubtotalWithExtraFee)
-
   return [
     priceTotal,
     discountedPriceSubTotal,
