@@ -1,4 +1,4 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
+import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { GENERIC_ERROR_MESSAGE } from '../../config/constants';
 
 import { greenDiningAPI } from '../../services/api';
@@ -33,6 +33,7 @@ type GreenDiningState = {
   cancelBlockError: boolean,
 
   startedAt: number | null, // Timestamp
+  showTimer: boolean,
 }
 
 const initialState: GreenDiningState = {
@@ -56,6 +57,7 @@ const initialState: GreenDiningState = {
   cancelBlockError: false,
 
   startedAt: null,
+  showTimer: true,
 }
 
 export const getGreenDiningDetails = createAsyncThunk<GreenDiningDetails, GetGreenDiningDetailsParams>(
@@ -158,6 +160,9 @@ const greenDiningSlice = createSlice({
       state.blockOrderError = false;
       state.blockOrderErrorMessage = null;
     },
+    setShowTimer: (state, action: PayloadAction<boolean>) => {
+      state.showTimer = action.payload;
+    }
   },
   extraReducers: (builder) => builder
     .addCase(getGreenDiningDetails.pending, (state, action) => {
@@ -212,6 +217,7 @@ export const {
   setSelectedCount,
   resetBlocOrderkError,
   successGreenDiningOrder,
+  setShowTimer,
 } = greenDiningSlice.actions;
 
 export const greenDiningReducer = greenDiningSlice.reducer;

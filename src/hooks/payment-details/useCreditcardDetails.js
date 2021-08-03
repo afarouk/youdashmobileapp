@@ -25,6 +25,9 @@ import {
   setFocused,
   setFormState
 } from '../../redux/slices/cc';
+import { setShowTimer } from '../../redux/slices/greenDiningSlice';
+import { useGreenDiningCancel } from '../green-dining/useGreenDiningCancel';
+import { ORDERING_STATE } from '../../types/greenDining';
 
 export default ({
   businessData,
@@ -113,8 +116,12 @@ export default ({
 
     resetOrderError();
     setOrderInProgress(true);
+    dispatch(setShowTimer(false));
+
     await processCardOrder(data);
+    
     setOrderInProgress(false);
+    dispatch(setShowTimer(true));
   };
 
   const processCardOrder = async (data) => {

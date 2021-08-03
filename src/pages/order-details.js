@@ -211,9 +211,9 @@ const OrderDetailsPage = ({ businessData, user }) => {
           setOrderInProgress(false);
         }
       }
-      return 
-    }
-
+      return;
+    } 
+    
     if (acceptCash) {
       if (user && !credentialsChanged) {
         setOrderInProgress(true);
