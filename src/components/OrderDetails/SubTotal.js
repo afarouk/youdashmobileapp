@@ -29,7 +29,7 @@ export const SubTotal = ({
           ${priceSubTotal.toFixed(2)}
         </span>
       </h5>
-      {hasDiscount && (
+      {Boolean(hasDiscount) && (
         <h5 className={`flex discounted-text order-discount`}>
           <span>{orderDiscount.title}</span>
           <span>${discountedPriceSubTotal.toFixed(2)}</span>
