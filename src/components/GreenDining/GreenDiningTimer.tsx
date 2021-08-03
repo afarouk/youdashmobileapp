@@ -12,6 +12,7 @@ import { useBeforeUnload } from '../../hooks/useBeforeUnload';
 export const GreenDiningTimer = () => {
   const { cancelGreenDining, sendBackendCancellation } = useGreenDiningCancel();
   const greenDiningStartedAt = useSelector(state => state.greenDining.startedAt);
+  const showTimer = useSelector(state => state.greenDining.showTimer);
   
   useBeforeUnload({ callback: sendBackendCancellation });
 
@@ -34,7 +35,7 @@ export const GreenDiningTimer = () => {
     })
   }
 
-  if (!greenDiningStartedAt) {
+  if (!greenDiningStartedAt || !showTimer) {
     return null;
   }
 

@@ -2,6 +2,7 @@ import React from 'react';
 import { useRouteMatch } from 'react-router';
 import { useGreenDiningCancel } from '../../../hooks/green-dining/useGreenDiningCancel';
 import { useSelector } from '../../../redux/store';
+import { ORDERING_STATE } from '../../../types/greenDining';
 import { GreenDiningTimer } from '../../GreenDining/GreenDiningTimer';
 import { MenuIcon } from '../../Shared/Icons/Icons';
 import { ArrowLeftIcon } from "../../Shared/Icons/Icons";
@@ -29,7 +30,8 @@ export const Header: React.FC<HeaderProps> = ({
   bannerImageURL,
 }) => {
   const tableDetails = useSelector(state => state.shoppingCart.tableDetails);
-  const greenDiningStartedAt = useSelector(state => state.greenDining.startedAt);
+  const greenDiningOrderingStarted = useSelector(state => state.greenDining.orderingState === ORDERING_STATE.STARTED);
+  const showGreenDiningTimer = useSelector(state => state.greenDining.showTimer);
   const { cancelGreenDining } = useGreenDiningCancel();
 
   const orderDetailsRouteInfo = useRouteMatch({
@@ -55,16 +57,16 @@ export const Header: React.FC<HeaderProps> = ({
     );
   }  
 
-  if (greenDiningStartedAt) {
+  if (greenDiningOrderingStarted && showGreenDiningTimer) {
     titleElement = 'Time Left'
   }
   
   return (
     <header className="page-header" id="header">
-      <ActionIcon onBack={greenDiningStartedAt ? cancelGreenDining : onBack} isHome={isHome} />
+      <ActionIcon onBack={greenDiningOrderingStarted ? cancelGreenDining : onBack} isHome={isHome} />
       <div className="page-title">
         {titleElement}
-        {greenDiningStartedAt && <GreenDiningTimer />}
+        {greenDiningOrderingStarted && <GreenDiningTimer />}
       </div>
     </header>
   );
