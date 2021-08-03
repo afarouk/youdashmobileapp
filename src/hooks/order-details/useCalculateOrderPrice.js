@@ -91,7 +91,7 @@ export default (businessData, priceSubTotal, shoppingCartItems) => {
     } else {
       setDiscountedPriceSubTotal(priceSubTotal + +extraFee.value);
     }
-  }, [priceSubTotal, orderDiscount]);
+  }, [priceSubTotal, orderDiscount, extraFee]);
 
   useEffect(() => {
     setPriceTotal(
