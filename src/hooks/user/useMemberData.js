@@ -37,10 +37,18 @@ export default (businessData, user, updateMode, setUpdateMode) => {
     }
   }, [user]);
   const handleCredentialsChange = (e) => {
-    setCredentials({
-      ...credentials,
-      [e.target.name]: e.target.value
-    });
+    if (e.detail && e.detail.keyTagEvent) {
+      setCredentials({
+        ...credentials,
+        [e.detail.name]: e.detail.value
+      });
+    } else {
+      setCredentials({
+        ...credentials,
+        [e.target.name]: e.target.value
+      });
+    }
+
     if (!credentialsChanged) setCredentialsChanged(true);
   };
   const handleSubmit = (updateMode, user, shouldChangeUpdateMode) => {
