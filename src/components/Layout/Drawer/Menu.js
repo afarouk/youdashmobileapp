@@ -31,7 +31,7 @@ export const MainMenu = ({ user, onClose, onLogout }) => {
     menuItems.push({
       ...routes.trackOrder,
       path: routes.trackOrder.path.replace(':orderId', order.orderUUID),
-      title: 'Track last order',
+      title: 'Track Last Order',
       icon: <LocationOnIcon />
     })
   }
