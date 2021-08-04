@@ -12,9 +12,17 @@ export const SubTotal = ({
 }) => {
   const hasDiscount =
     priceSubTotal !== discountedPriceSubTotal && orderDiscount && orderDiscount.discount;
+
+  const discountAmount = parseFloat(priceSubTotal.toFixed(2)) - parseFloat(discountedPriceSubTotal.toFixed(2))
+
   return (
     <div className="subtotal">
-      {/*<h4 className="font-size-lg primary-text">Gross total</h4>*/}
+      {Boolean(hasDiscount) && (
+        <h5 className={`flex discounted-text order-discount`}>
+          <span>{orderDiscount.title}</span>
+          <span>-${discountAmount.toFixed(2)}</span>
+        </h5>
+      )}
       {extraFee.value ? (
         <h5 className="flex">
           <span>{extraFee.label ? extraFee.label : 'Extra Fee'}</span>
@@ -26,15 +34,9 @@ export const SubTotal = ({
       <h5 className="flex">
         <span>Sub-total</span>
         <span className={`subtotal-price ${hasDiscount ? 'subtotal-price-with-discount' : ''}`}>
-          ${priceSubTotal.toFixed(2)}
+          ${discountedPriceSubTotal.toFixed(2)}
         </span>
       </h5>
-      {Boolean(hasDiscount) && (
-        <h5 className={`flex discounted-text order-discount`}>
-          <span>{orderDiscount.title}</span>
-          <span>${discountedPriceSubTotal.toFixed(2)}</span>
-        </h5>
-      )}
       {taxes.value && taxes.percent ? (
         <h5 className="flex">
           <span>Taxes {taxes.percent}%</span>

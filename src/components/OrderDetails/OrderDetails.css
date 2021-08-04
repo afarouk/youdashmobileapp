@@ -84,21 +84,6 @@
 .subtotal-price {
   position: relative;
 }
-.order-discount > span:first-child {
-  padding-left: 1em;
-}
-.subtotal-price-with-discount {
-  position: relative;
-}
-.subtotal-price-with-discount:after {
-  content: ' ';
-  position: absolute;
-  top: 44%;
-  right: 0;
-  border-bottom: 2px solid #000;
-  width: 100%;
-  display: block;
-}
 
 .order-details__divider {
     display: block;
