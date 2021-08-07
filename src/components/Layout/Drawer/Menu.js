@@ -26,12 +26,12 @@ export const MainMenu = ({ user, onClose, onLogout }) => {
   if (loyaltyAndOrderHistory && loyaltyAndOrderHistory.orderHistory && loyaltyAndOrderHistory.orderHistory.length) {
     order = loyaltyAndOrderHistory.orderHistory[0];
   }
-  
+
   if (order && order.orderStatus !== 'FULFILLED') {
     menuItems.push({
       ...routes.trackOrder,
       path: routes.trackOrder.path.replace(':orderId', order.orderUUID),
-      title: 'Track Order',
+      title: 'Track Last Order',
       icon: <LocationOnIcon />
     })
   }
