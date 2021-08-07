@@ -36,7 +36,6 @@ export default (businessData, priceSubTotal, shoppingCartItems) => {
 
   const handleTipsChange = (value) => {
     const totalBeforeTaxes = discountedPriceSubTotal;
-    console.log({ totalBeforeTaxes, value })
     setTips({
       value: value ? value : 0,
       percentValue: value
@@ -145,6 +144,8 @@ export default (businessData, priceSubTotal, shoppingCartItems) => {
       setTips({ value: 0, percentValue: 0 });
       return;
     }
+
+    handleTipsChange(tips.value);
     setPriceTotal(roundToTwoPlaces(discountedPriceSubTotal + taxValue));
   }, [businessData.extraFees, discountedPriceSubTotal, shoppingCartItems]);
 
