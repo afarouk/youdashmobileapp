@@ -82,9 +82,7 @@ export const changeTimezone = (date, timeZone) =>
     })
   );
 
-export const floatNum = (num) => parseFloat(num.toFixed(2));
-
-export const getPercent = (total, value) => floatNum((total * value) / 100);
+export const getPercent = (total, value) => roundToTwoPlaces((total * value) / 100);
 
 export const calculateDiscountedPrice = ({ discountItem, price, greenDiningCount = 0 }) => {
   const { type, discount, isGreenDiningDeal } = discountItem
@@ -593,4 +591,12 @@ export const getReadableTime = ({ hours, minutes, timeZone }) => {
   };
 
   return date.toLocaleString('en-US', options);
+}
+
+export const roundToTwoPlaces = (num) => {
+  // we do num * 10 * 10 because of javascript bug
+  // example:
+  // 0.575*100 = 57.49999999999999
+  // 0.575*10*10 = 57.5
+  return Math.round(num * 10 * 10)/100;
 }
