@@ -41,6 +41,10 @@ export const routes = {
     path: '/payment',
     title: 'Payment'
   },
+  reservation: {
+    path: '/reservation',
+    title: 'Reservation'
+  },
   terms: {
     target: '_blank',
     url: 'https://chalkboardstoday.com/termsandconditions',

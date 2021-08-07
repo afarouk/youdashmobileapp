@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Container } from '../Shared/Container/Container';
 import { Hero } from './Hero/Hero';
@@ -27,6 +27,9 @@ export const Home = ({
     priorityBox,
     itemsById
   } = businessData;
+
+  const [loyaltyVisible, setLoyaltyVisible] = useState(false);
+
   return (
     <>
       <Hero saslName={saslName} saslIcon={saslIcon} defaultImageURL={defaultImageURL} />
@@ -43,7 +46,7 @@ export const Home = ({
             <PickUp user={user} businessData={businessData} />
           </div>
         </div>
-        {user && loyaltyAndOrderHistory && (
+        {loyaltyVisible && user && loyaltyAndOrderHistory && (
           <Loyalty loyaltyAndOrderHistory={loyaltyAndOrderHistory} />
         )}
         {/* {user && loyaltyAndOrderHistory && (
