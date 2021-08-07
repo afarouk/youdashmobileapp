@@ -156,6 +156,8 @@ export const GREEN_DINING_USED_DEALS_MAX_COUNT = 30; // how many green dining de
 
 export const KEY_TAG_URL_PARAMETER = 'iid';
 
+export const RESERVATION_MAX_PEOPLE_COUNT = 10;
+
 export enum DeliveryType {
   UNDEFINED = 'UNDEFINED',
   DELIVER = 'DELIVER',

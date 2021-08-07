@@ -1,0 +1,13 @@
+.reservation-form {}
+
+.reservation-form__time-wrapper {
+  margin-bottom: var(--default-margin-bottom);
+}
+
+.reservation-form .ant-select {
+  width: 48%;
+}
+
+.reservation-form__people-label {
+  width: 48%;
+}

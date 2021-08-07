@@ -1,11 +1,19 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 
 import { Card } from '../Card/Card';
 import { formatPhoneNumber } from '../../../utils/helpers';
 import { EditIcon } from '../Icons/Icons';
+
+import { User } from '../../../types/user';
+
 import './UserDataForm.css';
-export const UserDetails = ({ user, toggleUpdateMode }) => {
+
+type Props = {
+  user: User,
+  toggleUpdateMode?: () => void,
+}
+
+export const UserDetails: React.VFC<Props> = ({ user, toggleUpdateMode }) => {
   return (
     <Card className="user-details">
       <h4 className="flex font-size-lg primary-text">
@@ -28,16 +36,12 @@ export const UserDetails = ({ user, toggleUpdateMode }) => {
         <span>E-mail:</span>
         <span>{user.email}</span>
       </h5>
-      {user.kUID && (
+      {user.kuid && (
         <h5 className="flex">
           <span>Key-tag ID:</span>
-          <span>{user.kUID}</span>
+          <span>{user.kuid}</span>
         </h5>
       )}
     </Card>
   );
-};
-
-UserDetails.propTypes = {
-  user: PropTypes.object,
 };

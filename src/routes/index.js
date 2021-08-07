@@ -20,6 +20,7 @@ const OrderStatusPage = lazy(() => import(/* webpackChunkName: 'OrderStatus'*/ '
 const PollPage = lazy(() => import(/* webpackChunkName: 'Poll'*/ '../pages/poll'));
 const SignUpPage = lazy(() => import(/* webpackChunkName: 'SignUp'*/ '../pages/sign-up'));
 const LoginPage = lazy(() => import(/* webpackChunkName: 'Login'*/ '../pages/login'));
+const ReservationPage = lazy(() => import(/* webpackChunkName: 'Reservation'*/ '../pages/reservation'));
 
 export const Routes = ({ user }) => {
   return (
@@ -53,7 +54,12 @@ export const Routes = ({ user }) => {
             component={PollPage}
           />
 
-          {/* @todo  why is orderdetails a public route? even though orderhistory is not? */}
+          <PublicRoute
+            path="/:businessUrlKey/reservation"
+            component={ReservationPage}
+            pageTitle={routes.reservation.title}
+          />
+
           <PublicRoute
             path="/:businessUrlKey/order-details"
             component={OrderDetailsPage}
