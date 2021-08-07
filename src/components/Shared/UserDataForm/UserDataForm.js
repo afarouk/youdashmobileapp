@@ -59,6 +59,16 @@ export const UserDataForm = ({
 
   const kUIDValue = credentials.kUID || (user && user.kuid);
 
+
+  const handleKeyTagClick = () => {
+    if (kUIDValue) {
+      return;
+    }
+
+    setModalVisible(true)
+  }
+
+
   return (
     <>
       {user && updateMode && (
@@ -136,11 +146,9 @@ export const UserDataForm = ({
               onChange={onChange}
               disabled={true}
             />
-            {!kUIDValue && (
-              <div className='key-tag-container__img-wrapper'>
-                <img src={keyTagImage} alt="" onClick={() => setModalVisible(true)} />
-              </div>
-            )}
+            <div className='key-tag-container__img-wrapper'>
+              <img src={keyTagImage} alt="" onClick={handleKeyTagClick} />
+            </div>
           </div>
 
         </div>
