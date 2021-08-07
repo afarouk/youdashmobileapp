@@ -35,7 +35,7 @@ export default (businessData, priceSubTotal, shoppingCartItems) => {
   const discounts = useSelector(state => state.shoppingCart.discounts.byId)
 
   const handleTipsChange = (value) => {
-    const totalBeforeTaxes = discountedPriceSubTotal + +(+extraFee.value);
+    const totalBeforeTaxes = discountedPriceSubTotal;
     setTips({
       value: value ? value : 0,
       percentValue: value
