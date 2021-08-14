@@ -1,10 +1,12 @@
 import React from 'react';
 import { Card } from '../Shared/Card/Card';
 
+import './Directions.css'
+
 type Props = {
   lat: number, 
   lng: number, 
-  address: string, 
+  address?: string, 
   isDemo: boolean, 
   saslName: string,
   storeFrontImageURL: string,

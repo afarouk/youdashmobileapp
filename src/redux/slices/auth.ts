@@ -1,18 +1,19 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { authAPI } from '../../services/api';
+import { User } from '../../types/user';
 
 export const loginRequest = createAsyncThunk('auth/login', async (credentials) => {
   const response = await authAPI.login(credentials);
   return response.data;
 });
-export const registerNewMemberRequest = createAsyncThunk(
+export const registerNewMemberRequest = createAsyncThunk<any, any>(
   'auth/registerNewMember',
   async (credentials) => {
     const response = await authAPI.registerNewMember(credentials);
     return response.data;
   }
 );
-export const updateEmailMobileNamesForUserRequest = createAsyncThunk(
+export const updateEmailMobileNamesForUserRequest = createAsyncThunk<any, any>(
   'auth/updateEmailMobileNamesForUser',
   async (payload) => {
     const response = await authAPI.updateEmailMobileNamesForUser(payload);
@@ -33,21 +34,29 @@ export const getCommunityExpressUserSASLSummaryRequest = createAsyncThunk(
     return response.data;
   }
 );
-export const sendVerificationCodeRequest = createAsyncThunk(
+export const sendVerificationCodeRequest = createAsyncThunk<any, any>(
     'auth/sendVerificationCode',
     async (payload) => {
       const response = await authAPI.sendVerificationCode(payload);
       return response.data;
     }
 );
-export const resendVerificationCodeRequest = createAsyncThunk(
+export const resendVerificationCodeRequest = createAsyncThunk<any, any>(
     'auth/resendVerificationCode',
     async (payload) => {
       const response = await authAPI.resendVerificationCode(payload);
       return response.data;
     }
 );
-const authState = {
+
+type AuthState = {
+  user: null | User;
+  authenticationStatus: any,
+  loading: boolean,
+  error: boolean | string,
+}
+
+const authState: AuthState = {
   user: null,
   authenticationStatus: null,
   loading: false,
@@ -70,67 +79,67 @@ const authSlice = createSlice({
     }
   },
   extraReducers: {
-    [loginRequest.pending]: (state, action) => {
+    [loginRequest.pending.toString()]: (state, action) => {
       state.loading = true;
       state.error = false;
     },
-    [loginRequest.fulfilled]: (state, action) => {
+    [loginRequest.fulfilled.toString()]: (state, action) => {
       state.user = action.payload;
       state.loading = false;
     },
-    [loginRequest.rejected]: (state, action) => {
+    [loginRequest.rejected.toString()]: (state, action) => {
       //TODO: Need to handle this in a UI
       state.error = action.error.message;
       state.loading = false;
     },
-    [registerNewMemberRequest.pending]: (state, action) => {
+    [registerNewMemberRequest.pending.toString()]: (state, action) => {
       state.loading = true;
       state.error = false;
     },
-    [registerNewMemberRequest.fulfilled]: (state, action) => {
+    [registerNewMemberRequest.fulfilled.toString()]: (state, action) => {
       state.user = action.payload;
       state.loading = false;
     },
-    [registerNewMemberRequest.rejected]: (state, action) => {
+    [registerNewMemberRequest.rejected.toString()]: (state, action) => {
       //TODO: Need to handle this in a UI
       state.error = action.error.message;
       state.loading = false;
     },
-    [updateEmailMobileNamesForUserRequest.pending]: (state, action) => {
+    [updateEmailMobileNamesForUserRequest.pending.toString()]: (state, action) => {
       state.loading = true;
       state.error = false;
     },
-    [updateEmailMobileNamesForUserRequest.fulfilled]: (state, action) => {
+    [updateEmailMobileNamesForUserRequest.fulfilled.toString()]: (state, action) => {
       state.user = action.payload;
       state.loading = false;
     },
-    [updateEmailMobileNamesForUserRequest.rejected]: (state, action) => {
+    [updateEmailMobileNamesForUserRequest.rejected.toString()]: (state, action) => {
       //TODO: Need to handle this in a UI
       state.error = action.error.message;
       state.loading = false;
     },
-    [getCommunityExpressUserSASLSummaryRequest.pending]: (state, action) => {
+    [getCommunityExpressUserSASLSummaryRequest.pending.toString()]: (state, action) => {
       state.loading = true;
       state.error = false;
     },
-    [getCommunityExpressUserSASLSummaryRequest.fulfilled]: (state, action) => {
+    [getCommunityExpressUserSASLSummaryRequest.fulfilled.toString()]: (state, action) => {
       // state.user = action.payload;
       state.loading = false;
     },
-    [getCommunityExpressUserSASLSummaryRequest.rejected]: (state, action) => {
+    [getCommunityExpressUserSASLSummaryRequest.rejected.toString()]: (state, action) => {
       //TODO: Need to handle this in a UI
       state.error = action.error.message;
       state.loading = false;
     },
-    [sendVerificationCodeRequest.pending]: (state, action) => {
+    [sendVerificationCodeRequest.pending.toString()]: (state, action) => {
       state.loading = true;
       state.error = false;
     },
-    [sendVerificationCodeRequest.fulfilled]: (state, action) => {
+    [sendVerificationCodeRequest.fulfilled.toString()]: (state, action) => {
       state.user = action.payload;
       state.loading = false;
     },
-    [sendVerificationCodeRequest.rejected]: (state, action) => {
+    [sendVerificationCodeRequest.rejected.toString()]: (state, action) => {
       //TODO: Need to handle this in a UI
       state.error = action.error.message;
       state.loading = false;

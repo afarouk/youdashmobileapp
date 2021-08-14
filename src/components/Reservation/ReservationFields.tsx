@@ -10,18 +10,26 @@ import { BusinessData } from '../../types/businessData';
 import { User } from '../../types/user';
 
 import './ReservationForm.css';
+import { useDispatch, useSelector } from '../../redux/store';
+import { setPeopleCount } from '../../redux/slices/reservationSlice';
 
 type Props = {
   businessData: BusinessData,
   user: User,
 }
 
-export const ReservationForm: React.VFC<Props> = ({
+export const ReservationFields: React.VFC<Props> = ({
   businessData,
   user,
 }) => {
+  const dispatch = useDispatch();
+  const peopleCount = useSelector(state => state.reservation.peopleCount);
 
   const peopleCountOptions = Array.from({length: RESERVATION_MAX_PEOPLE_COUNT}, (_, i) => i + 1);
+
+  const handlePeopleCountChange = (count: string) => {
+    dispatch(setPeopleCount(parseInt(count)));
+  }
 
   return (
     <Card className="reservation-form mb-default">
@@ -33,12 +41,11 @@ export const ReservationForm: React.VFC<Props> = ({
       <div className="flex">
         <div className="full-width reservation-form__people-label">How many people</div>
         <AntDSelect
-          placeholder={'Day'}
-          value={1}
-          defaultValue={1}
-          // onChange={handleDayChange}
+          placeholder={'Count'}
+          value={`${peopleCount}`}
+          defaultValue="1"
+          onChange={handlePeopleCountChange}
           className="primary-text-picker"
-          // disabled={isGreenDiningOrdering}
         >
           {peopleCountOptions.map((count) => (
             <AntDSelect.Option value={count} key={count}>

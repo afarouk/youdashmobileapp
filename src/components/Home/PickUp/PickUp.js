@@ -1,6 +1,7 @@
 import React, { memo, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Radio } from 'antd';
+import { Link } from 'react-router-dom';
 
 import differenceInMinutes from 'date-fns/differenceInMinutes';
 
@@ -8,11 +9,13 @@ import { addLeadingZero, changeTimezone, formatAddress } from '../../../utils/he
 import { PickUpSelectors } from '../../Shared/PickUpSelectors/PickUpSelectors';
 import { Card } from '../../Shared/Card/Card';
 
+import keyTagImage from '../../../assets/images/key-tags-3-types.png';
 import usePreventOrdering from '../../../hooks/core/usePreventOrdering';
 import './PickUp.css';
-import {LocationOnIcon} from "../../Shared/Icons/Icons";
+import {CalendarIcon, LocationOnIcon} from "../../Shared/Icons/Icons";
 import {AccessTimeIcon} from "../../Shared/Icons/Icons";
 import { useSelector } from '../../../redux/store';
+import { ROUTE_NAME, useRouting } from '../../../hooks/useRouting';
 
 
 const getDay = () => ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'][new Date().getDay()];
@@ -37,7 +40,12 @@ const getOpenClosingDateTime = (weekDayPolicy, timezone) => {
     open: openDate
   };
 };
-export const PickUp = memo(({ businessData, user }) => {
+export const PickUp = memo(({ 
+  businessData, 
+  user,
+  onLoyaltyClick,
+}) => {
+  const { getRouteUrl } = useRouting();
   const [deliveryType, setDeliveryType] = useState(1);
   const [openStatus, setOpenStatus] = useState('Open');
   const handleDeliveryTypeChange = (e) => setDeliveryType(e.target.value);
@@ -99,23 +107,44 @@ export const PickUp = memo(({ businessData, user }) => {
       
       
       <div className="pickup-line address">
-        <span className="primary-text">
+        <span className="primary-text pickup-line__icon">
           <LocationOnIcon />
 
         </span>
         <span>{formatAddress(address)}</span>
       </div>
-      <div className="pickup-line address">
-        <span className="primary-text">
-          <AccessTimeIcon />
-        </span>
-        <span>
-          {(openingHours || []).map(({ weekDayPolicies }, i) => {
-            return <div key={`openingHours${i}`}>{formatTime(weekDayPolicies[today])}</div>;
-          })}
-        </span>
-        <span className="pickup-status primary-text">{openStatus}</span>
+      <div className="pickup-line address flex">
+        <div className="flex">
+          <span className="pickup-line__icon primary-text">
+            <AccessTimeIcon />
+          </span>
+          <span>
+            {(openingHours || []).map(({ weekDayPolicies }, i) => {
+              return <div key={`openingHours${i}`}>{formatTime(weekDayPolicies[today])}</div>;
+            })}
+          </span>
+        </div>
+        <div className="pickup-line__column">
+          <span className="pickup-status primary-text">{openStatus}</span>
+        </div>
       </div>
+
+      <div className="flex mb-default">
+        <div onClick={onLoyaltyClick} className="pickup-line__column cursor-pointer">
+          <span className="pickup-line__icon pickup-line__loyalty-icon">
+            <img src={keyTagImage} alt="key tag" />
+          </span>
+          <span className="fw-medium pickup-line__link-text">Loyalty</span>
+        </div>
+
+        <Link to={getRouteUrl(ROUTE_NAME.RESERVATION)} className="pickup-line__column">
+          <span className="pickup-line__icon primary-text fw-medium">
+            <CalendarIcon width="1.4em" height="1.4em" className="pickup__calendar-icon" />  
+          </span>
+          <span className="fw-medium pickup-line__link-text">Book a table</span>
+        </Link>
+      </div>
+
       {siteMessage && (
         <div className="pickup-line address">
           <span>{siteMessage}</span>

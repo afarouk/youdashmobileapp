@@ -8,6 +8,8 @@ export enum ROUTE_NAME {
   CART = 'CART',
   LANDING = 'LANDING',
   ORDER_STATUS = 'ORDER_STATUS',
+  RESERVATION = 'RESERVATION',
+  RESERVATION_DETAILS = 'RESERVATION_DETAILS',
 }
 
 const routes: Record<ROUTE_NAME, RouteConfig> = {
@@ -19,6 +21,12 @@ const routes: Record<ROUTE_NAME, RouteConfig> = {
   },
   [ROUTE_NAME.ORDER_STATUS]: {
     url: '/order-status/:orderId',
+  },
+  [ROUTE_NAME.RESERVATION]: {
+    url: '/reservation',
+  },
+  [ROUTE_NAME.RESERVATION_DETAILS]: {
+    url: '/reservation-details',
   },
 }
 
@@ -32,9 +40,12 @@ export const useRouting = () => {
 
 
   const goTo = ({ routeName }: GoToArgs) => {
-    const route = routes[routeName];
+    history.push(getRouteUrl(routeName));
+  }
 
-    history.push(`/${businessUrlKey}${route.url}${window.location.search}`);
+  const getRouteUrl = (routeName: ROUTE_NAME) => {
+    const route = routes[routeName];
+    return `/${businessUrlKey}${route.url}${window.location.search}`
   }
 
   const addQueryParams = ({ params, replace = false }: any) => {
@@ -48,5 +59,5 @@ export const useRouting = () => {
     // history.replace(`?${urlParams}`)
   }
 
-  return { goTo, addQueryParams };
+  return { goTo, addQueryParams, getRouteUrl };
 }
