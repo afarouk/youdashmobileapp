@@ -23,3 +23,18 @@ export type User = {
 export enum USER_TYPE  {
   MEMBER = 'MEMBER',
 }
+
+export type Credentials = {
+  firstName: string;
+  mobile: string;
+  email: string;
+  kUID: string;
+  serviceAccommodatorId?: string,
+  serviceLocationId?: string,
+}
+
+export type KeyTagChangeEvent = CustomEvent<{
+  keyTagEvent: boolean;
+  value: string;
+  name: string;
+}>

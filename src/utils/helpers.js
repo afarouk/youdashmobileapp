@@ -54,7 +54,7 @@ export const formatAddress = ({ city, country, number, state, street, timeZone, 
 export const formatGMapAddress = ({
   city,
   country,
-  number,
+  number = undefined, // it fixes ts error
   state,
   street,
   timeZone,

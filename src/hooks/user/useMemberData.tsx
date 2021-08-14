@@ -3,18 +3,37 @@ import {
   registerNewMemberRequest,
   updateEmailMobileNamesForUserRequest
 } from '../../redux/slices/auth';
-import { useDispatch } from 'react-redux';
 import useUserCookie from './useUserCookie';
-export default (businessData, user, updateMode, setUpdateMode) => {
+
+import { BusinessData } from '../../types/businessData';
+import { User, Credentials, KeyTagChangeEvent } from '../../types/user';
+import { useDispatch, useSelector } from '../../redux/store';
+
+type UseMemberDataResult = [
+  Credentials, 
+  boolean, 
+  (e: any) => void,
+  (updateMode: any, user: any, shouldChangeUpdateMode: any) => any,
+  boolean | string,
+  boolean,
+ ];
+
+const useMemberData = (businessData: BusinessData, user: User, updateMode?: boolean, setUpdateMode?: () => void): UseMemberDataResult => {
   const dispatch = useDispatch();
-  const [requestError, setRequestError] = useState(false);
+  const [requestError, setRequestError] = useState<boolean | string>(false);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [cookies, setCookie] = useUserCookie();
   const [credentialsChanged, setCredentialsChanged] = useState(false);
-  const [credentials, setCredentials] = useState({
+  const userLoading = useSelector(state => state.auth.loading)
+
+
+  const [credentials, setCredentials] = useState<Credentials>({
     firstName: '',
     mobile: '',
     email: '',
-    kUID: ''
+    kUID: '',
+    serviceAccommodatorId: undefined,
+    serviceLocationId: undefined,
   });
   useEffect(() => {
     if (businessData && businessData.serviceAccommodatorId && businessData.serviceLocationId) {
@@ -32,12 +51,14 @@ export default (businessData, user, updateMode, setUpdateMode) => {
         firstName: user.firstName,
         mobile: user.phoneNumber,
         email: user.email,
-        kUID: user.kUID ? user.kUID : null
+        kUID: (user as any).kUID ? (user as any).kUID : null
       });
     }
   }, [user]);
-  const handleCredentialsChange = (e) => {
-    if (e.detail && e.detail.keyTagEvent) {
+  const handleCredentialsChange = (event: React.ChangeEvent<HTMLInputElement> | KeyTagChangeEvent) => {
+    const e: any = event;
+
+    if (typeof e.detail  && e.detail.keyTagEvent) {
       setCredentials({
         ...credentials,
         [e.detail.name]: e.detail.value
@@ -51,7 +72,7 @@ export default (businessData, user, updateMode, setUpdateMode) => {
 
     if (!credentialsChanged) setCredentialsChanged(true);
   };
-  const handleSubmit = (updateMode, user, shouldChangeUpdateMode) => {
+  const handleSubmit = (updateMode: boolean, user: User, shouldChangeUpdateMode: boolean) => {
     if (credentials.firstName && credentials.mobile && credentials.email) {
       setRequestError(false);
       if (user && user.uid && credentialsChanged) {
@@ -60,7 +81,7 @@ export default (businessData, user, updateMode, setUpdateMode) => {
             credentials: credentials,
             user: user
           })
-        ).then(({ payload, error }) => {
+        ).then(({ payload, error }: any) => {
           if (error) {
             setRequestError(error.message ? error.message : true);
             return Promise.reject(error.message ? error.message : true);
@@ -70,7 +91,7 @@ export default (businessData, user, updateMode, setUpdateMode) => {
         });
       } else if (!user) {
         setCredentialsChanged(false);
-        return dispatch(registerNewMemberRequest(credentials)).then(({ payload, error }) => {
+        return dispatch(registerNewMemberRequest(credentials)).then(({ payload, error }: any) => {
           if (error) {
             setRequestError(error.message ? error.message : true);
             return Promise.reject(error.message ? error.message : true);
@@ -81,5 +102,7 @@ export default (businessData, user, updateMode, setUpdateMode) => {
       }
     }
   };
-  return [credentials, credentialsChanged, handleCredentialsChange, handleSubmit, requestError];
+  return [credentials, credentialsChanged, handleCredentialsChange, handleSubmit, requestError, userLoading];
 };
+
+export default useMemberData;

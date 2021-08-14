@@ -1,0 +1,8 @@
+.order-status__directions-image {
+  width: 100%;
+  height: auto;
+}
+
+.order-status__directions > * {
+  margin-bottom: var(--default-margin-bottom);
+}

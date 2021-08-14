@@ -30,6 +30,10 @@ export const Home = ({
 
   const [loyaltyVisible, setLoyaltyVisible] = useState(false);
 
+  const handleLoyaltyClick = () => {
+    setLoyaltyVisible(true)
+  }
+
   return (
     <>
       <Hero saslName={saslName} saslIcon={saslIcon} defaultImageURL={defaultImageURL} />
@@ -43,7 +47,11 @@ export const Home = ({
               user={user}
               loyaltyAndOrderHistory={loyaltyAndOrderHistory}
             />
-            <PickUp user={user} businessData={businessData} />
+            <PickUp 
+              user={user} 
+              businessData={businessData} 
+              onLoyaltyClick={handleLoyaltyClick}
+            />
           </div>
         </div>
         {loyaltyVisible && user && loyaltyAndOrderHistory && (

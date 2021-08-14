@@ -56,6 +56,8 @@
     ]
   },
   "devDependencies": {
+    "@types/react-input-mask": "^3.0.1",
+    "@types/react-qr-reader": "^2.1.4",
     "@types/react-router": "^5.1.14",
     "@types/react-router-dom": "^5.1.7",
     "cra-build-watch": "^3.4.0",

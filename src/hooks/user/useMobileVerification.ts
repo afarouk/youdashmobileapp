@@ -3,22 +3,33 @@ import {
   sendVerificationCodeRequest,
   resendVerificationCodeRequest
 } from '../../redux/slices/auth';
-import { useDispatch } from 'react-redux';
-export default (user) => {
+import { useDispatch } from '../../redux/store';
+import { User } from '../../types/user';
+
+type UseMobileVerificationResult = [
+  boolean,
+  string,
+  string | null,
+  (e: any) => void,
+  () => any,
+  () => Promise<any> | undefined,
+]
+
+export default (user: User): UseMobileVerificationResult => {
   const dispatch = useDispatch();
   const [isMobileVerified, setIsMobileVerified] = useState(false);
   const [verificationCode, setVerificationCode] = useState('');
-  const [verificationCodeError, setVerificationCodeError] = useState(null);
-  const handleVerificationCodeChange = (e) => setVerificationCode(e.target.value);
+  const [verificationCodeError, setVerificationCodeError] = useState<string | null>(null);
+  const handleVerificationCodeChange = (e: any) => setVerificationCode(e.target.value);
   const handleSendVerificationCode = () => {
     if (user && user.uid && verificationCode) {
-      setVerificationCodeError(false);
+      setVerificationCodeError(null);
       return dispatch(
         sendVerificationCodeRequest({
           smsCode: verificationCode,
           UID: user.uid
         })
-      ).then(({ payload, error }) => {
+      ).then(({ payload, error }: any) => {
         if (error) {
           setVerificationCodeError(error.message ? error.message : 'Verification code error.');
           return Promise.reject(error.message ? error.message : 'Verification code error.');

@@ -8,6 +8,7 @@ import {
   GetGreenDiningDetailsParams, 
   GetGreenDiningDetailsResponse,
 } from '../types/api';
+import { AddReservationApiParams, Reservation } from '../types/reservation';
 
 export const businessAPI = {
   getBusinessData: (urlKey: string) =>
@@ -136,6 +137,24 @@ export const greenDiningAPI = {
       params
     })
   },
+}
+
+export const reservationAPI = {
+  addWaitListEnty: (data: AddReservationApiParams) => {
+    const {
+      serviceAccommodatorId,
+      serviceLocationId,
+      ...restData
+    } = data
+    
+
+    return request.post<Reservation>('/apptsvc/rest/syncandupdate/addWaitListEnty', restData, {
+      params: {
+        serviceAccommodatorId,
+        serviceLocationId,
+      }
+    })
+  }
 }
 
 const getCayanToken = (CayanCheckout: any) => {

@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import QrReader from 'react-qr-reader'
 
-import PropTypes, { string } from 'prop-types';
 import { Alert, Button, Input } from 'antd';
 import InputMask from 'react-input-mask';
 import { EditIcon } from '../Icons/Icons';
@@ -9,21 +8,32 @@ import keyTagImage from '../../../assets/images/key-tags-3-types.png';
 import './UserDataForm.css';
 import Modal from 'antd/lib/modal/Modal';
 import { KEY_TAG_URL_PARAMETER } from '../../../config/constants';
+import { KeyTagChangeEvent, User } from '../../../types/user';
 
-export const UserDataForm = ({
+type Props = {
+  user: User,
+  credentials: any,
+  onChange: (event: React.ChangeEvent<HTMLInputElement> | KeyTagChangeEvent) => void,
+  updateMode?: boolean,
+  disabledFields?: string[],
+  toggleUpdateMode?: (event: React.MouseEvent) => void,
+  shouldChangeUpdateMode?: boolean,
+}
+
+export const UserDataForm: React.VFC<Props> = ({
   credentials,
   onChange,
-  updateMode,
+  updateMode = false,
   user,
   disabledFields = [],
   toggleUpdateMode,
   shouldChangeUpdateMode = false,
 }) => {
 
-  const [scanError, setScanError] = useState('');
+  const [scanError, setScanError] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
 
-  const handleScan = data => {
+  const handleScan = (data: any) => {
     if (!data || typeof data !== 'string') {
       return;
     }
@@ -53,7 +63,7 @@ export const UserDataForm = ({
     }
   }
 
-  const handleError = err => {
+  const handleError = (err: any) => {
     setScanError(true);
   }
 
@@ -95,7 +105,7 @@ export const UserDataForm = ({
             onChange={onChange}
             disabled={disabledFields.includes('mobile')}
           >
-            {(inputProps) => (
+            {(inputProps: any) => (
               <Input
                 {...inputProps}
                 autoComplete="off"
@@ -181,7 +191,3 @@ export const UserDataForm = ({
     </>
   );
 }
-
-UserDataForm.propTypes = {
-  onChange: PropTypes.func.isRequired
-};

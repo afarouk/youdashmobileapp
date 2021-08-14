@@ -7,8 +7,7 @@
 .order-status p {
   font-weight: 400;
 }
-.order-status .order-status__pickup > *,
-.order-status .order-status__directions > * {
+.order-status .order-status__pickup > * {
   margin-bottom: var(--default-margin-bottom);
 }
 .flex.order-status__timeline {
@@ -53,9 +52,4 @@
   color: var(--secondary-color);
   position: relative;
   top: 7px;
-}
-
-.order-status__directions-image {
-  width: 100%;
-  height: auto;
 }

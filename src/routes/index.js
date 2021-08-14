@@ -21,6 +21,7 @@ const PollPage = lazy(() => import(/* webpackChunkName: 'Poll'*/ '../pages/poll'
 const SignUpPage = lazy(() => import(/* webpackChunkName: 'SignUp'*/ '../pages/sign-up'));
 const LoginPage = lazy(() => import(/* webpackChunkName: 'Login'*/ '../pages/login'));
 const ReservationPage = lazy(() => import(/* webpackChunkName: 'Reservation'*/ '../pages/reservation'));
+const ReservationDetailsPage = lazy(() => import(/* webpackChunkName: 'Reservation'*/ '../pages/reservation-details'));
 
 export const Routes = ({ user }) => {
   return (
@@ -58,6 +59,12 @@ export const Routes = ({ user }) => {
             path="/:businessUrlKey/reservation"
             component={ReservationPage}
             pageTitle={routes.reservation.title}
+          />
+
+          <PublicRoute
+            path="/:businessUrlKey/reservation-details"
+            component={ReservationDetailsPage}
+            pageTitle={routes.reservationDetails.title}
           />
 
           <PublicRoute

@@ -1,0 +1,21 @@
+.app-loading-element {
+  position: relative;
+}
+
+.app-loading-element--loading .app-loading-element .app-loading-element__progress  {
+  /* hides loader inside loader so we don't show 2 loaders one inside another */
+  display: none; 
+}
+
+.app-loading-element__loader-container {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  z-index: 10;
+  background-color: rgba(255, 255, 255, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

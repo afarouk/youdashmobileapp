@@ -11,6 +11,7 @@ export type BusinessData = {
       timeZone: string | null,
       locale: string | null,
       zip: string | null,
+      number?: string | null,
     }
   },
   discounts: any[],

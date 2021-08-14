@@ -1,5 +1,5 @@
 import { configureStore, getDefaultMiddleware, combineReducers } from '@reduxjs/toolkit';
-import { TypedUseSelectorHook, useSelector as useReduxSelector } from 'react-redux';
+import { TypedUseSelectorHook, useSelector as useReduxSelector, useDispatch as useReduxDispatch } from 'react-redux';
 import { businessReducer } from './slices/business';
 
 import { authReducer } from './slices/auth';
@@ -12,6 +12,7 @@ import { cardConnectIframeReducer } from './slices/cardConnectIframe';
 import { heartlandReducer } from './slices/heartland';
 import { nabancardReducer } from './slices/nabancard';
 import { greenDiningReducer } from './slices/greenDiningSlice';
+import { reservationReducer } from './slices/reservationSlice'
 
 const middleware = [
   ...getDefaultMiddleware()
@@ -30,6 +31,7 @@ const rootReducer = combineReducers({
   heartland: heartlandReducer,
   nabancard: nabancardReducer,
   greenDining: greenDiningReducer,
+  reservation: reservationReducer,
 })
 
 export const store = configureStore({
@@ -38,5 +40,7 @@ export const store = configureStore({
 });
 
 export type AppState = ReturnType<typeof rootReducer>;
+export type AppDispatch = typeof store.dispatch
 
 export const useSelector: TypedUseSelectorHook<AppState> = useReduxSelector;
+export const useDispatch = () => useReduxDispatch<AppDispatch>()
