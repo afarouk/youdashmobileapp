@@ -311,12 +311,12 @@ const mapBusinessData = (urlKey: any, data: any): BusinessState['data'] => {
     hasGroupsBasedOnDay,
     catalogs: data.catalogs,
     storeFrontImageURL,
-    services: {
-      appointmentService: {
-        masterEnabled: true,
-      }
-    }
-    // services, TODO: uncomment it when business will be prepared for reservation
+    services,
+    // services: {
+    //   appointmentService: {
+    //     masterEnabled: true,
+    //   }
+    // }
   };
 };
 
