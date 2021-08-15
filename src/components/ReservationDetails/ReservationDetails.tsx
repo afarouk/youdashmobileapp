@@ -6,6 +6,7 @@ import { LoadingElement } from '../Shared/LoadingElement';
 import { User } from '../../types/user';
 import { Reservation } from '../../types/reservation';
 import { ReservationInfoCard } from './ReservationInfoCard';
+import { BarcodeCard } from '../Shared/BarcodeCard';
 
 type Props = {
   user: User,
@@ -18,6 +19,7 @@ type Props = {
   address?: string,
   saslName: string,
   storeFrontImageURL: string,
+  barcode: string,
 }
 
 export const ReservationDetails: React.VFC<Props> = ({
@@ -28,6 +30,7 @@ export const ReservationDetails: React.VFC<Props> = ({
   saslName,
   address,
   storeFrontImageURL,
+  barcode
 }) => {
 
 
@@ -42,6 +45,7 @@ export const ReservationDetails: React.VFC<Props> = ({
         isDemo={isDemo}
         storeFrontImageURL={storeFrontImageURL}
       />
+      <BarcodeCard value={barcode} />
     </LoadingElement>
   )
 }

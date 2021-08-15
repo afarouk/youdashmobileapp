@@ -30,6 +30,11 @@ const initialState: BusinessState = {
       polls: [],
       highLightedItem: null
     },
+    services: {
+      appointmentService: {
+        masterEnabled: false,
+      },
+    },
     pickUp: {
       dayPickUpTimes: [],
       isOpen: null,
@@ -210,7 +215,7 @@ const mapBusinessData = (urlKey: any, data: any): BusinessState['data'] => {
     services,
     latitude,
     longitude,
-    ogTags
+    ogTags,
   } = data?.siteletteDataModel?.sasl;
 
   const {
@@ -306,6 +311,12 @@ const mapBusinessData = (urlKey: any, data: any): BusinessState['data'] => {
     hasGroupsBasedOnDay,
     catalogs: data.catalogs,
     storeFrontImageURL,
+    services: {
+      appointmentService: {
+        masterEnabled: true,
+      }
+    }
+    // services, TODO: uncomment it when business will be prepared for reservation
   };
 };
 

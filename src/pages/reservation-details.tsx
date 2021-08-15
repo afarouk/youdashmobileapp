@@ -22,7 +22,10 @@ const ReservationDetailsPage: React.FC<Props> = ({ businessData, user }) => {
     storeFrontImageURL,
   } = businessData;
 
-  const { reservation } = useReservationDetails();
+  const { 
+    reservation,
+    barcode,
+  } = useReservationDetails();
   
   const formattedAddress = address ? formatGMapAddress(address) : '';
 
@@ -35,6 +38,7 @@ const ReservationDetailsPage: React.FC<Props> = ({ businessData, user }) => {
       isDemo={isDemo}
       address={formattedAddress}
       storeFrontImageURL={storeFrontImageURL}
+      barcode={barcode}
     />
   )
 }

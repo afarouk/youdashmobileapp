@@ -3,7 +3,7 @@ import { Container } from '../Shared/Container/Container';
 import { PickUp } from './PickUp';
 import { Directions } from './Directions';
 import { OrderTimeLine } from './OrderTimeLine';
-import { OrderBarcode } from './OrderBarcode';
+import { BarcodeCard } from '../Shared/BarcodeCard';
 import './OrderStatus.css';
 
 type Props = {
@@ -42,7 +42,7 @@ export const OrderStatus: React.FC<Props> = ({
         isDemo={isDemo}
         storeFrontImageURL={storeFrontImageURL}
       />
-      <OrderBarcode value={`ocg_${orderId ? orderId : ''}`} />
+      <BarcodeCard value={`ocg_${orderId ? orderId : ''}`} />
       <OrderTimeLine orderStatus={orderStatus} />
     </Container>
   );

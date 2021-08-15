@@ -14,6 +14,11 @@ export type BusinessData = {
       number?: string | null,
     }
   },
+  services: {
+    appointmentService: {
+      masterEnabled: boolean,
+    },
+  },
   discounts: any[],
   storeFrontImageURL: string,
   [key: string]: any,

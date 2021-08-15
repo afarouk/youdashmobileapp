@@ -26,9 +26,6 @@
 .order-status__pickup p > span:nth-child(2) {
   font-weight: 600;
 }
-.order-status__barcode svg {
-  width: 100%;
-}
 
 .order-status__pickup-delivery-type {
   font-size: 1.2rem;
