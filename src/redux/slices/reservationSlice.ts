@@ -9,7 +9,7 @@ type ReservationState = {
   data: Reservation | null,
 
   addReservationLoading: boolean,
-  addReservationError: string | null,
+  addReservationError: string | null | undefined,
 }
 
 const initialState: ReservationState = {
@@ -38,7 +38,7 @@ export const addReservationAction = createAsyncThunk<Reservation, AddReservation
 
       return response.data;
     } catch (error) {
-      return rejectWithValue((error.message as string) || GENERIC_ERROR_MESSAGE);
+      return rejectWithValue(error || GENERIC_ERROR_MESSAGE);
     }
   }
 )
@@ -62,7 +62,8 @@ const reservationSlice = createSlice({
     })
     .addCase(addReservationAction.rejected, (state, action) => {
       state.addReservationLoading = false;
-      state.addReservationError = action.payload || GENERIC_ERROR_MESSAGE;
+      console.log('action', action)
+      state.addReservationError = action.payload;
     })
 })
 

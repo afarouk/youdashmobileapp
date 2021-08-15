@@ -18,7 +18,7 @@ type Props = {
   businessData: BusinessData,
   user: User,
   loading: boolean,
-  error: string | null,
+  error: string | null | undefined,
   verificationCode: string,
   isMobileVerified: boolean,
   onVerificationCodeChange: any,
@@ -86,6 +86,14 @@ export const Reservation: React.VFC<Props> = ({
           </div>
         </LoadingElement>
 
+        {error && (
+          <Alert
+            className="mb-default"
+            message={error}
+            type="error"
+          />
+        )}
+
         <Button
           block
           size="large"
@@ -93,6 +101,7 @@ export const Reservation: React.VFC<Props> = ({
           className="font-size-md"
           htmlType="submit"
           loading={loading}
+          disabled={userLoading}
         >
           Book my table
         </Button>
