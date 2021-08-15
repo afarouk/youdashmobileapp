@@ -61,10 +61,11 @@ export const Routes = ({ user }) => {
             pageTitle={routes.reservation.title}
           />
 
-          <PublicRoute
+          <ProtectedRoute
             path="/:businessUrlKey/reservation-details"
             component={ReservationDetailsPage}
             pageTitle={routes.reservationDetails.title}
+            user={user}
           />
 
           <PublicRoute
