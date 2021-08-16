@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { amountTypes, DISCOUNT_QUERY_PARAMETER_NAME, DISCOUNT_UUID_QUERY_PARAMETER_NAME } from '../../config/constants';
 import { useLocation } from 'react-router-dom';
-import { calculateDiscountedPrice, getPercent, floatNum } from '../../utils/helpers';
+import { calculateDiscountedPrice, getPercent, floatNum, roundToTwoPlaces } from '../../utils/helpers';
 import { useSelector } from '../../redux/store';
 
 export default (businessData, priceSubTotal, shoppingCartItems) => {
@@ -35,7 +35,7 @@ export default (businessData, priceSubTotal, shoppingCartItems) => {
   const discounts = useSelector(state => state.shoppingCart.discounts.byId)
 
   const handleTipsChange = (value) => {
-    const totalBeforeTaxes = discountedPriceSubTotal + +(+extraFee.value);
+    const totalBeforeTaxes = discountedPriceSubTotal;
     setTips({
       value: value ? value : 0,
       percentValue: value
@@ -95,7 +95,7 @@ export default (businessData, priceSubTotal, shoppingCartItems) => {
 
   useEffect(() => {
     setPriceTotal(
-      floatNum(discountedPriceSubTotal + tips.percentValue + +taxes.value)
+      roundToTwoPlaces(discountedPriceSubTotal + tips.percentValue + +taxes.value)
     );
   }, [tips]);
 
@@ -144,7 +144,9 @@ export default (businessData, priceSubTotal, shoppingCartItems) => {
       setTips({ value: 0, percentValue: 0 });
       return;
     }
-    setPriceTotal(floatNum(discountedPriceSubTotal + taxValue));
+
+    handleTipsChange(tips.value);
+    setPriceTotal(roundToTwoPlaces(discountedPriceSubTotal + taxValue));
   }, [businessData.extraFees, discountedPriceSubTotal, shoppingCartItems]);
 
   return [

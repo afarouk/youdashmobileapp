@@ -60,7 +60,6 @@ export const Routes = ({ user }) => {
             component={ReservationPage}
             pageTitle={routes.reservation.title}
           />
-
           <PublicRoute
             path="/:businessUrlKey/reservation-details"
             component={ReservationDetailsPage}
