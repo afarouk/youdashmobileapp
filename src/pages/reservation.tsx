@@ -8,6 +8,7 @@ import { Reservation } from '../components/Reservation/Reservation';
 import { BusinessData } from '../types/businessData';
 import { User } from '../types/user';
 import { ROUTE_NAME, useRouting } from '../hooks/useRouting';
+import { useReservationDetails } from '../hooks/reservation/useReservationDetails';
 
 type Props = {
   businessData: BusinessData,
@@ -26,6 +27,8 @@ const ReservationPage: React.FC<Props> = ({ businessData, user }) => {
     reservationDate,
   } = useAddReservation();
 
+  const { reservation } = useReservationDetails();
+
   const [
     isMobileVerified,
     verificationCode,
@@ -37,10 +40,12 @@ const ReservationPage: React.FC<Props> = ({ businessData, user }) => {
 
 
   useEffect(() => {
-    if (businessData && !reservationEnabled) {
-      goTo({ routeName: ROUTE_NAME.LANDING });
+    if (businessData) {
+      if (!reservationEnabled || reservation) {
+        goTo({ routeName: ROUTE_NAME.LANDING });
+      }
     }
-  }, [businessData])
+  }, [businessData, reservation])
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();

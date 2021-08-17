@@ -10,6 +10,7 @@ import { useEffect } from 'react';
 
 import useAuthActions from './useAuthActions';
 import useUserCookie from './useUserCookie';
+import { setData } from '../../redux/slices/reservationSlice';
 
 export default (initLoad = false) => {
   const dispatch = useDispatch();
@@ -32,7 +33,7 @@ export default (initLoad = false) => {
         })
       ).then(({ payload, error }) => {
         if (error) return;
-        const { loyaltyOrderHistoryForUser, notification, priority, pollResults } = payload;
+        const { loyaltyOrderHistoryForUser, notification, priority, pollResults, waitListEntry } = payload;
 
         dispatch(
           setLoyaltyAndOrderHistoryData({
@@ -42,6 +43,8 @@ export default (initLoad = false) => {
             priority
           })
         );
+
+        dispatch(setData(waitListEntry));
       });
     }
   };
@@ -67,7 +70,8 @@ export default (initLoad = false) => {
           loyaltyOrderHistoryForUser,
           notification,
           priority,
-          pollResults
+          pollResults,
+          waitListEntry,
         } = payload;
         const { userRegistrationDetails, action, welcomeMessage } = authenticationDetails;
         if (authenticationDetails && action && action.enumText) {
@@ -100,6 +104,7 @@ export default (initLoad = false) => {
             priority
           })
         );
+        dispatch(setData(waitListEntry));
       });
     }
   }, [serviceAccommodatorId, serviceLocationId]);

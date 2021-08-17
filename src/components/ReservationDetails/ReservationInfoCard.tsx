@@ -11,10 +11,12 @@ type Props = {
 export const ReservationInfoCard: React.VFC<Props> = ({ reservation }) => {
   let formattedReservationTime = '';
 
-  if (reservation) {
-    const reservationTime = new Date(reservation.startTime);
+  if (reservation && reservation.year && reservation.year > 0) {
+    const { year, month, day, hour, minute } = reservation;
+    const reservationTime = new Date(year, month, day, hour, minute);
     formattedReservationTime = ` ${format(reservationTime, 'MMMM d, h:mmaaa')}`;
   }
+
 
   return (
     <Card className="mb-default">

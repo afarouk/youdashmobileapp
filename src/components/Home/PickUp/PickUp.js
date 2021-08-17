@@ -41,6 +41,7 @@ const getOpenClosingDateTime = (weekDayPolicy, timezone) => {
     open: openDate
   };
 };
+
 export const PickUp = memo(({ 
   businessData, 
   user,
@@ -50,6 +51,8 @@ export const PickUp = memo(({
   const [deliveryType, setDeliveryType] = useState(1);
   const [openStatus, setOpenStatus] = useState('Open');
   const reservationEnabled = useSelector(selectReservationEnabled);
+  const reservation = useSelector(state => state.reservation.data);
+  const reservationInitialDataLoaded = useSelector(state => state.reservation.initialDataLoaded);
   const handleDeliveryTypeChange = (e) => setDeliveryType(e.target.value);
   const { openingHours } = businessData;
   const { siteMessage, isOpen, address } = businessData.pickUp;
@@ -86,6 +89,9 @@ export const PickUp = memo(({
       );
     }
   }, [openingHours, preventOrdering]);
+
+  const hasReservation = reservation && reservation.entryId;
+  const reservationRoute = hasReservation ? ROUTE_NAME.RESERVATION_DETAILS : ROUTE_NAME.RESERVATION;
 
   return (
     <Card className={'pickup'}>
@@ -139,12 +145,14 @@ export const PickUp = memo(({
           <span className="fw-medium pickup-line__link-text">Loyalty</span>
         </div>
 
-        {reservationEnabled && (
-          <Link to={getRouteUrl(ROUTE_NAME.RESERVATION)} className="pickup-line__column">
+        {reservationEnabled & reservationInitialDataLoaded && (
+          <Link to={getRouteUrl(reservationRoute)} className="pickup-line__column">
             <span className="pickup-line__icon primary-text fw-medium">
               <CalendarIcon width="1.4em" height="1.4em" className="pickup__calendar-icon" />  
             </span>
-            <span className="fw-medium pickup-line__link-text">Book a table</span>
+            <span className="fw-medium pickup-line__link-text">
+              {hasReservation ? 'Check reservation' : 'Book a table'}
+            </span>
           </Link>
         )}
       </div>

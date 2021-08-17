@@ -7,6 +7,7 @@ type ReservationState = {
   peopleCount: number,
 
   data: Reservation | null,
+  initialDataLoaded: boolean,
 
   addReservationLoading: boolean,
   addReservationError: string | null | undefined,
@@ -16,6 +17,7 @@ const initialState: ReservationState = {
   peopleCount: 1,
   
   data: null,
+  initialDataLoaded: false,
 
   addReservationLoading: false,
   addReservationError: null,
@@ -51,6 +53,10 @@ const reservationSlice = createSlice({
   reducers: {
     setPeopleCount: (state, action: PayloadAction<number>) => {
       state.peopleCount = action.payload;
+    },
+    setData: (state, action: PayloadAction<Reservation>) => {
+      state.data = action.payload;
+      state.initialDataLoaded = true;
     }
   },
   extraReducers: (builder) => builder
@@ -71,6 +77,7 @@ const reservationSlice = createSlice({
 
 export const { 
   setPeopleCount,
+  setData,
 } = reservationSlice.actions
 
 export const reservationReducer = reservationSlice.reducer;
