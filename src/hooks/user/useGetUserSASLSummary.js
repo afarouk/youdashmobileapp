@@ -10,7 +10,7 @@ import { useEffect } from 'react';
 
 import useAuthActions from './useAuthActions';
 import useUserCookie from './useUserCookie';
-import { setData } from '../../redux/slices/reservationSlice';
+import { setData, setInitialDataLoaded } from '../../redux/slices/reservationSlice';
 
 export default (initLoad = false) => {
   const dispatch = useDispatch();
@@ -32,7 +32,10 @@ export default (initLoad = false) => {
           serviceLocationId
         })
       ).then(({ payload, error }) => {
-        if (error) return;
+        if (error) {
+          dispatch(setInitialDataLoaded());
+          return;
+        }
         const { loyaltyOrderHistoryForUser, notification, priority, pollResults, waitListEntry } = payload;
 
         dispatch(
@@ -64,7 +67,11 @@ export default (initLoad = false) => {
           serviceLocationId
         })
       ).then(({ payload, error }) => {
-        if (error) return;
+        if (error) {
+          dispatch(setInitialDataLoaded());
+          return;
+        }
+        
         const {
           authenticationDetails,
           loyaltyOrderHistoryForUser,
@@ -106,6 +113,8 @@ export default (initLoad = false) => {
         );
         dispatch(setData(waitListEntry));
       });
+    } else if (serviceAccommodatorId && serviceLocationId) {
+      dispatch(setInitialDataLoaded());
     }
   }, [serviceAccommodatorId, serviceLocationId]);
 

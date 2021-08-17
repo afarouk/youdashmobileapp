@@ -145,7 +145,7 @@ export const PickUp = memo(({
           <span className="fw-medium pickup-line__link-text">Loyalty</span>
         </div>
 
-        {reservationEnabled & reservationInitialDataLoaded && (
+        {reservationEnabled && reservationInitialDataLoaded && (
           <Link to={getRouteUrl(reservationRoute)} className="pickup-line__column">
             <span className="pickup-line__icon primary-text fw-medium">
               <CalendarIcon width="1.4em" height="1.4em" className="pickup__calendar-icon" />  

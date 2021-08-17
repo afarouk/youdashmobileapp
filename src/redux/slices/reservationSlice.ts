@@ -57,6 +57,9 @@ const reservationSlice = createSlice({
     setData: (state, action: PayloadAction<Reservation>) => {
       state.data = action.payload;
       state.initialDataLoaded = true;
+    },
+    setInitialDataLoaded: (state, action: PayloadAction<void>) => {
+      state.initialDataLoaded = true;
     }
   },
   extraReducers: (builder) => builder
@@ -70,7 +73,6 @@ const reservationSlice = createSlice({
     })
     .addCase(addReservationAction.rejected, (state, action) => {
       state.addReservationLoading = false;
-      console.log('action', action)
       state.addReservationError = action.payload;
     })
 })
@@ -78,6 +80,7 @@ const reservationSlice = createSlice({
 export const { 
   setPeopleCount,
   setData,
+  setInitialDataLoaded,
 } = reservationSlice.actions
 
 export const reservationReducer = reservationSlice.reducer;
