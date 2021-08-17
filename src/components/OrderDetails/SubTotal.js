@@ -13,7 +13,7 @@ export const SubTotal = ({
   const hasDiscount =
     priceSubTotal !== discountedPriceSubTotal && orderDiscount && orderDiscount.discount;
 
-  const discountAmount = priceSubTotal - discountedPriceSubTotal
+  const discountAmount = parseFloat(priceSubTotal.toFixed(2)) - parseFloat(discountedPriceSubTotal.toFixed(2))
 
   return (
     <div className="subtotal">
