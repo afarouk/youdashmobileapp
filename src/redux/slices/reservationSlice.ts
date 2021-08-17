@@ -28,12 +28,14 @@ export const addReservationAction = createAsyncThunk<Reservation, AddReservation
     const state: any = getState();
     const serviceAccommodatorId = state.business.data.serviceAccommodatorId;
     const serviceLocationId = state.business.data.serviceLocationId;
+    const uid = state.auth.user.uid;
 
     try {
       const response = await reservationAPI.addWaitListEnty({
         ...data,
         serviceLocationId,
         serviceAccommodatorId,
+        uid,
       })
 
       return response.data;

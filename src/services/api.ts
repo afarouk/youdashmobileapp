@@ -144,6 +144,7 @@ export const reservationAPI = {
     const {
       serviceAccommodatorId,
       serviceLocationId,
+      uid,
       ...restData
     } = data
     
@@ -152,6 +153,7 @@ export const reservationAPI = {
       params: {
         serviceAccommodatorId,
         serviceLocationId,
+        UID: uid,
       }
     })
   }

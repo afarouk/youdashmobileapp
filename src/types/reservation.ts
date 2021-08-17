@@ -50,6 +50,7 @@ export type AddReservationData = {
 export type AddReservationApiParams = AddReservationData & {
   serviceAccommodatorId: string,
   serviceLocationId: string,
+  uid: string,
 }
 
 export enum ENTRY_SOURCE_TYPE {
