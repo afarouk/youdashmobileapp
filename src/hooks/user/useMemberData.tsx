@@ -58,7 +58,7 @@ const useMemberData = (businessData: BusinessData, user: User, updateMode?: bool
   const handleCredentialsChange = (event: React.ChangeEvent<HTMLInputElement> | KeyTagChangeEvent) => {
     const e: any = event;
 
-    if (typeof e.detail  && e.detail.keyTagEvent) {
+    if (e.detail   && e.detail.keyTagEvent) {
       setCredentials({
         ...credentials,
         [e.detail.name]: e.detail.value
