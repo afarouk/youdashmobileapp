@@ -436,7 +436,6 @@ const getAuthorizationsAndDsicounts = ({
   }
 
   return {
-    authorizations: null,
     discounts: discounts && discounts.length > 0 ? discounts : null,
     loyaltyStatus: loyaltyActive ? loyaltyStatus : null,
     promotions: null,
