@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { GENERIC_ERROR_MESSAGE } from '../../config/constants';
 import { reservationAPI } from '../../services/api';
-import { AddReservationData, Reservation } from '../../types/reservation';
+import { AddReservationData, CancelReservationData, Reservation } from '../../types/reservation';
 
 type ReservationState = {
   peopleCount: number,
@@ -11,6 +11,9 @@ type ReservationState = {
 
   addReservationLoading: boolean,
   addReservationError: string | null | undefined,
+
+  cancelReservationLoading: boolean,
+  cancelReservationError: string | null | undefined,
 }
 
 const initialState: ReservationState = {
@@ -21,6 +24,9 @@ const initialState: ReservationState = {
 
   addReservationLoading: false,
   addReservationError: null,
+
+  cancelReservationLoading: false,
+  cancelReservationError: null,
 }
 
 export const addReservationAction = createAsyncThunk<Reservation, AddReservationData, { rejectValue: string }>(
@@ -33,11 +39,35 @@ export const addReservationAction = createAsyncThunk<Reservation, AddReservation
     const uid = state.auth.user.uid;
 
     try {
-      const response = await reservationAPI.addWaitListEnty({
+      const response = await reservationAPI.addWaitListEntry({
         ...data,
         serviceLocationId,
         serviceAccommodatorId,
         uid,
+      })
+
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error || GENERIC_ERROR_MESSAGE);
+    }
+  }
+)
+
+export const cancelReservationAction = createAsyncThunk<void, CancelReservationData, { rejectValue: string }>(
+  'reservation/cancel',
+  async (data, { rejectWithValue, getState  }) => {
+    // TODO: move serviceAccommodatorId, serviceLocationId logic to API
+    const state: any = getState();
+    const serviceAccommodatorId = state.business.data.serviceAccommodatorId;
+    const serviceLocationId = state.business.data.serviceLocationId;
+    const UID = state.auth.user.uid;
+
+    try {
+      const response = await reservationAPI.cancelWaitListEntry({
+        ...data,
+        serviceLocationId,
+        serviceAccommodatorId,
+        UID,
       })
 
       return response.data;
@@ -74,6 +104,18 @@ const reservationSlice = createSlice({
     .addCase(addReservationAction.rejected, (state, action) => {
       state.addReservationLoading = false;
       state.addReservationError = action.payload;
+    })
+    .addCase(cancelReservationAction.pending, (state, action) => {
+      state.cancelReservationLoading = true;
+      state.cancelReservationError = null;
+    })
+    .addCase(cancelReservationAction.fulfilled, (state, action) => {
+      state.cancelReservationLoading = false;
+      state.cancelReservationError = null;
+    })
+    .addCase(cancelReservationAction.rejected, (state, action) => {
+      state.cancelReservationLoading = false;
+      state.cancelReservationError = action.payload;
     })
 })
 

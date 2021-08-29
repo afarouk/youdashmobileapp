@@ -30,10 +30,8 @@ export const ReservationDetails: React.VFC<Props> = ({
   saslName,
   address,
   storeFrontImageURL,
-  barcode
+  barcode,
 }) => {
-
-
   return (
     <LoadingElement loading={false} className="p-default">
       <ReservationInfoCard reservation={reservation} />

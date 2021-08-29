@@ -67,6 +67,19 @@ export type AddReservationApiParams = AddReservationData & {
   uid: string,
 }
 
+export type CancelWaitListEntryParams = {
+  serviceAccommodatorId: string,
+  serviceLocationId: string,
+  UID: string,
+  entryId: string,
+}
+
+export type CancelReservationData = {
+  entryId: string,
+}
+
+export type CancelWaitListEntryResponse = any;
+
 export enum ENTRY_SOURCE_TYPE {
   WEB = 'WEB',
 }

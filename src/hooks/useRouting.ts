@@ -59,5 +59,5 @@ export const useRouting = () => {
     // history.replace(`?${urlParams}`)
   }
 
-  return { goTo, addQueryParams, getRouteUrl };
+  return { goTo, addQueryParams, getRouteUrl, ROUTE_NAME };
 }

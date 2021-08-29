@@ -8,7 +8,7 @@ import {
   GetGreenDiningDetailsParams, 
   GetGreenDiningDetailsResponse,
 } from '../types/api';
-import { AddReservationApiParams, Reservation } from '../types/reservation';
+import { AddReservationApiParams, CancelWaitListEntryParams, CancelWaitListEntryResponse, Reservation } from '../types/reservation';
 
 export const businessAPI = {
   getBusinessData: (urlKey: string) =>
@@ -140,7 +140,7 @@ export const greenDiningAPI = {
 }
 
 export const reservationAPI = {
-  addWaitListEnty: (data: AddReservationApiParams) => {
+  addWaitListEntry: (data: AddReservationApiParams) => {
     const {
       serviceAccommodatorId,
       serviceLocationId,
@@ -156,8 +156,14 @@ export const reservationAPI = {
         UID: uid,
       }
     })
-  }
+  },
+  cancelWaitListEntry: (params: CancelWaitListEntryParams) => {
+    return request.delete<CancelWaitListEntryResponse>('/apptsvc/rest/synch/cancelWaitListByEntryId', {
+      params,
+    })
+  },
 }
+
 
 const getCayanToken = (CayanCheckout: any) => {
   return new Promise((resolve, reject) => {
