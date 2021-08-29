@@ -158,7 +158,7 @@ export const reservationAPI = {
     })
   },
   cancelWaitListEntry: (params: CancelWaitListEntryParams) => {
-    return request.delete<CancelWaitListEntryResponse>('/apptsvc/rest/synch/cancelWaitListByEntryId', {
+    return request.delete<CancelWaitListEntryResponse>('/apptsvc/rest/syncandupdate/cancelWaitListByEntryId', {
       params,
     })
   },
