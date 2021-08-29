@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { Alert, Button } from 'antd';
 import { ShareIcon } from '../Shared/Icons/Icons';
 import useNativeShare from "../../hooks/useNativeShare";
+import { useMenuOnlyQrCode } from '../../hooks/useMenuOnlyQrCode';
 
 export const Order = ({
   quantity,
@@ -13,6 +14,7 @@ export const Order = ({
   preventOrdering
 }) => {
   const [onShare] = useNativeShare();
+  const { isMenuOnlyQrCode } = useMenuOnlyQrCode();
 
   return (
     <div className="product-order">
@@ -43,7 +45,7 @@ export const Order = ({
         type="primary"
         block
         size="large"
-        disabled={!quantity || preventOrdering}
+        disabled={!quantity || preventOrdering || isMenuOnlyQrCode}
         onClick={addToCart}
       >
         {!isShoppingCart ? 'Add to cart' : 'Apply changes'}
