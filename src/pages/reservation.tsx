@@ -10,7 +10,6 @@ import { User } from '../types/user';
 import { ROUTE_NAME, useRouting } from '../hooks/useRouting';
 import { useReservationDetails } from '../hooks/reservation/useReservationDetails';
 import useMemberData from '../hooks/user/useMemberData';
-import { useDispatch } from '../redux/store';
 import { setUserAuthorizationInProgress } from '../redux/slices/reservationSlice';
 
 type Props = {
@@ -21,8 +20,6 @@ type Props = {
 const ReservationPage: React.FC<Props> = ({ businessData, user }) => {
   const { goTo } = useRouting();
   const [formError, setFormError] = useState('');
-
-  const dispatch = useDispatch();
 
   const {
     addReservation,

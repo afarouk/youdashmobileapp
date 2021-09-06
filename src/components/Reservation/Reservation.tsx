@@ -3,8 +3,6 @@ import React from 'react';
 import { ReservationFields } from './ReservationFields';
 import { Form } from '../Shared/Form/Form';
 
-import useMemberData from '../../hooks/user/useMemberData';
-
 import { Alert, Button } from 'antd';
 import { BusinessData } from '../../types/businessData';
 import { User } from '../../types/user';

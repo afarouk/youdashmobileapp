@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import { Modal } from 'antd';
 import { cancelReservationAction, clearCancelReservationError } from "../../redux/slices/reservationSlice";
 import { useDispatch, useSelector } from "../../redux/store";
@@ -9,7 +8,6 @@ export const useCancelReservation = () => {
   const { goTo, ROUTE_NAME } = useRouting();
   const reservation = useSelector(state => state.reservation.data);
   const cancelReservationError = useSelector(state => state.reservation.cancelReservationError);
-  const initialDataLoaded = useSelector(state => state.reservation.initialDataLoaded);
 
   // useEffect(() => {
   //  This causes the bug wit redirects after user made a registration
