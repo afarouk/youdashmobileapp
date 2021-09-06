@@ -9,6 +9,7 @@ type ReservationState = {
   data: Reservation | null,
   initialDataLoaded: boolean,
 
+  userAuthorizationInProgress: boolean,
   addReservationLoading: boolean,
   addReservationError: string | null | undefined,
 
@@ -22,6 +23,7 @@ const initialState: ReservationState = {
   data: null,
   initialDataLoaded: false,
 
+  userAuthorizationInProgress: false,
   addReservationLoading: false,
   addReservationError: null,
 
@@ -90,6 +92,12 @@ const reservationSlice = createSlice({
     },
     setInitialDataLoaded: (state, action: PayloadAction<void>) => {
       state.initialDataLoaded = true;
+    },
+    clearCancelReservationError: (state, action: PayloadAction<void>) => {
+      state.cancelReservationError = null;
+    },
+    setUserAuthorizationInProgress: (state, action: PayloadAction<boolean>) => {
+      state.userAuthorizationInProgress = action.payload;
     }
   },
   extraReducers: (builder) => builder
@@ -99,6 +107,7 @@ const reservationSlice = createSlice({
     })
     .addCase(addReservationAction.fulfilled, (state, action) => {
       state.addReservationLoading = false;
+      state.peopleCount = initialState.peopleCount;
       state.data = action.payload;
     })
     .addCase(addReservationAction.rejected, (state, action) => {
@@ -110,6 +119,7 @@ const reservationSlice = createSlice({
       state.cancelReservationError = null;
     })
     .addCase(cancelReservationAction.fulfilled, (state, action) => {
+      state.data = null;
       state.cancelReservationLoading = false;
       state.cancelReservationError = null;
     })
@@ -123,6 +133,8 @@ export const {
   setPeopleCount,
   setData,
   setInitialDataLoaded,
+  clearCancelReservationError,
+  setUserAuthorizationInProgress,
 } = reservationSlice.actions
 
 export const reservationReducer = reservationSlice.reducer;

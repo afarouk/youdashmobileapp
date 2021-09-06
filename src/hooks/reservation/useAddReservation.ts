@@ -7,7 +7,7 @@ import { ENTRY_SOURCE_TYPE, PREFERRED_NOTIFICATION_METHOD } from "../../types/re
 
 export const useAddReservation = () => {
   const dispatch = useDispatch();
-  const user = useSelector(state => state.auth.user);
+  const currentUser = useSelector(state => state.auth.user);
   const peopleCount = useSelector(state => state.reservation.peopleCount);
   const reservationEnabled = useSelector(selectReservationEnabled);
   const reservationDate = useSelector(selectReservationDate);
@@ -19,11 +19,15 @@ export const useAddReservation = () => {
     addReservationError,
   } = useSelector(state => state.reservation);
   
-  const addReservation = async () => {
+  const addReservation = async (authUser?: any) => {
+    // we use add reservation with parameter right after login when user is not yet provided from redux
+
     if (!reservationDate) {
       console.error('addReservation: reservation date is missing');
       return;
     }
+
+    const user = authUser || currentUser;
 
     if (!user) {
       console.error('addReservation: user is missing');

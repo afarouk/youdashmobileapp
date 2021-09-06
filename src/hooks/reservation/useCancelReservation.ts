@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { Modal } from 'antd';
-import { cancelReservationAction } from "../../redux/slices/reservationSlice";
+import { cancelReservationAction, clearCancelReservationError } from "../../redux/slices/reservationSlice";
 import { useDispatch, useSelector } from "../../redux/store";
 import { useRouting } from "../useRouting";
 
@@ -8,20 +8,28 @@ export const useCancelReservation = () => {
   const dispatch = useDispatch();
   const { goTo, ROUTE_NAME } = useRouting();
   const reservation = useSelector(state => state.reservation.data);
+  const cancelReservationError = useSelector(state => state.reservation.cancelReservationError);
+  const initialDataLoaded = useSelector(state => state.reservation.initialDataLoaded);
 
-  useEffect(() => {
-    if (!reservation) {
-      // redirect to landing page after cancellation
-      goTo({ routeName: ROUTE_NAME.LANDING });
-    }
-  }, [reservation])
+  // useEffect(() => {
+  //  This causes the bug wit redirects after user made a registration
+  //   if (!reservation && initialDataLoaded) {
+  //     console.log('cancel reservation redirect')
+  //     // redirect to landing page after cancellation
+  //     goTo({ routeName: ROUTE_NAME.LANDING });
+  //   }
+  // }, [reservation, initialDataLoaded])
 
   const cancelReservation = async () => {
     if (!reservation) {
       return;
     }
 
-    await dispatch(cancelReservationAction({ entryId: reservation?.entryId }))
+    const result = await dispatch(cancelReservationAction({ entryId: reservation?.entryId }))
+
+    if (result.type === cancelReservationAction.fulfilled.toString()) {
+      goTo({ routeName: ROUTE_NAME.LANDING });
+    }
   }
 
   const handleCancelClick = async () => {
@@ -34,11 +42,16 @@ export const useCancelReservation = () => {
       cancelText: 'No',
       centered: true,
     })
+  }
 
+  const handleClearCancelReservationError = () => {
+    dispatch(clearCancelReservationError())
   }
 
   return {
     cancelReservation,
     handleCancelClick,
+    cancelReservationError,
+    handleClearCancelReservationError,
   }
 }

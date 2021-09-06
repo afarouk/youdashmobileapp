@@ -3,7 +3,7 @@ import React from 'react';
 import format from 'date-fns/format'
 import { Card } from '../Shared/Card/Card';
 import { Reservation } from '../../types/reservation';
-import { Button } from 'antd';
+import { Alert, Button } from 'antd';
 import { useCancelReservation } from '../../hooks/reservation/useCancelReservation';
 
 
@@ -14,7 +14,7 @@ type Props = {
 export const ReservationInfoCard: React.VFC<Props> = ({ reservation }) => {
   let formattedReservationTime = '';
 
-  const { handleCancelClick } = useCancelReservation();
+  const { handleCancelClick, cancelReservationError, handleClearCancelReservationError } = useCancelReservation();
 
   if (reservation && reservation.year && reservation.year > 0) {
     const { year, month, day, hour, minute } = reservation;
@@ -34,16 +34,29 @@ export const ReservationInfoCard: React.VFC<Props> = ({ reservation }) => {
         <div>Name</div>
         <div className="bold">{reservation?.callByName}</div>
       </div>
-      <Button
-        size="middle"
-        type="text"
-        htmlType="button"
-        loading={false}
-        disabled={false}
-        onClick={handleCancelClick}
-      >
-        Cancel
-      </Button>
+      {cancelReservationError && (
+        <Alert
+          className="mb-default"
+          message={cancelReservationError}
+          type="error"
+          closable={true}
+          onClose={handleClearCancelReservationError}
+        />
+      )}
+
+      {reservation && (
+        <Button
+          size="middle"
+          type="text"
+          htmlType="button"
+          loading={false}
+          disabled={false}
+          onClick={handleCancelClick}
+        >
+          Cancel Reservation
+        </Button>
+      )}
+      
     </Card>
   )
 }

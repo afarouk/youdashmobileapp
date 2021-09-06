@@ -13,6 +13,7 @@ import { UserDataForm } from '../Shared/UserDataForm/UserDataForm';
 import { UserDetails } from '../Shared/UserDataForm/UserDetails';
 import { VerificationCode } from '../OrderDetails/VerificationCode/VerificationCode';
 import { LoadingElement } from '../Shared/LoadingElement';
+import * as reservationTypes from '../../types/reservation';
 
 type Props = { 
   businessData: BusinessData,
@@ -24,7 +25,13 @@ type Props = {
   onVerificationCodeChange: any,
   onResendVerificationCode: any,
   verificationCodeError: string | null,
-  onSubmit: (event: React.FormEvent) => void
+  reservation?: reservationTypes.Reservation | null,
+  onSubmit: (event: React.FormEvent) => void,
+
+  credentials: any,
+  onCredentialsChange: any,
+  registerMemberRequestError: any,
+  userLoading: any,
 }
 
 export const Reservation: React.VFC<Props> = ({ 
@@ -37,14 +44,17 @@ export const Reservation: React.VFC<Props> = ({
   onVerificationCodeChange,
   onResendVerificationCode,
   verificationCodeError,
+  reservation,
   onSubmit,
+
+  credentials,
+  onCredentialsChange,
+  registerMemberRequestError,
+  userLoading,
 }) => {
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [credentials, credentialsChanged, onCredentialsChange, onSignUpSubmit, registerMemberRequestError, userLoading] = useMemberData(
-    businessData,
-    user
-  );
+
+  const hasReservation = Boolean(reservation)
 
   return (
     <div className="p-default">
@@ -79,12 +89,12 @@ export const Reservation: React.VFC<Props> = ({
                 verificationCodeError={verificationCodeError}
               />
             )}
-
-            {registerMemberRequestError && (
-              <Alert message={registerMemberRequestError} type="error" showIcon closable />
-            )}
           </div>
         </LoadingElement>
+
+        {registerMemberRequestError && (
+          <Alert message={registerMemberRequestError} type="error" showIcon closable />
+        )}
 
         {error && (
           <Alert
@@ -101,7 +111,7 @@ export const Reservation: React.VFC<Props> = ({
           className="font-size-md"
           htmlType="submit"
           loading={loading}
-          disabled={userLoading}
+          disabled={userLoading || hasReservation}
         >
           Book my table
         </Button>
