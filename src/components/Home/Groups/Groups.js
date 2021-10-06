@@ -6,13 +6,23 @@ import stickybits from 'stickybits';
 import './Groups.css';
 import { ProductCard } from './ProductCard/ProductCard';
 import { ArrowLeftOutlinedIcon, ArrowRightOutlinedIcon } from "../../Shared/Icons/Icons";
+import { scrollToElement } from '../../../utils/helpers';
 const { TabPane } = Tabs;
 
 stickybits('.groups-tabs ', { noStyles: true });
 export const Groups = memo(({ groups }) => {
   const [activeKey, setActiveKey] = useState(1);
+
+  const getGroupTabId = (index) => {
+    return `group-tab-${index}`;
+  }
+
   const handleTabClick = ([key]) => {
-    setActiveKey(parseInt(key))
+    console.log({ key })
+
+    scrollToElement(document.getElementById(getGroupTabId(key)))
+
+    setActiveKey(parseInt(key));
   };
   const resizeTab = groups.length && groups.length < 3;
 
@@ -53,7 +63,7 @@ export const Groups = memo(({ groups }) => {
 
   //     }
   //   };
-    
+
   //   const observer = new IntersectionObserver(callback, options);
 
   //   const targets = document.querySelectorAll('.groups-tabs .ant-tabs-tab');
@@ -69,17 +79,47 @@ export const Groups = memo(({ groups }) => {
     if (activeKey !== 1) {
       setActiveKey(activeKey - 1);
     }
-  }
+  };
 
   const handleRightClick = (event) => {
     if (activeKey !== groups.length) {
       setActiveKey(activeKey + 1);
     }
-  }
+  };
 
   return (
     <div className={`groups-tabs ${resizeTab ? `tabs-${groups.length}-only` : ''}`}>
       <Tabs 
+        className="so-groups-tabs"
+        activeKey={`${activeKey}`} 
+        onTabClick={handleTabClick} 
+        tabBarExtraContent={groups.length > 2 && {
+          left: <ArrowLeftOutlinedIcon 
+            ref={arrowLeftRef} 
+            onClick={handleLeftClick} 
+            className={activeKey === 1 ? 'disabled' : ''}
+          />,
+          right: <ArrowRightOutlinedIcon 
+            ref={arrowRightRef} 
+            onClick={handleRightClick} 
+            className={activeKey === groups.length ? 'disabled' : ''}
+
+          />,
+        }}
+        renderTabBar={(props, DefaultTabBar) => {
+          return <DefaultTabBar {...props} mobile />
+        }}
+      >
+        {(groups || []).map(({ groupDisplayText, id, unSubgroupedItems }, index) => {
+          const title = groupDisplayText.length <= 10 ? groupDisplayText : `${groupDisplayText.substring(0, 10)}...`
+
+          return (
+            <TabPane tab={title} key={index + 1}>
+            </TabPane>
+          )
+        })}
+      </Tabs>
+      {/* <Tabs 
         activeKey={`${activeKey}`} 
         onTabClick={handleTabClick} 
         tabBarExtraContent={groups.length > 2 && {
@@ -110,7 +150,20 @@ export const Groups = memo(({ groups }) => {
             </TabPane>
           )
         })}
-      </Tabs>
+      </Tabs> */}
+
+      {(groups || []).map(({ groupDisplayText, id, unSubgroupedItems }, index) => {
+        const title = groupDisplayText.length <= 10 ? groupDisplayText : `${groupDisplayText.substring(0, 10)}...`;
+
+        return (
+          <div key={index} id={getGroupTabId(index + 1)}>
+            <h4 className="title">{title}</h4>
+            {(unSubgroupedItems || []).map((product, productIndex) => (
+              <ProductCard product={product} key={`product${index}${productIndex}`} />
+            ))}
+          </div>
+        );
+      })}
     </div>
   );
 });

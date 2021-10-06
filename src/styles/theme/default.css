@@ -55,12 +55,23 @@ html {
 .font-size-lg > * {
   font-size: 1.1rem;
 }
+.font-size-sxl {
+  font-size: 1.5rem;
+}
+
 .font-size-xl {
   font-size: 2rem;
 }
 .font-size-default {
   font-size: 0.875rem;
 }
+
+.title {
+  font-size: 1.5rem;
+  margin-bottom: 0.75rem;
+  color: var(--primary-color); 
+}
+
 a {
   color: #0097a7;
 }

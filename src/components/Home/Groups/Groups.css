@@ -2,11 +2,28 @@
   margin-top: 1em;
 }
 
-.groups-tabs .ant-tabs > .ant-tabs-nav {
+/* .groups-tabs .ant-tabs > .ant-tabs-nav {
   position: sticky;
   top: 45px;
   right: 0;
   background-color: #eff2f6;
+} */
+
+.so-groups-tabs {
+  position: sticky;
+  top: 43px;
+  right: 0;
+  background-color: #eff2f6;
+}
+
+.so-groups-tabs:before {
+  content: '';
+  width: 100vw;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #eff2f6;
+  height: 100%;
 }
 
 .groups-tabs .ant-tabs {

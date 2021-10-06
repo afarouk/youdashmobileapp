@@ -14,7 +14,9 @@ export const scrollToElement = (el, offset = 80) => {
   if (typeof window !== 'undefined' && window.scrollTo) {
     if (el) {
       const y = el.getBoundingClientRect().top + window.pageYOffset;
-      window.scrollTo({ top: y - offset, behavior: 'smooth' });
+      const headerHeight = 45;
+      const top = y - offset - headerHeight
+      window.scrollTo({ top, behavior: 'smooth' });
     }
   }
 };
