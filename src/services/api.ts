@@ -119,6 +119,17 @@ export const orderAPI = {
       }
     })
   },
+  getOrderByUuid: (params: { uuid: string }) => {
+    const { uuid } = params;
+    // https://simfel.com/apptsvc/rest/retail/retrieveOrderByUUID?UID=n8tHIVejQYu-SOiIz-JfpA&orderUUID=GJCCH0HATPSLeVrIpua1Gg&demo=true
+
+    return request.get(`apptsvc/rest/retail/retrieveOrderByUUID`, {
+      params: {
+        orderUUID: uuid,
+      }
+    })
+
+  }
 };
 
 export const greenDiningAPI = {
