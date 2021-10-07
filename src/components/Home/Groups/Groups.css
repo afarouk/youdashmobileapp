@@ -52,6 +52,19 @@
   margin-right: 0;
 }
 
+.groups-tabs .ant-tabs-tab-btn:active {
+  color: rgba(0, 0, 0, 0.25);
+}
+
+.groups-tabs .ant-tabs-extra-content {
+  align-self: stretch;
+  position: relative;
+  display: flex;
+  align-items: center;
+  z-index: 3;
+  padding-bottom: 5px;
+}
+
 .groups-tabs .ant-tabs-extra-content:before {
   content: '';
   position: absolute;

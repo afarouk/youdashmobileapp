@@ -2,26 +2,42 @@ import React, { memo, useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { Tabs } from 'antd';
 import stickybits from 'stickybits';
+import throttle from 'lodash/throttle';
+import scrollIntoView from 'scroll-into-view'
 
 import './Groups.css';
-import { ProductCard } from './ProductCard/ProductCard';
 import { ArrowLeftOutlinedIcon, ArrowRightOutlinedIcon } from "../../Shared/Icons/Icons";
 import { scrollToElement } from '../../../utils/helpers';
+import { Group } from './Group/Group';
 const { TabPane } = Tabs;
 
-stickybits('.groups-tabs ', { noStyles: true });
+// stickybits('.groups-tabs ', { noStyles: true });
 export const Groups = memo(({ groups }) => {
   const [activeKey, setActiveKey] = useState(1);
+  const isScrollingToSectionRef = useRef(false);
 
-  const getGroupTabId = (index) => {
-    return `group-tab-${index}`;
+  const getSectionId = (index) => {
+    return `section-${index}`;
+  }
+
+  const scrollToSection = (key) => {
+    isScrollingToSectionRef.current = true;
+    const section = document.getElementById(getSectionId(key));
+
+    const scrollConfig = { 
+      time: 400,
+      align: {
+        top: 0,
+        topOffset: 100,
+      }
+    }
+    scrollIntoView(section, scrollConfig, () => {
+      isScrollingToSectionRef.current = false;
+    })
   }
 
   const handleTabClick = ([key]) => {
-    console.log({ key })
-
-    scrollToElement(document.getElementById(getGroupTabId(key)))
-
+    scrollToSection(key)
     setActiveKey(parseInt(key));
   };
   const resizeTab = groups.length && groups.length < 3;
@@ -29,61 +45,57 @@ export const Groups = memo(({ groups }) => {
   const arrowLeftRef = useRef(null);
   const arrowRightRef = useRef(null);
 
-  // useEffect(() => {
-  //   if (!groups || !groups.length) {
-  //     return;
-  //   }
 
-  //   const options = {
-  //     root: document.querySelector('.groups-tabs .ant-tabs-nav-wrap'),
-  //     rootMargin: '0px',
-  //     threshold: 1.0
-  //   }
+  useEffect(() => {
+    const handleScroll = throttle(() => {
+      // this is quick solution, check if we have performance issues
+      // add requestAnimationFrame here
+      if (isScrollingToSectionRef.current) return;
 
-  //   const callback = (entries, observer) => {
-  //     entries.forEach(entry => {
-  //       entry.target.setAttribute('data-is-intersecting', entry.isIntersecting);
-  //     });
+      const g = (groups || []);
 
-  //     // TODO: use refs instead of query selectors
-  //     const tabs = document.querySelectorAll('.groups-tabs .ant-tabs-tab');
-  //     const firstTab = tabs[0];
-  //     const lastTab = tabs[tabs.length - 1];
+      for(let i = 0; i <= g.length; i++) {
+        const section = document.getElementById(getSectionId(i + 1));
+        
+        if (!section) continue;
 
-  //     if (firstTab.getAttribute('data-is-intersecting') === 'true') {
-  //       arrowLeftRef.current.classList.add('disabled')
-  //     } else {
-  //       arrowLeftRef.current.classList.remove('disabled')
-  //     }
+        const rect = section.getBoundingClientRect();
+        
+        const headerHeight = 45;
+        const menuHeight = 45;
+        const gap = 140;
+        const topOffset = headerHeight + menuHeight + gap;
+        if (rect.y + rect.height - topOffset > 0) {
+          if (activeKey !== i + 1) {
+            setActiveKey(i + 1);
+          }
 
-  //     if (lastTab.getAttribute('data-is-intersecting') === 'true') {
-  //       arrowRightRef.current.classList.add('disabled')
-  //     } else {
-  //       arrowRightRef.current.classList.remove('disabled')
+          break;
+        }
 
-  //     }
-  //   };
+      }
+      
+    }, 100)
 
-  //   const observer = new IntersectionObserver(callback, options);
-
-  //   const targets = document.querySelectorAll('.groups-tabs .ant-tabs-tab');
-  //   targets.forEach(target => observer.observe(target));
-
-  //   return () => {
-  //     observer.disconnect();
-  //   }
-
-  // }, [groups])
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    }
+  }, [activeKey])
 
   const handleLeftClick = (event) => {
     if (activeKey !== 1) {
-      setActiveKey(activeKey - 1);
+      const newKey = activeKey - 1;
+      setActiveKey(newKey);
+      scrollToSection(newKey)
     }
   };
 
   const handleRightClick = (event) => {
     if (activeKey !== groups.length) {
-      setActiveKey(activeKey + 1);
+      const newKey = activeKey + 1
+      setActiveKey(newKey);
+      scrollToSection(newKey)
     }
   };
 
@@ -119,49 +131,15 @@ export const Groups = memo(({ groups }) => {
           )
         })}
       </Tabs>
-      {/* <Tabs 
-        activeKey={`${activeKey}`} 
-        onTabClick={handleTabClick} 
-        tabBarExtraContent={groups.length > 2 && {
-          left: <ArrowLeftOutlinedIcon 
-            ref={arrowLeftRef} 
-            onClick={handleLeftClick} 
-            className={activeKey === 1 ? 'disabled' : ''}
-          />,
-          right: <ArrowRightOutlinedIcon 
-            ref={arrowRightRef} 
-            onClick={handleRightClick} 
-            className={activeKey === groups.length ? 'disabled' : ''}
-
-          />,
-        }}
-        renderTabBar={(props, DefaultTabBar) => {
-          return <DefaultTabBar {...props} mobile />
-        }}
-      >
-        {(groups || []).map(({ groupDisplayText, id, unSubgroupedItems }, index) => {
-          const title = groupDisplayText.length <= 10 ? groupDisplayText : `${groupDisplayText.substring(0, 10)}...`
-
-          return (
-            <TabPane tab={title} key={index + 1}>
-              {(unSubgroupedItems || []).map((product, productIndex) => (
-                <ProductCard product={product} key={`product${index}${productIndex}`} />
-              ))}
-            </TabPane>
-          )
-        })}
-      </Tabs> */}
 
       {(groups || []).map(({ groupDisplayText, id, unSubgroupedItems }, index) => {
-        const title = groupDisplayText.length <= 10 ? groupDisplayText : `${groupDisplayText.substring(0, 10)}...`;
-
         return (
-          <div key={index} id={getGroupTabId(index + 1)}>
-            <h4 className="title">{title}</h4>
-            {(unSubgroupedItems || []).map((product, productIndex) => (
-              <ProductCard product={product} key={`product${index}${productIndex}`} />
-            ))}
-          </div>
+          <Group 
+            key={index}
+            title={groupDisplayText} 
+            id={getSectionId(index + 1)}
+            products={unSubgroupedItems}
+          />
         );
       })}
     </div>
