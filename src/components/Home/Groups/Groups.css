@@ -88,6 +88,12 @@
   color: rgba(0, 0, 0, 0.25);
 }
 
+.groups-tabs .ant-tabs-tab-btn:focus, 
+.groups-tabs .ant-tabs-tab-btn:active,
+.groups-tabs .ant-tabs-tab:hover {
+  color: #a4a9aa;
+}
+
 /* .groups-tabs .ant-tabs-nav-operations {
   display: none;
 } */
