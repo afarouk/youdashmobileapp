@@ -22,8 +22,6 @@ export const PickUp: React.FC<PickUpProps> = ({ order, userName }) => {
     minute,
   } = order || {};
 
-  console.log('order', order)
-
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [_, __, tableId] = (tablePath || '').split('#');
 

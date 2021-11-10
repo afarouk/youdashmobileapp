@@ -299,11 +299,13 @@ export const formatOrderData = ({
         groupId,
         itemOptions,
         price,
-        discountedPrice
+        discountedPrice,
+        uuid,
       } = item;
       return {
         ...itemShape,
         itemId,
+        uuid,
         finalPriceCharged: discountedPrice !== undefined ? discountedPrice : price,
         discountedPrice: discountedPrice,
         itemVersion:

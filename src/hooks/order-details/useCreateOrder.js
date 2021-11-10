@@ -125,7 +125,7 @@ export default (businessData, user) => {
       discountsById,
       isGreenDiningOrder,
     });
-    
+
     switch (paymentProcessor) {
       case PAYMENT_PROCESSOR.TSYS_ECOMMERCE:
       case PAYMENT_PROCESSOR.CARDCONNECT_ECOMMERCE:

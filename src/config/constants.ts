@@ -68,8 +68,6 @@ export const userSASLSummaryPriorities = {
   POLL: 'POLL'
 };
 
-export const googleMapAPIKey = 'AIzaSyDon847P6x8IUl-pBwSMvvuZd3g2186uhQ';
-
 export const ORDER_STATUS = {
   UNDEFINED: 'UNDEFINED',
   INITIALIZED: 'INITIALIZED',
