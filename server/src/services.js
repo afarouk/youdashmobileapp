@@ -17,7 +17,7 @@ async function getSiteletteData(urlKey, query = {}) {
 
   const baseUrl = server
       ? `http://${server}`
-      : `https://${demo && demo === 'true' ? 'simfel.com' : 'communitylive.ws'}`;
+      : `https://${demo && demo === 'true' ? 'chalkboardsdemo.dev' : 'communitylive.ws'}`;
 
   const finalUrl = `${baseUrl}${endpoints.getSiteletteData}?urlKey=${urlKey}`;
   log(finalUrl, 2);

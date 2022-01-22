@@ -9,7 +9,7 @@ const throwError = urlParams.has('throw') && urlParams.get('throw') === 'true' ?
 export const isDemo = demo === 'true';
 const baseUrl = server
     ? `http://${server}`
-    : `https://${isDemo ? 'simfel.com' : 'communitylive.ws'}`;
+    : `https://${isDemo ? 'chalkboardsdemo.dev' : 'communitylive.ws'}`;
 
 const request = axios.create({
     baseURL: baseUrl
