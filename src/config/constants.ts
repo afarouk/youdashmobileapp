@@ -71,11 +71,11 @@ export const userSASLSummaryPriorities = {
 export const ORDER_STATUS = {
   UNDEFINED: 'UNDEFINED',
   INITIALIZED: 'INITIALIZED',
-  PROPOSED: 'PROPOSED',
+  SENT_TO_FACTORY: 'SENT_TO_FACTORY',
   IN_PROCESS: 'IN_PROCESS',
   FULFILLED: 'FULFILLED',
-  REJECTED: 'REJECTED',
-  ARCHIVED: 'ARCHIVED'
+  PICKED_UP_OR_DELIVERED: 'PICKED_UP_OR_DELIVERED',
+  RESCINDED: 'RESCINDED'
 }
 
 export const ORDER_STATUS_CONFIG = {
@@ -87,7 +87,7 @@ export const ORDER_STATUS_CONFIG = {
       future: inTransitionIconFuture,
     },
   },
-  [ORDER_STATUS.PROPOSED]: {
+  [ORDER_STATUS.SENT_TO_FACTORY]: {
     label: 'Sent to kitchen',
     icons: {
       past: inKitchenIconPast,
