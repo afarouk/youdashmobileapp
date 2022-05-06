@@ -126,7 +126,6 @@ const itemShape = {
   delayedFire: false,
   hint: '',
   finalPriceCharged: 0, //TODO: set
-  compPrice: null,
   invoiceType: null,
   invoiceStatus: null,
   itemizedTax: null,
@@ -357,7 +356,6 @@ export const formatOrderData = ({
     invoicePaid: transactionData ? totalAmount : 0.0,
     invoiceTotal: 0.0,
     invoiceClaimed: 0.0,
-    compPrice: 0.0,
     currencyCode: 'USD',
     //CC
     v_acceptorId: null,
