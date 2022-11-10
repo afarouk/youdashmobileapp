@@ -37,15 +37,15 @@ export const ProductItem = ({
     comments,
     canSplitLeftRight
   } = productItem;
-  let subOptions = productItem?.itemOptions?.subOptions;
-  let subItems = productItem?.itemOptions?.subItems;
-  let subItemsLeft = productItem?.itemOptions?.subItemsLeft;
+  let s0/*subOptions*/ = productItem?.itemOptions?.s0 /*subOptions*/;
+  let s1/*subItems*/ = productItem?.itemOptions?.s1/*subItems*/;
+  let s2/*subItemsLeft*/ = productItem?.itemOptions?.s2 /*subItemsLeft*/;
   let selectDefaultValue =
     productItem.itemVersion && typeof productItem.itemVersion === 'object'
       ? productItem.itemVersion.itemVersion
       : productItem.itemVersion;
 
-  const canSplit = canSplitLeftRight && subItems && subItemsLeft;
+  const canSplit = canSplitLeftRight && s1/*subItems*/ && s2/*subItemsLeft*/;
   const handleVersionChange = (e) => onItemVersionChange(e.target.value);
   return (
     <Container>
@@ -90,21 +90,21 @@ export const ProductItem = ({
                 </div>
               )}
             <SubItemsBlock
-              subItems={subOptions}
+              s1={s0}
               onCheckboxChange={onCheckboxChange}
-              parentPropName="subOptions"
+              parentPropName="s0"
             />
             {canSplit && <SideSplitter side="left" />}
             <SubItemsBlock
-              subItems={subItemsLeft}
+              s1={s2}
               onCheckboxChange={onCheckboxChange}
-              parentPropName="subItemsLeft"
+              parentPropName="s2"
             />
             {canSplit && <SideSplitter side="right" />}
             <SubItemsBlock
-              subItems={subItems}
+              s1={s1}
               onCheckboxChange={onCheckboxChange}
-              parentPropName="subItems"
+              parentPropName="s1"
             />
             {allowItemComments && <Comments comments={comments} onTextChange={onTextChange} />}
 

@@ -5,20 +5,20 @@ import { Radio } from 'antd';
 
 export const SubItems = ({
   title,
-  promptText,
+  p1/*promptText*/,
   addOns,
   parentPropName,
   parentPropIndex,
   onCheckboxChange,
-  selectorType
+  t1/*selectorType*/
 }) => {
-  const handleCheckboxChange = (index, priceAdjustment, e, isRadio = false) => {
+  const handleCheckboxChange = (index, p1/*priceAdjustment*/, e, isRadio = false) => {
     onCheckboxChange(
       parentPropIndex,
       parentPropName,
       index,
-      'isSelected',
-      priceAdjustment,
+      'iS' /*'isSelected'*/,
+      p1/*priceAdjustment*/,
       e.target.checked,
       isRadio
     );
@@ -27,24 +27,24 @@ export const SubItems = ({
   return (
     <div className="product-row bg-secondary">
       <h4 className="font-size-md">{title}</h4>
-      {promptText && <h5 className="font-size-sm">{promptText}</h5>}
-      {selectorType === 'CHECKBOX' && (
+      {p1/*promptText*/&& <h5 className="font-size-sm">{p1/*promptText*/}</h5>}
+      {t1/*selectorType*/ === 'CHECKBOX' && (
         <div className="addons-row">
           {(addOns || []).map(
             (addOn, index) => {
-              const { subSubItemName, id, isSelected, isDisabled, priceAdjustment } = addOn
+              const { s1/*subSubItemName*/, id, iS/*isSelected*/, iD/*isDisabled*/, p1/*priceAdjustment*/ } = addOn
               return (
                 <div key={`${parentPropName}${parentPropIndex}${index}`} className="choice">
                   <Checkbox
-                    disabled={isDisabled}
-                    onChange={(e) => handleCheckboxChange(index, priceAdjustment, e)}
-                    checked={isSelected}
+                    disabled={iD/*isDisabled*/}
+                    onChange={(e) => handleCheckboxChange(index, p1/*priceAdjustment*/, e)}
+                    checked={iS/*isSelected*/}
                   >
                     <span className="addon-label addon-label-checkbox font-size-sm">
-                      {subSubItemName}
-                      {priceAdjustment ? (
+                      {s1/*subSubItemName*/}
+                      {p1/*priceAdjustment*/ ? (
                         <span className="addon-label-checkbox__price font-size-xs">
-                          (${priceAdjustment.toFixed(2)})
+                          (${p1/*priceAdjustment*/.toFixed(2)})
                         </span>
                       ) : null}
                     </span>
@@ -56,25 +56,25 @@ export const SubItems = ({
         </div>
       )}
 
-      {selectorType === 'RADIO' && (
+      {t1/*selectorType*/ === 'RADIO' && (
         <div className="addons-row">
           {/*<Radio.Group onChange={handleRadioChange} value={radioValue}>*/}
           <div className="preferences">
             {addOns.map(
-              ({ subSubItemName, id, isSelected, isDisabled, priceAdjustment }, index) => {
+              ({ s1/*subSubItemName*/, id, iS/*isSelected*/, iD/*isDisabled*/, p1/*priceAdjustment*/ }, index) => {
                 return (
                   <div key={`${parentPropName}${parentPropIndex}${index}`} className="choice">
                     <Radio
-                      disabled={isDisabled}
+                      disabled={iD/*isDisabled*/}
                       value={index}
-                      checked={isSelected}
-                      onChange={(e) => handleCheckboxChange(index, priceAdjustment, e, true)}
+                      checked={iS/*isSelected*/}
+                      onChange={(e) => handleCheckboxChange(index, p1/*priceAdjustment*/, e, true)}
                     >
                       <span className="addon-label font-size-sm">
-                        {subSubItemName}
-                        {priceAdjustment ? (
+                        {s1/*subSubItemName*/}
+                        {p1/*priceAdjustment*/ ? (
                           <span className="addon-label-checkbox__price font-size-xs">
-                            (${priceAdjustment.toFixed(2)})
+                            (${p1/*priceAdjustment*/.toFixed(2)})
                           </span>
                         ) : null}
                       </span>

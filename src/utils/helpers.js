@@ -550,17 +550,17 @@ export const formatPhoneNumber = (phoneNumberString) => {
   return null;
 };
 
-export const extractItemNames = (subOptions, list) => {
-  (subOptions || []).map(({ subSubItems }) => {
-    return subSubItems.filter((s) => s.isSelected).map((s) => list.push(s.subSubItemName));
+export const extractItemNames = (s0/*subOptions*/, list) => {
+  (s0/*subOptions*/ || []).map(({ sS/*subSubItems*/ }) => {
+    return sS/*subSubItems*/.filter((s) => s.iS/*isSelected*/).map((s) => list.push(s.s1/*subSubItemName*/));
   });
 };
 export const getSubItemsString = (itemOptions) => {
   let list = [];
   if (!itemOptions || typeof itemOptions === 'undefined') return null;
-  extractItemNames(itemOptions.subOptions, list);
-  extractItemNames(itemOptions.subItemsLeft, list);
-  extractItemNames(itemOptions.subItems, list);
+  extractItemNames(itemOptions.s0/*subOptions*/, list);
+  extractItemNames(itemOptions.s2/*subItemsLeft*/, list);
+  extractItemNames(itemOptions.s1/*subItems*/, list);
   const output = list.join(', ');
   return output ? `(${output})` : '';
 };

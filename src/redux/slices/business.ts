@@ -106,10 +106,10 @@ const mapUnSubgroupedItems = (items: any, groupId: any) => {
   let itemsObject: any = {}; //needed for itemsById dictionary
   const itemsArray = items.map((item: any) => {
     const { thumbnailBase64, ...rest } = item;
-    if (rest.canSplitLeftRight && rest.itemOptions && rest.itemOptions.subItems) {
+    if (rest.canSplitLeftRight && rest.itemOptions && rest.itemOptions.s1/*subItems*/) {
       rest.itemOptions = {
         ...rest.itemOptions,
-        subItemsLeft: [...rest.itemOptions.subItems],
+        s2/*subItemsLeft*/: [...rest.itemOptions.s1/*subItems*/],
       }
     }
 

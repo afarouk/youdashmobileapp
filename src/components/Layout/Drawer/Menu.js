@@ -73,7 +73,7 @@ export const MainMenu = ({ user, onClose, onLogout }) => {
 
   return (
     <Menu mode="inline" selectable={false}>
-      {menuItems.map(({ title, path, url, icon, subItems, authRequired, onClickAction, target }, index) => {
+      {menuItems.map(({ title, path, url, icon, s1/*subItems*/, authRequired, onClickAction, target }, index) => {
         if (authRequired && !user) return null;
         const props = {};
         if (onClickAction) {
@@ -86,7 +86,7 @@ export const MainMenu = ({ user, onClose, onLogout }) => {
           props.onClick = undefined;
         }
 
-        return subItems ? (
+        return s1/*subItems*/ ? (
           <SubMenu
             key={index}
             title={
@@ -96,7 +96,7 @@ export const MainMenu = ({ user, onClose, onLogout }) => {
               </span>
             }
           >
-            {subItems.map(({ title, path, icon }, subIndex) => (
+            {s1/*subItems*/.map(({ title, path, icon }, subIndex) => (
               <Menu.Item key={`${index}${subIndex}`} icon={icon} onClick={onClose}>
                 <Link to={`/${businessUrlKey}${path}${search}`}>{title}</Link>
               </Menu.Item>

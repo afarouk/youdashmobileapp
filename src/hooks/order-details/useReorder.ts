@@ -39,20 +39,20 @@ export const reorderItems = (items: any, businessData: BusinessData, dispatch: D
           ? itemVersion.itemVersion
           : itemFromCollection.itemVersion;
 
-      let subOptions = itemOptions?.subOptions;
-      let subItems = itemOptions?.subItems;
-      let subItemsLeft = itemOptions?.subItemsLeft;
+      let s0/*subOptions*/ = itemOptions?.s0/*subOptions*/;
+      let s1/*subItems*/ = itemOptions?.s1/*subItems*/;
+      let s2/*subItemsLeft*/ = itemOptions?.s2/*subItemsLeft*/;
 
-      if (subOptions && subOptions.length) {
-        const result = updateSubSubItemsVersionPriceAdjustment(itemVersionId, subOptions);
+      if (s0/*subOptions*/ && s0/*subOptions*/.length) {
+        const result = updateSubSubItemsVersionPriceAdjustment(itemVersionId, s0/*subOptions*/);
         itemPrice += result.newPriceDifference;
       }
-      if (subItems && subItems.length) {
-        const result = updateSubSubItemsVersionPriceAdjustment(itemVersionId, subItems);
+      if (s1/*subItems*/ && s1/*subItems*/.length) {
+        const result = updateSubSubItemsVersionPriceAdjustment(itemVersionId, s1/*subItems*/);
         itemPrice += result.newPriceDifference;
       }
-      if (subItemsLeft && subItemsLeft.length) {
-        const result = updateSubSubItemsVersionPriceAdjustment(itemVersionId, subItemsLeft);
+      if (s2/*subItemsLeft*/ && s2/*subItemsLeft*/.length) {
+        const result = updateSubSubItemsVersionPriceAdjustment(itemVersionId, s2/*subItemsLeft*/);
         itemPrice += result.newPriceDifference;
       }
 
